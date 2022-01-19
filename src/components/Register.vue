@@ -2,7 +2,7 @@
   <div class="test">
     <h1>{{ msg }}</h1>
     <div class="content">
-      <img src="../assets/logo.png" alt="Logo Groupomania" />
+      <img src="../assets/logo_base.png" alt="Logo Groupomania" />
       <h1>Inscription</h1>
       <form id="register">
         <div class="c1">
@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  name: "Register",
+  name: 'Register',
   props: {
     msg: String,
   },

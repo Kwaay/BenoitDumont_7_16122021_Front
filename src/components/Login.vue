@@ -2,7 +2,7 @@
   <div class="test">
     <h1>{{ msg }}</h1>
     <div class="content">
-      <img src="../assets/logo.png" alt="Logo Groupomania" />
+      <img src="../assets/logo_base.png" alt="Logo Groupomania" />
       <h1>Connexion</h1>
       <form>
         <label>Email *</label>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
   props: {
     msg: String,
   },
