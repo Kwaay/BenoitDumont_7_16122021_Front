@@ -1,13 +1,13 @@
 <template>
   <div class="test">
-    <div class="content">
+    <div class="contents">
       <div class="sidebar">
         <div class="icons">
           <img src="../assets/logo_white.png" alt="Logo White" />
-          <a href=""><i class="fas fa-home"></i></a>
-          <a href=""><i class="fas fa-user"></i></a>
+          <a href="/"><i class="fas fa-home"></i></a>
+          <a href="/profil"><i class="fas fa-user"></i></a>
           <a href="/settings"><i class="fas fa-cog"></i></a>
-          <a href="/dashboard"><i class="fas fa-tools"></i></a>
+          <a href="/admin/dashboard"><i class="fas fa-tools"></i></a>
         </div>
         <div class="box-posts">
           <div class="up">
@@ -31,12 +31,12 @@
                   track-by="lang"
                   :options="[
                     {
-                        flag: 'fi-fr',
-                        lang: 'Français'
+                      flag: 'fi-fr',
+                      lang: 'Français',
                     },
                     {
-                        flag: 'fi-us',
-                        lang: 'English'
+                      flag: 'fi-us',
+                      lang: 'English',
                     },
                   ]"
                   :option-height="2"
@@ -44,11 +44,11 @@
                 >
                   <template slot="singleLabel" slot-scope="props">
                     <span class="fi" :class="props.option.flag"></span>
-                     - <span class="colored">{{ props.option.lang }}</span>
+                    - <span class="colored">{{ props.option.lang }}</span>
                   </template>
                   <template slot="option" slot-scope="props">
                     <span class="fi" :class="props.option.flag"></span>
-                     - <span class="colored">{{ props.option.lang }}</span>
+                    - <span class="colored">{{ props.option.lang }}</span>
                   </template>
                 </multiselect>
               </div>
@@ -60,7 +60,9 @@
                 <p>Le mode que vous voulez choisir pour le site</p>
               </div>
               <div class="params">
-                <input type="checkbox" id="mod" /><label for="mod">Toggle</label>
+                <input type="checkbox" id="mod" /><label for="mod"
+                  >Toggle</label
+                >
               </div>
             </div>
             <br />
@@ -72,7 +74,9 @@
                 </p>
               </div>
               <div class="params">
-                <input type="checkbox" id="security" /><label for="security">Toggle</label>
+                <input type="checkbox" id="security" /><label for="security"
+                  >Toggle</label
+                >
               </div>
             </div>
             <br />
@@ -111,16 +115,19 @@ export default {
 body {
   background: #f1f1f1;
 }
-.content {
+
+.contents {
   background-color: #22262b;
   display: flex;
 }
+
 .content-container {
   display: flex;
   justify-content: space-between;
   background-color: #2d3036;
   padding-top: 5vh;
 }
+
 .sidebar {
   background-color: #2d3036;
   height: 100vh;
@@ -128,12 +135,14 @@ body {
   z-index: 99999;
   width: 100%;
 }
+
 .icons img {
   margin: 2vh;
   width: 85px;
   height: 85px;
   object-fit: cover;
 }
+
 .icons {
   display: inline-flex;
   align-items: center;
@@ -142,26 +151,31 @@ body {
   transition: color 450ms ease-in-out;
   height: 70%;
 }
+
 .icons i {
   font-size: 32px;
   padding: 1vh;
 }
+
 .icons a :hover {
   transition: color 450ms ease-in-out;
   opacity: 0.8;
   color: white;
 }
+
 .up {
   height: 10vh;
   display: flex;
   justify-content: flex-end;
   padding: 4vh;
 }
+
 .account {
   display: inline-flex;
   align-items: center;
   color: white;
 }
+
 .account img {
   width: 48px;
   height: 48px;
@@ -170,17 +184,20 @@ body {
   border: 1px solid #2d3036;
   margin: 2vh;
 }
+
 .box-posts {
   overflow: hidden;
   position: relative;
   width: 100%;
 }
+
 .settings {
   background-color: #22262b;
   color: white;
   padding: 5vh;
   border-radius: 30px;
 }
+
 .lang,
 .mode,
 .security {
@@ -188,58 +205,61 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
 .history {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5vh;
-  border: 1px solid #707070;
-}
-.history p {
-  color: #707070;
-}
-.history {
   padding: 2.5vh;
   border: 1px solid #707070;
 }
+
 .history p {
   color: #707070;
   font-size: x-large;
 }
+
 .action {
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin: 5vh;
 }
+
 .desactiver {
   text-align: center;
   padding: 2.5vh;
   width: 20%;
   border: 1px solid #fff;
 }
+
 .desactiver p {
   color: #fff;
   font-size: x-large;
 }
+
 .supprimer {
   text-align: center;
   padding: 2.5vh;
   width: 20%;
   border: 1px solid #e61919;
 }
+
 .supprimer p {
   color: #e61919;
   font-size: x-large;
 }
+/* stylelint-disable selector-class-pattern */
 .multiselect__tags {
-  background-color: #22262b!important;
+  background-color: #22262b !important;
 }
+
 .multiselect__select {
   top: 50%;
   transform: translateY(-50%);
 }
+
 .multiselect__tags span img {
   width: 16px;
   height: 16px;
@@ -247,6 +267,7 @@ body {
   border-radius: 50%;
   vertical-align: middle;
 }
+
 .multiselect__element span img {
   width: 16px;
   height: 16px;
@@ -254,33 +275,37 @@ body {
   border-radius: 50%;
   vertical-align: middle;
 }
+
 .multiselect__input {
-  background: #22262b!important;
+  background: #22262b !important;
   color: #adadad;
 }
+
 .multiselect ::placeholder {
   color: #adadad;
 }
+
 .multiselect__single {
-  background-color: #22262b!important;
+  background-color: #22262b !important;
 }
+
 .multiselect__option {
-  background: #22262b!important;
+  background: #22262b !important;
 }
+
+/* stylelint-enable selector-class-pattern */
 .colored {
   vertical-align: middle;
   color: #a6a6a6;
 }
-#mod, #security {
-  display: none;
-}
-input [type=checkbox] {
+
+.params input {
   height: 0;
   width: 0;
   visibility: hidden;
 }
 
-label {
+.params label {
   cursor: pointer;
   text-indent: -9999px;
   width: 70px;
@@ -291,7 +316,7 @@ label {
   position: relative;
 }
 
-label:after {
+.params label::after {
   content: '';
   position: absolute;
   top: 5px;
@@ -303,13 +328,12 @@ label:after {
   transition: 0.3s;
 }
 
-input:checked + label {
+.params input:checked + label {
   background: #78797d;
 }
 
-input:checked + label:after {
+.params input:checked + label::after {
   left: calc(100% - 5px);
   transform: translateX(-100%);
 }
-
 </style>

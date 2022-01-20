@@ -5,8 +5,7 @@
 </template>
 
 <script>
-export default {
-};
+export default {};
 </script>
 
 <style lang="scss">
@@ -21,10 +20,10 @@ body {
 }
 
 #app {
-  background-color: #151515;
   font-family: Nunito, sans-serif;
   color: #020202;
 }
+
 #app a {
   color: #78797d;
 }

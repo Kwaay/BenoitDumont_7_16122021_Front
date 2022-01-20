@@ -1,17 +1,33 @@
+const path = require('path');
+
 module.exports = {
   root: true,
   env: {
+    browser: true,
     node: true,
+  },
+  parserOptions: {
+    parser: '@babel/eslint-parser',
   },
   extends: [
     'plugin:vue/essential',
-    '@vue/airbnb',
+    'airbnb-base',
+    'plugin:prettier/recommended',
   ],
-  parserOptions: {
-    parser: 'babel-eslint',
-  },
+  plugins: ['prettier'],
+  // add your custom rules here
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'vue/multi-word-component-names': ['off'],
+  },
+  settings: {
+    'import/resolver': {
+      alias: {
+        extensions: ['.js', '.vue', '.json'],
+        map: [
+          ['~', path.resolve(__dirname, './')],
+          ['@', path.resolve(__dirname, './')],
+        ],
+      },
+    },
   },
 };
