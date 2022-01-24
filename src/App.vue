@@ -25,6 +25,14 @@ body {
 }
 
 #app a {
-  color: #78797d;
+  color: #aaa;
+}
+
+.vt-content {
+  padding: 1.5vh;
+}
+
+.vt-notification-container {
+  font-family: Nunito, sans-serif;
 }
 </style>

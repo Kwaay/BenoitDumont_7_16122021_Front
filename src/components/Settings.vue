@@ -2,7 +2,7 @@
   <div class="test">
     <div class="contents">
       <div class="sidebar">
-        <div class="icons">
+        <div class="icon">
           <img src="../assets/logo_white.png" alt="Logo White" />
           <a href="/"><i class="fas fa-home"></i></a>
           <a href="/profil"><i class="fas fa-user"></i></a>
@@ -10,7 +10,7 @@
           <a href="/admin/dashboard"><i class="fas fa-tools"></i></a>
         </div>
         <div class="box-posts">
-          <div class="up">
+          <div class="upside">
             <div class="account">
               <img src="../assets/20210503_133718.png" alt="Profile Image" />
               <i class="fas fa-sort-down"></i>
@@ -136,14 +136,14 @@ body {
   width: 100%;
 }
 
-.icons img {
+.icon img {
   margin: 2vh;
   width: 85px;
   height: 85px;
   object-fit: cover;
 }
 
-.icons {
+.icon {
   display: inline-flex;
   align-items: center;
   flex-direction: column;
@@ -152,18 +152,18 @@ body {
   height: 70%;
 }
 
-.icons i {
+.icon i {
   font-size: 32px;
   padding: 1vh;
 }
 
-.icons a :hover {
+.icon a :hover {
   transition: color 450ms ease-in-out;
   opacity: 0.8;
   color: white;
 }
 
-.up {
+.upside {
   height: 10vh;
   display: flex;
   justify-content: flex-end;

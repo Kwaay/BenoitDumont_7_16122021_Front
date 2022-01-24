@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 <template>
   <div class="test">
     <div class="content">
@@ -218,10 +217,10 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.user = data.value;
-        });
-      /* .catch((error) => {
+        })
+        .catch((error) => {
           this.error = error;
-        }); */
+        });
     },
   },
 };

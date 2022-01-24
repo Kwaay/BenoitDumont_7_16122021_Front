@@ -4,7 +4,7 @@
       <div class="sidebar">
         <div class="icons">
           <img src="../assets/logo_white.png" alt="Logo White" />
-          <a href="/home"><i class="fas fa-home"></i></a>
+          <a href="/"><i class="fas fa-home"></i></a>
           <a href="/profil"><i class="fas fa-user"></i></a>
           <a href="/settings"><i class="fas fa-cog"></i></a>
           <a href="/admin/dashboard"><i class="fas fa-tools"></i></a>
@@ -23,157 +23,24 @@
               <label for="post-image"><i class="fas fa-camera"></i></label>
               <input type="file" id="post-image" />
             </form>
-            <div class="post">
-              <p class="align">
-                <img src="../assets/image-fake.jpg" alt="Image de Profil" />
-                {Nom <br />Prénom}
-                <br />
-                <span>{time since publication}</span>
-              </p>
-              <br />
+            <div class="post" v-for="post in posts" :key="post.id">
+              <div class="post-container">
+                <img :src="post.User.avatar" alt="Image de Profil" />
+                <div class="align">
+                  <p>
+                    {{ post.User.name }} {{ post.User.firstname }} <br />
+                    {{ new Date(post.createdAt).toLocaleString() }}
+                  </p>
+                </div>
+              </div>
               <div class="post-content">
+                <h2>{{ post.title }}</h2>
                 <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  {{ post.content }}
                 </p>
-              </div>
-              <div class="post-image">
-                <img src="../assets/image-fake.jpg" alt="Image du Post" />
-              </div>
-            </div>
-            <div class="post">
-              <p class="align">
-                <img src="../assets/image-fake.jpg" alt="Image de Profil" />
-                {Nom <br />Prénom}
-                <br />
-                <span>{time since publication}</span>
-              </p>
-              <br />
-              <div class="post-content">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
-              </div>
-              <div class="post-image">
-                <img src="../assets/image-fake.jpg" alt="Image du Post" />
-              </div>
-            </div>
-            <div class="post">
-              <p class="align">
-                <img src="../assets/image-fake.jpg" alt="Image de Profil" />
-                {Nom <br />Prénom}
-                <br />
-                <span>{time since publication}</span>
-              </p>
-              <br />
-              <div class="post-content">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
-              </div>
-              <div class="post-image">
-                <img src="../assets/image-fake.jpg" alt="Image du Post" />
-              </div>
-            </div>
-            <div class="post">
-              <p class="align">
-                <img src="../assets/image-fake.jpg" alt="Image de Profil" />
-                {Nom <br />Prénom}
-                <br />
-                <span>{time since publication}</span>
-              </p>
-              <br />
-              <div class="post-content">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
-              </div>
-              <div class="post-image">
-                <img src="../assets/image-fake.jpg" alt="Image du Post" />
-              </div>
-            </div>
-            <div class="post">
-              <p class="align">
-                <img src="../assets/image-fake.jpg" alt="Image de Profil" />
-                {Nom <br />Prénom}
-                <br />
-                <span>{time since publication}</span>
-              </p>
-              <br />
-              <div class="post-content">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
-              </div>
-              <div class="post-image">
-                <img src="../assets/image-fake.jpg" alt="Image du Post" />
-              </div>
-            </div>
-            <div class="post">
-              <p class="align">
-                <img src="../assets/image-fake.jpg" alt="Image de Profil" />
-                {Nom <br />Prénom}
-                <br />
-                <span>{time since publication}</span>
-              </p>
-              <br />
-              <div class="post-content">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
+                <div class="post-image" v-if="post.image">
+                  <img :src="post.image" alt="Image du Post" />
+                </div>
               </div>
             </div>
           </div>
@@ -185,11 +52,33 @@
 
 <script>
 export default {
-  name: 'AccueilNew',
+  name: 'Accueil',
   data() {
     return {
-      link: 'https://github.com/',
-      success: true,
+      posts: [],
+    };
+  },
+  mounted() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/post', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.posts = data;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
+    this.options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     };
   },
 };
@@ -327,8 +216,11 @@ export default {
 }
 
 .post-content {
-  padding: 0 3vh;
   text-align: justify;
+}
+
+.post-content h2 {
+  color: white;
 }
 
 #post-image {
@@ -338,16 +230,14 @@ export default {
 .post {
   padding-top: 2vh;
   display: inline-flex;
-  align-items: center;
+  flex-direction: column;
+  margin: 2vh;
+  width: 100%;
 }
 
 .post p {
   color: white;
   font-size: 20px;
-}
-
-.align {
-  text-align: center;
 }
 
 .post p span {
@@ -360,10 +250,26 @@ export default {
   border-radius: 30px;
 }
 
+.post-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.post-container img {
+  margin: 0;
+}
+
+.align {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2vh;
+}
+
 .post-image img {
   width: 200px;
   height: 200px;
   aspect-ratio: 16/9;
   object-fit: cover;
+  margin: 0;
 }
 </style>

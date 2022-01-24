@@ -1,6 +1,5 @@
 <template>
   <div class="test">
-    <h1>{{ msg }}</h1>
     <div class="content">
       <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
       <h1>Connexion</h1>
@@ -14,7 +13,7 @@
         />
         <label>Mot de passe *</label>
         <input
-          type="text"
+          type="password"
           name="password"
           placeholder="Votre mot de passe"
           v-model="password"
@@ -42,22 +41,26 @@ export default {
   },
   methods: {
     submit() {
+      /* const alreadyLogin = localStorage.getItem('token');
+      if (alreadyLogin !== 'null' || alreadyLogin !== 'undefined') {
+        return this.$vToastify.error('Already logged in');
+      } */
+      if (this.identifiant.length === 0) {
+        return this.$vToastify.error('Identifiant input is empty');
+      }
       if (this.password.length === 0) {
-        return false;
+        return this.$vToastify.error('Password input is empty');
       }
       const regexPassword =
         /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
 
       if (!regexPassword.test(this.password)) {
-        return false;
-      }
-      if (this.identifiant.length === 0) {
-        return false;
+        return this.$vToastify.error("Password doesn't have a correct format");
       }
       if (this.identifiant.includes('@groupomania.fr')) {
         const regexEmail = /^([\w-]+(?:\.[\w-]+)*)@groupomania\.fr$/i;
         if (!regexEmail.test(this.identifiant)) {
-          return false;
+          return this.$vToastify.error("Email doesn't have a correct format");
         }
         return fetch('http://localhost:3000/api/user/login', {
           method: 'POST',
@@ -71,10 +74,13 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
-            this.user = data.value;
+            this.user = data;
+            localStorage.setItem('token', data.token);
+            return this.$vToastify.success('Successfully Login');
           });
       }
-      return fetch('http://localhost:3000/api/user/login', {
+
+      fetch('http://localhost:3000/api/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,11 +93,14 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.user = data.value;
+          localStorage.setItem('token', data.token);
+          return this.$vToastify.success('Successfully Login');
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
         });
+      return true;
     },
-  },
-  props: {
-    msg: String,
   },
 };
 </script>
