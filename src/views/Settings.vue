@@ -4,10 +4,18 @@
       <div class="sidebar">
         <div class="icon">
           <img src="../assets/logo_white.png" alt="Logo White" />
-          <a href="/"><i class="fas fa-home"></i></a>
-          <a href="/profil"><i class="fas fa-user"></i></a>
-          <a href="/settings"><i class="fas fa-cog"></i></a>
-          <a href="/admin/dashboard"><i class="fas fa-tools"></i></a>
+          <router-link :to="{ name: 'Accueil' }"
+            ><i class="fas fa-home"></i
+          ></router-link>
+          <router-link :to="{ name: 'Profil' }"
+            ><i class="fas fa-user"></i
+          ></router-link>
+          <router-link :to="{ name: 'Settings' }"
+            ><i class="fas fa-cog"></i
+          ></router-link>
+          <router-link :to="{ name: 'Home Dashboard' }"
+            ><i class="fas fa-tools"></i
+          ></router-link>
         </div>
         <div class="box-posts">
           <div class="upside">

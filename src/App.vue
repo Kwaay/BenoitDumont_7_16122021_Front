@@ -25,7 +25,7 @@ body {
 }
 
 #app a {
-  color: #aaa;
+  color: #a6a6a6;
 }
 
 .vt-content {

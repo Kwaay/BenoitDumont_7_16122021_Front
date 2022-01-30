@@ -1,11 +1,17 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Register from '../components/Register.vue';
-import Login from '../components/Login.vue';
-import Accueil from '../components/Accueil.vue';
-import Settings from '../components/Settings.vue';
-import Profil from '../components/Profil.vue';
-import Dashboard from '../components/Dashboard.vue';
+import Register from '../views/Register.vue';
+import Login from '../views/Login.vue';
+import Accueil from '../views/Accueil.vue';
+import Settings from '../views/Settings.vue';
+import Profil from '../views/Profil.vue';
+import DashboardHome from '../views/DashboardHome.vue';
+import DashboardUser from '../views/DashboardUser.vue';
+import DashboardPost from '../views/DashboardPost.vue';
+import DashboardToken from '../views/DashboardToken.vue';
+import UserEdit from '../views/UserEdit.vue';
+import PostEdit from '../views/PostEdit.vue';
+import CommentEdit from '../views/CommentEdit.vue';
 
 Vue.use(VueRouter);
 
@@ -26,7 +32,7 @@ const routes = [
     component: Accueil,
   },
   {
-    path: '/profil',
+    path: '/profil/:UserId',
     name: 'Profil',
     component: Profil,
   },
@@ -37,8 +43,38 @@ const routes = [
   },
   {
     path: '/admin/dashboard',
-    name: 'Admin Dashboard',
-    component: Dashboard,
+    name: 'Home Dashboard',
+    component: DashboardHome,
+  },
+  {
+    path: '/admin/user',
+    name: 'User Dashboard',
+    component: DashboardUser,
+  },
+  {
+    path: '/admin/post',
+    name: 'Post Dashboard',
+    component: DashboardPost,
+  },
+  {
+    path: '/admin/token',
+    name: 'Token Dashboard',
+    component: DashboardToken,
+  },
+  {
+    path: '/user/edit/:UserId',
+    name: 'User Modification',
+    component: UserEdit,
+  },
+  {
+    path: '/post/edit/:PostId',
+    name: 'Post Modification',
+    component: PostEdit,
+  },
+  {
+    path: '/comment/edit/:CommentId',
+    name: 'Comment Modification',
+    component: CommentEdit,
   },
 ];
 

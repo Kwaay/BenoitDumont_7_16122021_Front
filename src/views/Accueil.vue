@@ -4,15 +4,23 @@
       <div class="sidebar">
         <div class="icons">
           <img src="../assets/logo_white.png" alt="Logo White" />
-          <a href="/"><i class="fas fa-home"></i></a>
-          <a href="/profil"><i class="fas fa-user"></i></a>
-          <a href="/settings"><i class="fas fa-cog"></i></a>
-          <a href="/admin/dashboard"><i class="fas fa-tools"></i></a>
+          <router-link :to="{ name: 'Accueil' }"
+            ><i class="fas fa-home"></i
+          ></router-link>
+          <router-link :to="{ name: 'Profil', params: { UserId: this.UserId } }"
+            ><i class="fas fa-user"></i
+          ></router-link>
+          <router-link :to="{ name: 'Settings' }"
+            ><i class="fas fa-cog"></i
+          ></router-link>
+          <router-link :to="{ name: 'Home Dashboard' }"
+            ><i class="fas fa-tools"></i
+          ></router-link>
         </div>
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img src="../assets/20210503_133718.png" alt="Profile Image" />
+              <img :src="userConnected.user.avatar" alt="Profile Image" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
@@ -38,8 +46,19 @@
                 <p>
                   {{ post.content }}
                 </p>
-                <div class="post-image" v-if="post.image">
-                  <img :src="post.image" alt="Image du Post" />
+                <div
+                  class="post-image"
+                  v-if="post.media && isImage(post.media)"
+                >
+                  <img :src="post.media" alt="Image du Post" />
+                </div>
+                <div
+                  class="post-video"
+                  v-if="post.media && isVideo(post.media)"
+                >
+                  <video controls width="250">
+                    <source :src="post.media" type="video/mp4" />
+                  </video>
                 </div>
               </div>
             </div>
@@ -55,8 +74,32 @@ export default {
   name: 'Accueil',
   data() {
     return {
+      userConnected: {},
+      UserId: '',
       posts: [],
+      supportedExtensions: {
+        image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
+        video: ['mp4', 'avi'],
+      },
     };
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
   mounted() {
     const token = localStorage.getItem('token');
@@ -74,12 +117,24 @@ export default {
       .catch((error) => {
         return this.$vToastify.error(`An error occurred: ${error}`);
       });
-    this.options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
+  },
+  methods: {
+    isImage(media) {
+      if (
+        this.supportedExtensions.image.includes(media.split('.').slice(-1)[0])
+      ) {
+        return true;
+      }
+      return false;
+    },
+    isVideo(media) {
+      if (
+        this.supportedExtensions.video.includes(media.split('.').slice(-1)[0])
+      ) {
+        return true;
+      }
+      return false;
+    },
   },
 };
 </script>
@@ -99,17 +154,9 @@ export default {
 
 .sidebar {
   background-color: #2d3036;
-  height: 100vh;
   display: inline-flex;
   z-index: 99999;
   width: 100%;
-}
-
-.sidebar img {
-  margin: 2vh;
-  width: 85px;
-  height: 85px;
-  object-fit: cover;
 }
 
 .icons {
@@ -133,6 +180,13 @@ export default {
     opacity: 0.8;
     color: white;
   }
+}
+
+.icons img {
+  margin: 2vh;
+  width: 85px;
+  height: 85px;
+  object-fit: cover;
 }
 
 .up {
@@ -169,6 +223,7 @@ export default {
   height: 100%;
   background-color: #22262b;
   border-radius: 30px;
+  padding-bottom: 10vh;
 }
 
 .posts h1 {
@@ -244,12 +299,6 @@ export default {
   font-size: medium;
 }
 
-.post img {
-  width: 85px;
-  height: 85px;
-  border-radius: 30px;
-}
-
 .post-container {
   display: inline-flex;
   align-items: center;
@@ -257,6 +306,9 @@ export default {
 
 .post-container img {
   margin: 0;
+  width: 85px;
+  height: 85px;
+  border-radius: 30px;
 }
 
 .align {
@@ -266,9 +318,8 @@ export default {
 }
 
 .post-image img {
-  width: 200px;
-  height: 200px;
-  aspect-ratio: 16/9;
+  width: 300px;
+  height: 150px;
   object-fit: cover;
   margin: 0;
 }
