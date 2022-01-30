@@ -5,50 +5,41 @@
         <div class="side-container">
           <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
           <div class="icons">
-            <a href="/admin/dashboard">
+            <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/users">
+            <router-link :to="{ name: 'User Dashboard' }">
               <p><i class="fas fa-user"></i>Utilisateurs</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/posts">
+            <router-link :to="{ name: 'Post Dashboard' }">
               <p><i class="fas fa-comment-alt"></i>Posts</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/tokens">
+            <router-link :to="{ name: 'Token Dashboard' }">
               <p><i class="fas fa-ticket-alt"></i>Tokens</p>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
       <div class="middle">
         <div class="middle-container">
-          <h2>Dashboard</h2>
-          <div class="data">
-            <div class="data-nb-users">
-              <div class="in">
-                <h3>Nombre d'utilisateurs inscrits</h3>
-                <span>{{ this.nbUsers }}</span>
+          <h2>User Dashboard</h2>
+          <div class="list-users">
+            <div class="user" v-for="user in users" :key="user.id">
+              <img :src="user.avatar" alt="Image for this User" />
+              <div class="user-infos">
+                <h3>{{ user.name }} {{ user.firstname }}</h3>
+                <p>( {{ user.username }} )</p>
               </div>
-            </div>
-            <div class="data-nb-posts">
-              <div class="in">
-                <h3>Nombre de posts</h3>
-                <span>{{ this.nbPosts }}</span>
-              </div>
-            </div>
-            <div class="data-nb-reactions">
-              <div class="in">
-                <h3>Nombre de réactions</h3>
-                <span>{{ this.nbReactions }}</span>
-              </div>
-            </div>
-            <div class="data-nb-commentaires">
-              <div class="in">
-                <h3>Nombre de commentaires</h3>
-                <span>{{ this.nbComments }}</span>
+              <div class="user-actions">
+                <div class="update">
+                  <i class="fa fa-pencil"></i>
+                </div>
+                <div class="delete">
+                  <i class="fa fa-trash"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -62,19 +53,7 @@
 export default {
   data() {
     return {
-      nbUsers: '0',
-      oldNbUsers: '0',
-      percentUsers: '0',
-      trendUsers: '',
-      nbPosts: '0',
-      nbOldPosts: '0',
-      percentPosts: '0',
-      nbReactions: '0',
-      nbOldReactions: '0',
-      percentReactions: '0',
-      nbComments: '0',
-      nbOldComments: '0',
-      percentComments: '0',
+      users: [],
     };
   },
   mounted() {
@@ -88,59 +67,13 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.nbUsers = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-    fetch('http://localhost:3000/api/post/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbPosts = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch('http://localhost:3000/api/reaction/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbReactions = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch('http://localhost:3000/api/comment/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbComments = data.length;
+        this.users = data;
       })
       .catch((error) => {
         this.error = error;
       });
   },
-  methods: {
-    percent() {},
-  },
+  methods: {},
 };
 </script>
 
@@ -197,43 +130,77 @@ export default {
 }
 
 .middle {
-  background-color: #eee;
+  background-color: #2d3036;
   width: 100%;
 }
 
 .middle-container h2 {
   padding: 2vh 4vh;
+  color: white;
 }
 
-.data {
-  display: flex;
-  justify-content: space-between;
-}
-
-.data-nb-users,
-.data-nb-posts,
-.data-nb-reactions,
-.data-nb-commentaires {
-  margin: 2vh 4vh;
-  padding: 2vh;
+.user {
   display: inline-flex;
-  align-items: center;
   flex-direction: column;
-  background-color: #fbfbfb;
-  border-radius: 10px;
-  min-width: 320px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  color: white;
+  border: 1px solid white;
+  margin: 2vh 4vh;
+  border-radius: 30px;
+  max-width: 500px;
 }
 
-.data-nb-users span,
-.data-nb-posts span,
-.data-nb-reactions span,
-.data-nb-commentaires span {
-  font-size: x-large;
+.user img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  margin: 2vh 2vh 0;
+  border-radius: 50%;
 }
 
-.in {
+.user-infos {
+  padding: 1vh;
+}
+
+.user-infos p {
+  text-align: center;
+}
+
+.user-actions {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  width: 100%;
+  transition: all 450ms ease-in-out;
+}
+
+.update,
+.delete {
+  padding: 0.5vh;
+  border: 1px solid white;
+  width: 100%;
+  text-align: center;
+  transition: all 450ms ease-in-out;
+}
+
+.update {
+  border-bottom-left-radius: 30px;
+}
+
+.update :hover {
+  transition: all 450ms ease-in-out;
+  transform: scale(1.11);
+  color: yellow;
+}
+
+.delete {
+  border-bottom-right-radius: 30px;
+}
+
+.delete :hover {
+  transition: all 450ms ease-in-out;
+  transform: scale(1.11);
+  color: red;
 }
 </style>

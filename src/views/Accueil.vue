@@ -141,7 +141,7 @@ export default {
 
 <style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: #2d3036;
   display: flex;
 }
 
@@ -153,7 +153,7 @@ export default {
 }
 
 .sidebar {
-  background-color: #2d3036;
+  background-color: #22262b;
   display: inline-flex;
   z-index: 99999;
   width: 100%;
@@ -221,7 +221,7 @@ export default {
   overflow-y: scroll;
   width: calc(100% + 20px);
   height: 100%;
-  background-color: #22262b;
+  background-color: #2d3036;
   border-radius: 30px;
   padding-bottom: 10vh;
 }
@@ -318,8 +318,8 @@ export default {
 }
 
 .post-image img {
-  width: 300px;
-  height: 150px;
+  width: 350px;
+  height: 200px;
   object-fit: cover;
   margin: 0;
 }

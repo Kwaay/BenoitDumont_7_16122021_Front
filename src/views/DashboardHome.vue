@@ -5,21 +5,21 @@
         <div class="side-container">
           <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
           <div class="icons">
-            <a href="/admin/dashboard">
+            <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/users">
+            <router-link :to="{ name: 'User Dashboard' }">
               <p><i class="fas fa-user"></i>Utilisateurs</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/posts">
+            <router-link :to="{ name: 'Post Dashboard' }">
               <p><i class="fas fa-comment-alt"></i>Posts</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/tokens">
+            <router-link :to="{ name: 'Token Dashboard' }">
               <p><i class="fas fa-ticket-alt"></i>Tokens</p>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
@@ -63,18 +63,9 @@ export default {
   data() {
     return {
       nbUsers: '0',
-      oldNbUsers: '0',
-      percentUsers: '0',
-      trendUsers: '',
       nbPosts: '0',
-      nbOldPosts: '0',
-      percentPosts: '0',
       nbReactions: '0',
-      nbOldReactions: '0',
-      percentReactions: '0',
       nbComments: '0',
-      nbOldComments: '0',
-      percentComments: '0',
     };
   },
   mounted() {
