@@ -5,53 +5,32 @@
         <div class="side-container">
           <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
           <div class="icons">
-            <a href="/admin/dashboard">
+            <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/users">
+            <router-link :to="{ name: 'User Dashboard' }">
               <p><i class="fas fa-user"></i>Utilisateurs</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/posts">
+            <router-link :to="{ name: 'Post Dashboard' }">
               <p><i class="fas fa-comment-alt"></i>Posts</p>
-            </a>
+            </router-link>
             <br />
-            <a href="/admin/tokens">
+            <router-link :to="{ name: 'Token Dashboard' }">
               <p><i class="fas fa-ticket-alt"></i>Tokens</p>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
       <div class="middle">
         <div class="middle-container">
-          <h2>Dashboard</h2>
-          <div class="data">
-            <div class="data-nb-users">
-              <div class="in">
-                <h3>Nombre d'utilisateurs inscrits</h3>
-                <span>{{ this.nbUsers }}</span>
-              </div>
-            </div>
-            <div class="data-nb-posts">
-              <div class="in">
-                <h3>Nombre de posts</h3>
-                <span>{{ this.nbPosts }}</span>
-              </div>
-            </div>
-            <div class="data-nb-reactions">
-              <div class="in">
-                <h3>Nombre de réactions</h3>
-                <span>{{ this.nbReactions }}</span>
-              </div>
-            </div>
-            <div class="data-nb-commentaires">
-              <div class="in">
-                <h3>Nombre de commentaires</h3>
-                <span>{{ this.nbComments }}</span>
-              </div>
-            </div>
-          </div>
+          <h2>Token Dashboard</h2>
+          <data-table
+            :v-bind="{ columns, data: tokens }"
+            :columns="columns"
+            :data="tokens"
+          />
         </div>
       </div>
     </div>
@@ -59,27 +38,61 @@
 </template>
 
 <script>
+import deleteActionButton from '../components/deleteActionButton.vue';
+
 export default {
   data() {
     return {
-      nbUsers: '0',
-      oldNbUsers: '0',
-      percentUsers: '0',
-      trendUsers: '',
-      nbPosts: '0',
-      nbOldPosts: '0',
-      percentPosts: '0',
-      nbReactions: '0',
-      nbOldReactions: '0',
-      percentReactions: '0',
-      nbComments: '0',
-      nbOldComments: '0',
-      percentComments: '0',
+      tokens: [],
+      columns: [
+        {
+          key: 'id',
+          title: 'Id',
+          type: 'number',
+        },
+        {
+          key: 'createdAt',
+          title: 'Created At',
+          type: 'string',
+        },
+        {
+          key: 'token',
+          title: 'Token',
+          component: {
+            props: ['data'],
+            render(createElement) {
+              return createElement(
+                'div',
+                {
+                  class: 'token-style',
+                },
+                this.data.token,
+              );
+            },
+          },
+        },
+        {
+          key: 'userAgent',
+          title: 'User Agent',
+          type: 'string',
+        },
+        {
+          key: 'ipAddress',
+          title: 'IP Address',
+          type: 'string',
+        },
+        {
+          title: 'Revoke',
+          component: deleteActionButton,
+          sortable: false,
+          searchable: false,
+        },
+      ],
     };
   },
   mounted() {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/user/', {
+    fetch('http://localhost:3000/api/token/', {
       method: 'GET',
       headers: {
         Authorization: `Bearer:' ${token}`,
@@ -88,63 +101,27 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.nbUsers = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-    fetch('http://localhost:3000/api/post/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbPosts = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch('http://localhost:3000/api/reaction/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbReactions = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch('http://localhost:3000/api/comment/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbComments = data.length;
+        this.tokens = data;
       })
       .catch((error) => {
         this.error = error;
       });
   },
-  methods: {
-    percent() {},
+  computed: {
+    data() {
+      return this.tokens.map((token) => {
+        const parsedCreatedAt = new Date(token.createdAt).toLocaleString();
+        return {
+          ...token,
+          createdAt: parsedCreatedAt,
+        };
+      });
+    },
   },
 };
 </script>
 
-<style scoped>
+<style>
 .content {
   background-color: #22262b;
   display: flex;
@@ -197,43 +174,32 @@ export default {
 }
 
 .middle {
-  background-color: #eee;
+  background-color: #2d3036;
   width: 100%;
+  color: white;
 }
 
 .middle-container h2 {
   padding: 2vh 4vh;
 }
 
-.data {
-  display: flex;
+.token {
+  border: 1px solid white;
+  margin: 2vh 4vh;
+  border-radius: 30px;
+  padding: 2vh;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
 }
 
-.data-nb-users,
-.data-nb-posts,
-.data-nb-reactions,
-.data-nb-commentaires {
-  margin: 2vh 4vh;
-  padding: 2vh;
-  display: inline-flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: #fbfbfb;
-  border-radius: 10px;
-  min-width: 320px;
+.wrap {
+  word-wrap: break-word;
 }
 
-.data-nb-users span,
-.data-nb-posts span,
-.data-nb-reactions span,
-.data-nb-commentaires span {
-  font-size: x-large;
-}
-
-.in {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.token-style {
+  word-wrap: break-word;
+  max-width: 600px;
 }
 </style>

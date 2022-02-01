@@ -1,2 +1,47 @@
 @import '~flag-icons/css/flag-icons.min.css';
 @import '~vue-multiselect/dist/vue-multiselect.min.css';
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "@andresouzaabreu/vue-data-table/dist/DataTable.css";
+
+.data-table {
+  padding: 2vh 4vh;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) > * {
+  color: white;
+}
+
+.table > :not(:first-child) {
+  color: white;
+}
+
+.table-hover > tbody > tr:hover > * {
+  color: white;
+}
+
+.page-link {
+  color: #22262b;
+}
+
+.page-link:hover {
+  color: #22262b;
+}
+
+.page-item.active .page-link {
+  background-color: #22262b;
+  border-color: #22262b;
+}
+
+.btn-primary {
+  background-color: #22262b;
+  border-color: #22262b;
+}
+
+.btn-primary:hover {
+  background-color: #22262b;
+  border-color: #22262b;
+}
+
+.data-table-table .column.sortable:hover {
+  color: #22262b;
+}

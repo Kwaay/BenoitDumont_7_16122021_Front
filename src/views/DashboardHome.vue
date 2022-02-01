@@ -188,8 +188,9 @@ export default {
 }
 
 .middle {
-  background-color: #eee;
+  background-color: #2d3036;
   width: 100%;
+  color: white;
 }
 
 .middle-container h2 {
@@ -210,7 +211,8 @@ export default {
   display: inline-flex;
   align-items: center;
   flex-direction: column;
-  background-color: #fbfbfb;
+  background-color: #3a3a3a;
+  color: white;
   border-radius: 10px;
   min-width: 320px;
 }

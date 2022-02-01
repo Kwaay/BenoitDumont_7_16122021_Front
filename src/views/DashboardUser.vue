@@ -28,17 +28,18 @@
           <h2>User Dashboard</h2>
           <div class="list-users">
             <div class="user" v-for="user in users" :key="user.id">
-              <img :src="user.avatar" alt="Image for this User" />
-              <div class="user-infos">
-                <h3>{{ user.name }} {{ user.firstname }}</h3>
-                <p>( {{ user.username }} )</p>
-              </div>
-              <div class="user-actions">
-                <div class="update">
-                  <i class="fa fa-pencil"></i>
-                </div>
-                <div class="delete">
-                  <i class="fa fa-trash"></i>
+              <div class="user-content">
+                <img :src="user.avatar" alt="Image for this User" />
+                <br />
+                {{ user.name }} <br />
+                {{ user.firstname }}<br />( {{ user.username }} )
+                <div class="user-actions">
+                  <div class="update">
+                    <i class="fa fa-pencil"></i>
+                  </div>
+                  <div class="delete">
+                    <i class="fa fa-trash"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -139,53 +140,49 @@ export default {
   color: white;
 }
 
-.user {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.list-users {
+  display: flex;
+  height: 100%;
   flex-wrap: wrap;
+}
+
+.user {
   color: white;
   border: 1px solid white;
   margin: 2vh 4vh;
   border-radius: 30px;
-  max-width: 500px;
+  max-width: 150px;
+  max-height: 300px;
+  text-align: center;
 }
 
 .user img {
   width: 64px;
   height: 64px;
   object-fit: cover;
-  margin: 2vh 2vh 0;
-  border-radius: 50%;
+  margin: 1vh;
+  border-radius: 20px;
 }
 
-.user-infos {
-  padding: 1vh;
-}
-
-.user-infos p {
+.user-content {
   text-align: center;
 }
 
 .user-actions {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  transition: all 450ms ease-in-out;
+  display: inline-flex;
+  margin: 1vh;
 }
 
 .update,
 .delete {
-  padding: 0.5vh;
-  border: 1px solid white;
+  padding: 1vh;
   width: 100%;
   text-align: center;
   transition: all 450ms ease-in-out;
 }
 
 .update {
-  border-bottom-left-radius: 30px;
+  border-top-right-radius: 20px;
 }
 
 .update :hover {
@@ -195,7 +192,7 @@ export default {
 }
 
 .delete {
-  border-bottom-right-radius: 30px;
+  border-bottom-right-radius: 20px;
 }
 
 .delete :hover {
