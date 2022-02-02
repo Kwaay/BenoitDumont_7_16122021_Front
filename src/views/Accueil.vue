@@ -216,7 +216,7 @@ export default {
 }
 
 .posts {
-  padding: 0 3vh;
+  padding: 3vh;
   overflow-x: hidden;
   overflow-y: scroll;
   width: calc(100% + 20px);
@@ -230,6 +230,7 @@ export default {
   font-size: 45px;
   color: white;
   text-align: left;
+  margin-bottom: 0;
 }
 
 .posts form {

@@ -26,24 +26,7 @@
       <div class="middle">
         <div class="middle-container">
           <h2>User Dashboard</h2>
-          <div class="list-users">
-            <div class="user" v-for="user in users" :key="user.id">
-              <div class="user-content">
-                <img :src="user.avatar" alt="Image for this User" />
-                <br />
-                {{ user.name }} <br />
-                {{ user.firstname }}<br />( {{ user.username }} )
-                <div class="user-actions">
-                  <div class="update">
-                    <i class="fa fa-pencil"></i>
-                  </div>
-                  <div class="delete">
-                    <i class="fa fa-trash"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <data-table :columns="columns" :data="userReturned" />
         </div>
       </div>
     </div>
@@ -51,10 +34,62 @@
 </template>
 
 <script>
+import modifyActionAdmin from '../components/modifyActionAdmin.vue';
+import deleteActionAdmin from '../components/deleteActionAdmin.vue';
+
 export default {
   data() {
     return {
       users: [],
+      columns: [
+        {
+          key: 'id',
+          title: 'Id',
+          type: 'number',
+        },
+        {
+          key: 'name',
+          title: 'Name',
+          type: 'string',
+        },
+        {
+          key: 'firstname',
+          title: 'Firstname',
+          type: 'string',
+        },
+        {
+          key: 'username',
+          title: 'Username',
+          type: 'string',
+        },
+        {
+          key: 'email',
+          title: 'Email',
+          type: 'string',
+        },
+        {
+          key: 'createdAt',
+          title: 'Created At',
+          type: 'string',
+        },
+        {
+          key: 'updatedAt',
+          title: 'Updated At',
+          type: 'string',
+        },
+        {
+          title: 'Modify',
+          component: modifyActionAdmin,
+          sortable: false,
+          searchable: false,
+        },
+        {
+          title: 'Delete',
+          component: deleteActionAdmin,
+          sortable: false,
+          searchable: false,
+        },
+      ],
     };
   },
   mounted() {
@@ -74,7 +109,20 @@ export default {
         this.error = error;
       });
   },
-  methods: {},
+  computed: {
+    userReturned() {
+      return this.users.map((user) => {
+        const parsedCreatedAt = new Date(user.createdAt).toLocaleString();
+        const parsedUpdatedAt = new Date(user.updatedAt).toLocaleString();
+        const userModified = {
+          ...user,
+          updatedAt: parsedUpdatedAt,
+          createdAt: parsedCreatedAt,
+        };
+        return userModified;
+      });
+    },
+  },
 };
 </script>
 
@@ -136,7 +184,7 @@ export default {
 }
 
 .middle-container h2 {
-  padding: 2vh 4vh;
+  padding: 5vh 0 0 5vh;
   color: white;
 }
 

@@ -42,6 +42,16 @@ const routes = [
     component: Settings,
   },
   {
+    path: '/user/:UserId/edit',
+    name: 'User Modification',
+    component: UserEdit,
+  },
+  {
+    path: '/admin/post/:PostId/edit',
+    name: 'Post Modification',
+    component: PostEdit,
+  },
+  {
     path: '/admin/dashboard',
     name: 'Home Dashboard',
     component: DashboardHome,
@@ -62,18 +72,18 @@ const routes = [
     component: DashboardToken,
   },
   {
-    path: '/user/edit/:UserId',
-    name: 'User Modification',
+    path: '/admin/user/:UserId/edit',
+    name: 'User Admin Modification',
     component: UserEdit,
   },
   {
-    path: '/post/edit/:PostId',
-    name: 'Post Modification',
+    path: '/admin/post/:PostId/edit',
+    name: 'Post Admin Modification',
     component: PostEdit,
   },
   {
-    path: '/comment/edit/:CommentId',
-    name: 'Comment Modification',
+    path: '/admin/comment/:CommentId/edit',
+    name: 'Comment Admin Modification',
     component: CommentEdit,
   },
 ];

@@ -42,6 +42,18 @@
   border-color: #22262b;
 }
 
+.data-table-sorting-icons {
+  position: relative;
+  padding-right: 20px;
+}
+
+
+.data-table-sorting-index {
+  position: absolute;
+  right: 5px;
+
+}
+
 .data-table-table .column.sortable:hover {
   color: #22262b;
 }

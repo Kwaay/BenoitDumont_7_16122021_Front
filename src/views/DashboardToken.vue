@@ -26,11 +26,7 @@
       <div class="middle">
         <div class="middle-container">
           <h2>Token Dashboard</h2>
-          <data-table
-            :v-bind="{ columns, data: tokens }"
-            :columns="columns"
-            :data="tokens"
-          />
+          <data-table :columns="columns" :data="tokenReturned" />
         </div>
       </div>
     </div>
@@ -38,7 +34,8 @@
 </template>
 
 <script>
-import deleteActionButton from '../components/deleteActionButton.vue';
+import EventBus from '../EventBus';
+import deleteActionAdmin from '../components/deleteActionAdmin.vue';
 
 export default {
   data() {
@@ -83,14 +80,33 @@ export default {
         },
         {
           title: 'Revoke',
-          component: deleteActionButton,
+          component: deleteActionAdmin,
           sortable: false,
           searchable: false,
         },
       ],
     };
   },
+  methods: {
+    revokeToken(tokenData) {
+      const validation = window.confirm(
+        'Are you sure you want to delete this token ?',
+      );
+      if (validation === true) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/token/${tokenData.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => this.$router.go());
+      }
+    },
+  },
   mounted() {
+    EventBus.$on('deleteActionPressed', this.revokeToken);
+
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/token/', {
       method: 'GET',
@@ -108,13 +124,14 @@ export default {
       });
   },
   computed: {
-    data() {
+    tokenReturned() {
       return this.tokens.map((token) => {
         const parsedCreatedAt = new Date(token.createdAt).toLocaleString();
-        return {
+        const tokenModified = {
           ...token,
           createdAt: parsedCreatedAt,
         };
+        return tokenModified;
       });
     },
   },
@@ -180,7 +197,7 @@ export default {
 }
 
 .middle-container h2 {
-  padding: 2vh 4vh;
+  padding: 5vh 0 0 5vh;
 }
 
 .token {
