@@ -3,7 +3,11 @@
     <div class="content">
       <div class="side">
         <div class="side-container">
-          <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+          <router-link :to="{ name: 'Accueil' }">
+            <p>
+              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+            </p>
+          </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
@@ -34,8 +38,9 @@
 </template>
 
 <script>
+import EventBus from '../EventBus';
 import modifyActionAdmin from '../components/modifyActionAdmin.vue';
-import deleteActionAdmin from '../components/deleteActionAdmin.vue';
+import deleteActionAdmin from '../components/deleteAction.vue';
 
 export default {
   data() {
@@ -92,23 +97,6 @@ export default {
       ],
     };
   },
-  mounted() {
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/user/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer:' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.users = data;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-  },
   computed: {
     userReturned() {
       return this.users.map((user) => {
@@ -122,6 +110,56 @@ export default {
         return userModified;
       });
     },
+  },
+  methods: {
+    listenEventBus() {
+      EventBus.$on('deleteActionPressed', this.deleteUser);
+      EventBus.$on('modifyActionPressed', this.modifyUser);
+    },
+    getUsers() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/user/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer:' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.users = data;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
+    modifyUser(userData) {
+      this.$router.push({
+        name: 'User Admin Modification',
+        params: { UserId: userData.id },
+      });
+    },
+    deleteUser(userData) {
+      const validation = window.confirm(
+        'Are you sure you want to delete this user ?',
+      );
+      if (validation === true) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/user/${userData.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => this.getUsers());
+      }
+    },
+  },
+  created() {
+    this.listenEventBus();
+  },
+  mounted() {
+    this.getUsers();
   },
 };
 </script>

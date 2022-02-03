@@ -3,7 +3,11 @@
     <div class="content">
       <div class="side">
         <div class="side-container">
-          <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+          <router-link :to="{ name: 'Accueil' }">
+            <p>
+              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+            </p>
+          </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
@@ -58,12 +62,10 @@
                 </div>
               </div>
               <div class="post-actions">
-                <div class="update">
+                <div class="update" @click="updatePost(post)">
                   <i class="fa fa-pencil"></i>
                 </div>
-                <div class="delete">
-                  <i class="fa fa-trash"></i>
-                </div>
+                <deleteAction :data="post" />
               </div>
             </div>
           </div>
@@ -74,10 +76,14 @@
 </template>
 
 <script>
+import EventBus from '../EventBus';
+import deleteAction from '../components/deleteAction.vue';
+
 export default {
+  components: { deleteAction },
   data() {
     return {
-      posts: {},
+      posts: [],
       supportedExtensions: {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
@@ -85,21 +91,8 @@ export default {
     };
   },
   mounted() {
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/post/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.posts = data;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
+    EventBus.$on('deleteActionPressed', this.deletePost);
+    this.getPosts();
   },
   methods: {
     isImage(media) {
@@ -117,6 +110,44 @@ export default {
         return true;
       }
       return false;
+    },
+    getPosts() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/post/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.posts = data;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
+    updatePost(post) {
+      this.$router.push({
+        name: 'Post Admin Modification',
+        params: { PostId: post.User.id },
+      });
+    },
+    deletePost(post) {
+      const validation = window.confirm(
+        'Are you sure you want to delete this post ?',
+      );
+      if (validation === true) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/post/${post.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => this.getPosts());
+      }
     },
   },
 };
@@ -180,12 +211,9 @@ export default {
   color: white;
 }
 
-.middle-container h2 {
-  padding: 2vh 4vh;
-}
-
 .post-content {
   text-align: justify;
+  padding: 0 2vh;
 }
 
 .post-content h2 {
@@ -196,10 +224,11 @@ export default {
 .post {
   display: inline-flex;
   flex-direction: column;
-  margin: 2vh;
+  margin: 5vh;
   padding: 2vh;
   border: 1px solid white;
   border-radius: 20px;
+  position: relative;
 }
 
 .post p {
@@ -214,13 +243,15 @@ export default {
 .post-container {
   display: inline-flex;
   align-items: center;
+  padding: 0 2vh 2vh;
 }
 
 .post-container img {
   margin: 0;
   width: 85px;
   height: 85px;
-  border-radius: 30px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .align {
@@ -240,6 +271,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  position: absolute;
+  right: 4vh;
 }
 
 .update,

@@ -24,31 +24,96 @@
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
-          <div class="posts">
-            <h1>Créer un post</h1>
-            <form>
-              <input type="text" name="create-post" placeholder="Ecrire ici" />
-              <label for="post-image"><i class="fas fa-camera"></i></label>
-              <input type="file" id="post-image" />
-            </form>
-            <div class="post" v-for="post in posts" :key="post.id">
-              <div class="post-container">
-                <img :src="post.User.avatar" alt="Image de Profil" />
-                <div class="align">
-                  <p>
-                    {{ post.User.name }} {{ post.User.firstname }} <br />
-                    {{ new Date(post.createdAt).toLocaleString() }}
-                  </p>
+          <div class="update">
+            <h1>Modification d'utilisateur</h1>
+            <div class="update-container">
+              <label for="post-image" class="design">
+                <div class="message">
+                  <img :src="user.avatar" alt="Photo de profil" />
+                  <p>Modifier l'image</p>
                 </div>
-              </div>
-              <div class="post-content">
-                <h2>{{ post.title }}</h2>
-                <p>
-                  {{ post.content }}
-                </p>
-                <div class="post-image" v-if="post.image">
-                  <img :src="post.image" alt="Image du Post" />
-                </div>
+                <input
+                  type="file"
+                  id="post-image"
+                  class="upload"
+                  @change="updateImage"
+                />
+              </label>
+              <div class="update-form">
+                <form @submit.prevent="submit" class="form-user-edit">
+                  <div class="champ">
+                    <label>Nom *</label>
+                    <br />
+                    <input
+                      type="text"
+                      name="nom"
+                      placeholder="example: John"
+                      v-model.lazy="user.name"
+                      :pattern="patternName"
+                    />
+                  </div>
+                  <div class="champ">
+                    <label>Prénom *</label>
+                    <br />
+                    <input
+                      type="text"
+                      name="prenom"
+                      placeholder="example: Doe"
+                      v-model.lazy="user.firstname"
+                      :pattern="patternFirstname"
+                    />
+                  </div>
+                  <div class="champ">
+                    <label>Pseudonyme *</label>
+                    <br />
+                    <input
+                      type="text"
+                      name="username"
+                      placeholder="Entre 4 et 10 caractères"
+                      v-model.lazy="user.username"
+                      :pattern="patternUsername"
+                    />
+                  </div>
+                  <div class="champ">
+                    <label>Email *</label>
+                    <br />
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="example@domain.fr"
+                      v-model.lazy="user.email"
+                    />
+                  </div>
+                  <div class="champ">
+                    <label>Question *</label>
+                    <br />
+                    <input
+                      type="text"
+                      name="question"
+                      placeholder="Entre 4 et 15 caractères"
+                      v-model.lazy="user.question"
+                      :pattern="patternQuestion"
+                    />
+                  </div>
+                  <div class="champ">
+                    <label>Réponse *</label>
+                    <br />
+                    <input
+                      type="text"
+                      name="reponse"
+                      placeholder="Entre 4 et 15 caractères"
+                      v-model.lazy="user.reponse"
+                      :pattern="patternReponse"
+                    />
+                  </div>
+                  <br />
+                  <input
+                    type="submit"
+                    name="submit"
+                    value="Modifier l'utilisateur"
+                    class="btn"
+                  />
+                </form>
               </div>
             </div>
           </div>
@@ -63,31 +128,101 @@ export default {
   name: 'Accueil',
   data() {
     return {
-      posts: [],
+      /* eslint-disable no-useless-escape */
+      patternName:
+        '[A-ZÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÇßØÅÆ]{1}[a-zàèìòùáéíóúýâêîôûãñõäëïöüÿçøåæœ]{2,15}',
+      patternFirstname:
+        '[A-ZÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÇßØÅÆ]{1}[a-zàèìòùáéíóúýâêîôûãñõäëïöüÿçøåæœ]{2,15}',
+      patternUsername:
+        '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ_-]{4,20}',
+      patternEmail: '([\w-]+(?:\.[\w-]+)*)@groupomania\.fr',
+      patternQuestion:
+        '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ,.?"\'/ _-]{4,15}',
+      patternReponse:
+        '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ,.`\'"/ _-]{4,15}',
+      /* eslint-enable no-useless-escape */
+      user: {},
     };
   },
-  mounted() {
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/post', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer: ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.posts = data;
+  methods: {
+    updateImage(e) {
+      const data = new FormData();
+      data.append('avatar', e.target.files[0]);
+      const token = localStorage.getItem('token');
+      return fetch(
+        `http://localhost:3000/api/user/${this.$route.params.UserId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: data,
+        },
+      ).then(() => this.fetchUserProfile());
+    },
+    submit() {
+      const regexName =
+        /^[A-ZÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÇßØÅÆ]{1}[a-zàèìòùáéíóúýâêîôûãñõäëïöüÿçøåæœ]{2,15}$/;
+      const regexFirstname =
+        /^[A-ZÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÇßØÅÆ]{1}[a-zàèìòùáéíóúýâêîôûãñõäëïöüÿçøåæœ]{2,15}$/;
+      const regexUsername =
+        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ_-]{4,20}$/;
+      const regexEmail = /^([\w-]+(?:\.[\w-]+)*)@groupomania\.fr$/i;
+      const regexQuestion =
+        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ,.?"'/ _-]{4,15}$/;
+      const regexReponse =
+        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ,.'"/ _-]{4,15}$/;
+      const { name, firstname, username, email, question, reponse } = this.user;
+      if (
+        !regexName.test(name) ||
+        !regexFirstname.test(firstname) ||
+        !regexUsername.test(username) ||
+        !regexEmail.test(email) ||
+        !regexQuestion.test(question) ||
+        !regexReponse.test(reponse)
+      ) {
+        return false;
+      }
+      const token = localStorage.getItem('token');
+      return fetch(
+        `http://localhost:3000/api/user/${this.$route.params.UserId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            firstname,
+            username,
+            email,
+            question,
+            reponse,
+          }),
+        },
+      ).then(() => this.fetchUserProfile());
+    },
+    fetchUserProfile() {
+      const token = localStorage.getItem('token');
+      fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
-      });
-    this.options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
+        .then((response) => response.json())
+        .then((data) => {
+          this.user = data;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
+  },
+  mounted() {
+    this.fetchUserProfile();
   },
 };
 </script>
@@ -101,19 +236,19 @@ export default {
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: #22262b;
   padding-top: 5vh;
 }
 
 .sidebar {
-  background-color: #2d3036;
+  background-color: #22262b;
   height: 100vh;
   display: inline-flex;
   z-index: 99999;
   width: 100%;
 }
 
-.sidebar img {
+.icons img {
   margin: 2vh;
   width: 85px;
   height: 85px;
@@ -169,115 +304,97 @@ export default {
   position: relative;
 }
 
-.posts {
-  padding: 0 3vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  width: calc(100% + 20px);
+.update {
+  background-color: #2d3036;
   height: 100%;
-  background-color: #22262b;
-  border-radius: 30px;
+  border-top-left-radius: 30px;
 }
 
-.posts h1 {
-  font-size: 45px;
+.update h1 {
+  padding: 5vh;
   color: white;
-  text-align: left;
+  text-align: center;
 }
 
-.posts form {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.posts form i {
-  padding-left: 2vh;
-  font-size: 48px;
-}
-
-.posts form label i {
-  -webkit-text-stroke: 1px #707070;
-  color: #3a3a3a;
-  -webkit-text-fill-color: transparent;
-  transition: all 450ms ease-in-out;
-}
-
-.posts form label :hover,
-.posts form label :active {
-  -webkit-text-stroke: 1px white;
-}
-
-.posts form input {
-  background-color: #3a3a3a;
-  border: 1px #707070 solid;
-  border-radius: 30px;
-  height: 42px;
+.update-container {
+  text-align: center;
   width: 100%;
-  color: white;
-  padding-left: 2vh;
 }
 
-.posts form input::placeholder {
-  font-family: Nunito, sans-serif;
-  font-size: large;
+.update-container img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
 }
 
-.post-content {
-  text-align: justify;
-}
-
-.post-content h2 {
+.update-form {
   color: white;
 }
 
-#post-image {
+.upload {
   display: none;
 }
 
-.post {
-  padding-top: 2vh;
-  display: inline-flex;
-  flex-direction: column;
-  margin: 2vh;
-  width: 100%;
+.message {
+  position: relative;
+  border-radius: 50%;
 }
 
-.post p {
+.message:hover img {
+  opacity: 0.6;
+  transition: all 450ms ease-in-out;
+}
+
+.message p {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  transition: all 450ms ease-in-out;
+}
+
+.message:hover p {
+  display: block;
   color: white;
-  font-size: 20px;
+  transition: all 450ms ease-in-out;
 }
 
-.post p span {
-  font-size: medium;
-}
-
-.post img {
-  width: 85px;
-  height: 85px;
-  border-radius: 30px;
-}
-
-.post-container {
+.form-user-edit {
+  margin: 4vh;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 900px;
 }
 
-.post-container img {
-  margin: 0;
+.champ {
+  padding: 1vh;
 }
 
-.align {
-  display: flex;
-  flex-direction: column;
-  padding-left: 2vh;
+.champ input {
+  width: 418px;
+  height: 48px;
+  font-family: Nunito, sans-serif;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  border: 1px #707070 solid;
 }
 
-.post-image img {
-  width: 200px;
-  height: 200px;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  margin: 0;
+.btn {
+  border: 1px solid #a6a6a6;
+  color: white;
+  transition: all 450ms ease-in-out;
+}
+
+.btn:hover {
+  background-color: white;
+  color: #2d3036;
 }
 </style>

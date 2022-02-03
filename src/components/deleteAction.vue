@@ -17,23 +17,6 @@ export default {
   methods: {
     deleteAction() {
       EventBus.$emit('deleteActionPressed', this.data);
-      /* if (this.$router.currentRoute.path.includes('user')) {
-        const validation = window.confirm(
-          'Are you sure you want to delete this user ?',
-        );
-        if (validation === true) {
-          const token = localStorage.getItem('token');
-          fetch(`http://localhost:3000/api/user/${this.data.id}`, {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer:' ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          return true;
-        }
-      }
-      return false; */
     },
   },
 };

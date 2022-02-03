@@ -3,7 +3,12 @@
     <div class="content">
       <div class="side">
         <div class="side-container">
-          <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+          <router-link :to="{ name: 'Accueil' }">
+            <p>
+              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+            </p>
+          </router-link>
+
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
@@ -28,25 +33,25 @@
           <h2>Dashboard</h2>
           <div class="data">
             <div class="data-nb-users">
-              <div class="in">
+              <div class="data-container">
                 <h3>Nombre d'utilisateurs inscrits</h3>
                 <span>{{ this.nbUsers }}</span>
               </div>
             </div>
             <div class="data-nb-posts">
-              <div class="in">
+              <div class="data-container">
                 <h3>Nombre de posts</h3>
                 <span>{{ this.nbPosts }}</span>
               </div>
             </div>
             <div class="data-nb-reactions">
-              <div class="in">
+              <div class="data-container">
                 <h3>Nombre de réactions</h3>
                 <span>{{ this.nbReactions }}</span>
               </div>
             </div>
             <div class="data-nb-commentaires">
-              <div class="in">
+              <div class="data-container">
                 <h3>Nombre de commentaires</h3>
                 <span>{{ this.nbComments }}</span>
               </div>
@@ -129,9 +134,7 @@ export default {
         this.error = error;
       });
   },
-  methods: {
-    percent() {},
-  },
+  methods: {},
 };
 </script>
 
@@ -193,20 +196,18 @@ export default {
   color: white;
 }
 
-.middle-container h2 {
-  padding: 2vh 4vh;
-}
-
 .data {
   display: flex;
   justify-content: space-between;
+  padding-top: 2vh;
+  flex-wrap: wrap;
 }
 
 .data-nb-users,
 .data-nb-posts,
 .data-nb-reactions,
 .data-nb-commentaires {
-  margin: 2vh 4vh;
+  margin: 2vh 5vh;
   padding: 2vh;
   display: inline-flex;
   align-items: center;
@@ -224,9 +225,13 @@ export default {
   font-size: x-large;
 }
 
-.in {
+.data-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.data-container h3 {
+  font-size: large;
 }
 </style>

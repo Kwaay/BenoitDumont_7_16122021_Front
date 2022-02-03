@@ -20,15 +20,15 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="imageConnected" alt="Profile Image" />
+              <img :src="userConnected" alt="Profile Image" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="profile">
             <div class="profile-container">
               <div class="infos">
-                <img :src="imageConnected" alt="Profile Image" />
-                <h1>{{ user.name }} {{ user.firstname }}</h1>
+                <img :src="userConnected" alt="Profile Image" />
+                <h1>{{ userConnected.name }} {{ userConnected.firstname }}</h1>
               </div>
               <div class="latest-posts">
                 <h2>Derniers posts</h2>
@@ -90,7 +90,7 @@ export default {
     })
       .then((response) => response.json())
       .then((dataUsers) => {
-        this.imageConnected = dataUsers.user.avatar;
+        this.userConnected = dataUsers;
       })
       .catch((error) => {
         this.error = error;

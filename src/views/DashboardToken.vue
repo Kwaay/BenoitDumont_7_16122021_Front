@@ -3,7 +3,11 @@
     <div class="content">
       <div class="side">
         <div class="side-container">
-          <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+          <router-link :to="{ name: 'Accueil' }">
+            <p>
+              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+            </p>
+          </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
@@ -35,7 +39,7 @@
 
 <script>
 import EventBus from '../EventBus';
-import deleteActionAdmin from '../components/deleteActionAdmin.vue';
+import deleteActionAdmin from '../components/deleteAction.vue';
 
 export default {
   data() {
@@ -88,6 +92,23 @@ export default {
     };
   },
   methods: {
+    getTokens() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/token/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer:' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.tokens = data;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
     revokeToken(tokenData) {
       const validation = window.confirm(
         'Are you sure you want to delete this token ?',
@@ -100,28 +121,13 @@ export default {
             Authorization: `Bearer:' ${token}`,
             'Content-Type': 'application/json',
           },
-        }).then(() => this.$router.go());
+        }).then(() => this.getTokens());
       }
     },
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.revokeToken);
-
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/token/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer:' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.tokens = data;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
+    this.getTokens();
   },
   computed: {
     tokenReturned() {

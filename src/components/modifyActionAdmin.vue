@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import EventBus from '../EventBus';
+
 export default {
   props: {
     data: {
@@ -14,10 +16,7 @@ export default {
   },
   methods: {
     modifyUser() {
-      this.$router.push({
-        name: 'User Admin Modification',
-        params: { UserId: this.data.id },
-      });
+      EventBus.$emit('modifyActionPressed', this.data);
     },
   },
 };
