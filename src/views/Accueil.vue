@@ -20,16 +20,33 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.user.avatar" alt="Profile Image" />
+              <img :src="userConnected.avatar" alt="Profile Image" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="posts">
             <h1>Créer un post</h1>
-            <form>
-              <input type="text" name="create-post" placeholder="Ecrire ici" />
+            <form @submit.prevent="submit">
+              <input
+                type="text"
+                name="title"
+                class="title-form"
+                placeholder="Titre du post"
+                v-model="title"
+              />
+              <input
+                type="text"
+                class="content-form"
+                placeholder="Contenu du post"
+                v-model="content"
+              />
               <label for="post-image"><i class="fas fa-camera"></i></label>
-              <input type="file" id="post-image" />
+              <input type="file" id="post-image" @change="tempStoreImage" />
+
+              <input type="submit" value="Poster" class="btn" />
+              <p class="filename" v-if="this.media">
+                Image sélectionnée <i class="fas fa-check-circle"></i>
+              </p>
             </form>
             <div class="post" v-for="post in posts" :key="post.id">
               <div class="post-container">
@@ -76,6 +93,9 @@ export default {
     return {
       userConnected: {},
       UserId: '',
+      title: '',
+      content: '',
+      media: '',
       posts: [],
       supportedExtensions: {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
@@ -94,7 +114,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data;
+        this.userConnected = data.user;
         this.UserId = data.user.id;
       })
       .catch((error) => {
@@ -102,23 +122,26 @@ export default {
       });
   },
   mounted() {
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/post', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer: ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.posts = data;
-      })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
-      });
+    this.fetchPosts();
   },
   methods: {
+    fetchPosts() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/post', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.posts = data;
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
+        });
+    },
     isImage(media) {
       if (
         this.supportedExtensions.image.includes(media.split('.').slice(-1)[0])
@@ -134,6 +157,67 @@ export default {
         return true;
       }
       return false;
+    },
+    submit() {
+      if (this.title.length === 0) {
+        return this.$vToastify.error('Title input is empty');
+      }
+      if (this.content.length === 0) {
+        return this.$vToastify.error('Content input is empty');
+      }
+      const regexTitle =
+        /^[A-ZÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÇßØÅÆ]{1}[a-z0-9àèìòùáéíóúýâêîôûãñõäëïöüÿçøåæœ?'"! _-]{2,15}$/;
+      const regexContent =
+        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'"?!., _-]{4,255}$/;
+      if (!regexTitle.test(this.title)) {
+        return this.$vToastify.error("Title doesn't have a correct format");
+      }
+      if (!regexContent.test(this.content)) {
+        return this.$vToastify.error("Content doesn't have a correct format");
+      }
+      const token = localStorage.getItem('token');
+      if (this.media) {
+        const data = new FormData();
+        data.append('media', this.media);
+        data.append('title', this.title);
+        data.append('content', this.content);
+        return fetch('http://localhost:3000/api/post', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer: ${token}`,
+          },
+          body: data,
+        })
+          .then((response) => response.json())
+          .then(() => {
+            this.fetchPosts();
+            return this.$vToastify.success(
+              'Post has been created successfully with a media',
+            );
+          });
+      }
+      return fetch('http://localhost:3000/api/post', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: this.title,
+          content: this.content,
+        }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          this.fetchPosts();
+          return this.$vToastify.success(
+            'Post has been created successfully without a media',
+          );
+        });
+    },
+    tempStoreImage(e) {
+      const file = e.target.files[0];
+      this.media = file;
     },
   },
 };
@@ -216,7 +300,7 @@ export default {
 }
 
 .posts {
-  padding: 3vh;
+  padding: 5vh;
   overflow-x: hidden;
   overflow-y: scroll;
   width: calc(100% + 20px);
@@ -224,6 +308,7 @@ export default {
   background-color: #2d3036;
   border-radius: 30px;
   padding-bottom: 10vh;
+  position: relative;
 }
 
 .posts h1 {
@@ -233,14 +318,41 @@ export default {
   margin-bottom: 0;
 }
 
+.title-form {
+  max-width: 300px;
+  padding-left: 2vh;
+}
+
+.content-form {
+  max-width: 70%;
+  padding-left: 2vh;
+}
+
+.filename {
+  position: absolute;
+  right: 1px;
+  bottom: -1vh;
+  color: white;
+}
+
+.filename i {
+  font-size: 16px !important;
+}
+
+.btn {
+  width: fit-content !important;
+}
+
 .posts form {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 4vh 0;
+  flex-wrap: wrap;
+  position: relative;
 }
 
 .posts form i {
-  padding-left: 2vh;
   font-size: 48px;
 }
 
@@ -249,6 +361,7 @@ export default {
   color: #3a3a3a;
   -webkit-text-fill-color: transparent;
   transition: all 450ms ease-in-out;
+  cursor: pointer;
 }
 
 .posts form label :hover,
@@ -263,7 +376,6 @@ export default {
   height: 42px;
   width: 100%;
   color: white;
-  padding-left: 2vh;
 }
 
 .posts form input::placeholder {
@@ -273,6 +385,7 @@ export default {
 
 .post-content {
   text-align: justify;
+  padding-top: 2vh;
 }
 
 .post-content h2 {
@@ -284,11 +397,13 @@ export default {
 }
 
 .post {
-  padding-top: 2vh;
   display: inline-flex;
   flex-direction: column;
-  margin: 2vh;
   width: 100%;
+  border: 1px solid white;
+  padding: 2vh;
+  border-radius: 30px;
+  margin: 1vh 0;
 }
 
 .post p {
@@ -309,7 +424,8 @@ export default {
   margin: 0;
   width: 85px;
   height: 85px;
-  border-radius: 30px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .align {

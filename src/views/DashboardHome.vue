@@ -57,6 +57,7 @@
               </div>
             </div>
           </div>
+          <div class="package-info"></div>
         </div>
       </div>
     </div>
@@ -134,7 +135,9 @@ export default {
         this.error = error;
       });
   },
-  methods: {},
+  methods: {
+    getPackageInfo() {},
+  },
 };
 </script>
 

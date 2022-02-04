@@ -48,7 +48,7 @@
                       type="text"
                       name="nom"
                       placeholder="example: John"
-                      v-model.lazy="user.name"
+                      v-model="user.name"
                       :pattern="patternName"
                     />
                   </div>
@@ -59,7 +59,7 @@
                       type="text"
                       name="prenom"
                       placeholder="example: Doe"
-                      v-model.lazy="user.firstname"
+                      v-model="user.firstname"
                       :pattern="patternFirstname"
                     />
                   </div>
@@ -70,7 +70,7 @@
                       type="text"
                       name="username"
                       placeholder="Entre 4 et 10 caractères"
-                      v-model.lazy="user.username"
+                      v-model="user.username"
                       :pattern="patternUsername"
                     />
                   </div>
@@ -81,7 +81,7 @@
                       type="email"
                       name="email"
                       placeholder="example@domain.fr"
-                      v-model.lazy="user.email"
+                      v-model="user.email"
                     />
                   </div>
                   <div class="champ">
@@ -91,7 +91,7 @@
                       type="text"
                       name="question"
                       placeholder="Entre 4 et 15 caractères"
-                      v-model.lazy="user.question"
+                      v-model="user.question"
                       :pattern="patternQuestion"
                     />
                   </div>
@@ -102,7 +102,7 @@
                       type="text"
                       name="reponse"
                       placeholder="Entre 4 et 15 caractères"
-                      v-model.lazy="user.reponse"
+                      v-model="user.reponse"
                       :pattern="patternReponse"
                     />
                   </div>

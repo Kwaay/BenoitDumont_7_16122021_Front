@@ -131,7 +131,7 @@ export default {
     updatePost(post) {
       this.$router.push({
         name: 'Post Admin Modification',
-        params: { PostId: post.User.id },
+        params: { PostId: post.id },
       });
     },
     deletePost(post) {
@@ -275,18 +275,12 @@ export default {
   right: 4vh;
 }
 
-.update,
-.delete {
+.update {
   padding: 1vh;
 }
 
 .update :hover {
   color: yellow;
-  transform: scale(1.11);
-}
-
-.delete :hover {
-  color: red;
   transform: scale(1.11);
 }
 </style>

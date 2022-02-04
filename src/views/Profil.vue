@@ -20,18 +20,18 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected" alt="Profile Image" />
+              <img :src="userConnected.avatar" alt="Profile Image" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="profile">
             <div class="profile-container">
               <div class="infos">
-                <img :src="userConnected" alt="Profile Image" />
+                <img :src="userConnected.avatar" alt="Profile Image" />
                 <h1>{{ userConnected.name }} {{ userConnected.firstname }}</h1>
+                <h2>Derniers posts</h2>
               </div>
               <div class="latest-posts">
-                <h2>Derniers posts</h2>
                 <div class="list-posts">
                   <div class="post" v-for="post in posts" :key="post.id">
                     <div class="post-title">
@@ -54,6 +54,12 @@
                           <source :src="post.media" type="video/mp4" />
                         </video>
                       </div>
+                      <div class="post-actions">
+                        <div class="update" @click="updatePost(post)">
+                          <i class="fa fa-pencil"></i>
+                        </div>
+                        <deleteAction :data="post" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -67,10 +73,14 @@
 </template>
 
 <script>
+import EventBus from '../EventBus';
+import deleteAction from '../components/deleteAction.vue';
+
 export default {
+  components: { deleteAction },
   data() {
     return {
-      imageConnected: {},
+      userConnected: {},
       user: {},
       posts: [],
       supportedExtensions: {
@@ -80,6 +90,7 @@ export default {
     };
   },
   mounted() {
+    EventBus.$on('deleteActionPressed', this.deletePost);
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
@@ -89,8 +100,8 @@ export default {
       },
     })
       .then((response) => response.json())
-      .then((dataUsers) => {
-        this.userConnected = dataUsers;
+      .then((data) => {
+        this.userConnected = data.user;
       })
       .catch((error) => {
         this.error = error;
@@ -128,6 +139,27 @@ export default {
         return true;
       }
       return false;
+    },
+    updatePost(post) {
+      this.$router.push({
+        name: 'Post Admin Modification',
+        params: { PostId: post.id },
+      });
+    },
+    deletePost(post) {
+      const validation = window.confirm(
+        'Are you sure you want to delete this post ?',
+      );
+      if (validation === true) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/post/${post.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => this.getPosts());
+      }
     },
   },
 };
@@ -225,11 +257,16 @@ export default {
   text-align: center;
 }
 
+.infos h1 {
+  padding-top: 2vh;
+}
+
 .infos img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
   border: 1px solid white;
+  object-fit: cover;
 }
 
 .profile-container {
@@ -251,6 +288,7 @@ export default {
   border-radius: 30px;
   margin: 4vh;
   padding: 2vh;
+  position: relative;
 }
 
 .post-content {
@@ -258,13 +296,32 @@ export default {
 }
 
 .post-image img {
-  width: 300px;
-  height: 150px;
+  width: 350px;
+  height: 200px;
   object-fit: cover;
   padding-top: 2vh;
 }
 
 .post-video {
   padding-top: 2vh;
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 4vh;
+  top: 2vh;
+}
+
+.update {
+  padding: 1vh;
+  transition: all 450ms ease-in-out;
+}
+
+.update :hover {
+  color: yellow;
+  transform: scale(1.11);
 }
 </style>

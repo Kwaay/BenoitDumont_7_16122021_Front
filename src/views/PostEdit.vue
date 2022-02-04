@@ -30,18 +30,31 @@
               <div class="media">
                 <label for="post-image" class="design">
                   <div class="message">
-                    <img :src="post.media" alt="Photo de profil" />
-                    <p>Modifier l'image</p>
+                    <div
+                      class="post-image"
+                      v-if="post.media && isImage(post.media)"
+                    >
+                      <img :src="post.media" alt="Image du Post" />
+                    </div>
+                    <div
+                      class="post-video"
+                      v-if="post.media && isVideo(post.media)"
+                    >
+                      <video controls width="250">
+                        <source :src="post.media" type="video/mp4" />
+                      </video>
+                    </div>
+                    <p>Modifier le media</p>
                   </div>
                   <input
                     type="file"
                     id="post-image"
                     class="upload"
-                    @change="updateMedia()"
+                    @change="updateMedia"
                   />
                 </label>
               </div>
-              <div class="upload-image">
+              <div class="upload-image" v-if="post.media === null">
                 <label for="post-image" class="design"
                   ><i class="fas fa-upload"></i> Uploader une image</label
                 >
@@ -49,7 +62,7 @@
                   type="file"
                   id="post-image"
                   class="upload"
-                  @change="updateMedia()"
+                  @change="updateMedia"
                 />
               </div>
               <div class="update-form">
@@ -102,6 +115,10 @@ export default {
       patternContent:
         '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\'"?!., _-]{4,255}',
       post: {},
+      supportedExtensions: {
+        image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
+        video: ['mp4', 'avi'],
+      },
     };
   },
   methods: {
@@ -122,19 +139,17 @@ export default {
           return this.$vToastify.error(`An error occurred: ${error}`);
         });
     },
-    async updateMedia() {
-      const { media } = this.post;
+    updateMedia(e) {
+      const data = new FormData();
+      data.append('media', e.target.files[0]);
       const token = localStorage.getItem('token');
-      await fetch(
-        `http://localhost:3000/api/post/${this.$route.params.PostId}`,
-        {
-          method: 'PATCH',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: media,
+      fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      ).then(() => this.fetchPostData());
+        body: data,
+      }).then(() => this.fetchPostData());
     },
     submit() {
       const regexTitle =
@@ -159,7 +174,23 @@ export default {
             content,
           }),
         },
-      );
+      ).then(() => this.fetchPostData());
+    },
+    isImage(media) {
+      if (
+        this.supportedExtensions.image.includes(media.split('.').slice(-1)[0])
+      ) {
+        return true;
+      }
+      return false;
+    },
+    isVideo(media) {
+      if (
+        this.supportedExtensions.video.includes(media.split('.').slice(-1)[0])
+      ) {
+        return true;
+      }
+      return false;
     },
   },
   mounted() {
@@ -252,7 +283,7 @@ export default {
 }
 
 .update h1 {
-  padding: 5vh;
+  padding-top: 3vh;
   color: white;
   text-align: center;
 }
@@ -317,11 +348,7 @@ export default {
 }
 
 .form-post-edit {
-  margin: 4vh;
-}
-
-.champ {
-  padding: 1vh;
+  margin: 2vh;
 }
 
 .champ input,
