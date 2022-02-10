@@ -74,7 +74,7 @@
 
 <script>
 import EventBus from '../EventBus';
-import deleteAction from '../components/deleteAction.vue';
+import deleteAction from '../components/DeleteAction.vue';
 
 export default {
   components: { deleteAction },

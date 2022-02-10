@@ -21,6 +21,10 @@
               <p><i class="fas fa-comment-alt"></i>Posts</p>
             </router-link>
             <br />
+            <router-link :to="{ name: 'Comment Dashboard' }">
+              <p><i class="fas fa-comment"></i>Comments</p>
+            </router-link>
+            <br />
             <router-link :to="{ name: 'Token Dashboard' }">
               <p><i class="fas fa-ticket-alt"></i>Tokens</p>
             </router-link>
@@ -56,7 +60,7 @@
                   class="post-video"
                   v-if="post.media && isVideo(post.media)"
                 >
-                  <video controls width="350">
+                  <video controls width="350" height="200">
                     <source :src="post.media" type="video/mp4" />
                   </video>
                 </div>
@@ -77,7 +81,7 @@
 
 <script>
 import EventBus from '../EventBus';
-import deleteAction from '../components/deleteAction.vue';
+import deleteAction from '../components/DeleteAction.vue';
 
 export default {
   components: { deleteAction },
@@ -211,6 +215,12 @@ export default {
   color: white;
 }
 
+.list-posts {
+  display: inline-flex;
+  flex-direction: wrap;
+  width: 100%;
+}
+
 .post-content {
   text-align: justify;
   padding: 0 2vh;
@@ -224,11 +234,13 @@ export default {
 .post {
   display: inline-flex;
   flex-direction: column;
-  margin: 5vh;
+  margin: 2.5vh 2.5vh 2.5vh 5vh;
   padding: 2vh;
   border: 1px solid white;
   border-radius: 20px;
   position: relative;
+  max-width: 600px;
+  width: 100%;
 }
 
 .post p {
@@ -260,11 +272,17 @@ export default {
   padding-left: 2vh;
 }
 
+.post-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
 .post-image img {
   width: 350px;
   height: 200px;
   object-fit: cover;
-  margin: 0;
 }
 
 .post-actions {

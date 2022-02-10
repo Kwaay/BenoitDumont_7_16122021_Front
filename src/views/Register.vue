@@ -1,8 +1,8 @@
 <template>
   <div class="test">
-    <div class="content">
+    <div class="content-signup">
       <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
-      <h1>Inscription</h1>
+      <h2>Inscription</h2>
       <form>
         <div class="champ">
           <label>Nom *</label>
@@ -59,14 +59,22 @@
             :pattern="patternPassword"
           />
         </div>
-        <div class="champ">
+        <div class="champ pos">
           <label>Avatar</label>
           <br />
           <label for="post-image" class="design"
             ><i class="fas fa-upload"></i> Uploader une image</label
           >
-          <input type="file" id="post-image" class="upload" />
+          <input
+            type="file"
+            id="post-image"
+            class="upload"
+            @change="tempStoreImage"
+          />
         </div>
+        <p class="filename" v-if="this.avatar">
+          Image sélectionnée <i class="fas fa-check-circle"></i>
+        </p>
         <div class="champ">
           <label>Question *</label>
           <br />
@@ -98,8 +106,11 @@
           @click.prevent="submit"
         />
       </form>
-      <h3>Déjà inscrit ? <a href="#">Se connecter</a></h3>
-      <h5>* = obligatoire</h5>
+      <h3>
+        Déjà inscrit ?
+        <router-link :to="{ name: 'Login' }">Se connecter</router-link>
+      </h3>
+      <h4>* = obligatoire</h4>
     </div>
   </div>
 </template>
@@ -128,7 +139,7 @@ export default {
       firstname: '',
       username: '',
       email: '',
-      // avatar: '',
+      avatar: '',
       password: '',
       question: '',
       reponse: '',
@@ -158,47 +169,71 @@ export default {
         password,
         question,
         reponse,
-        // avatar,
+        avatar,
       } = this;
-      if (
-        name.length === 0 ||
-        !regexName.test(name) ||
-        firstname.length === 0 ||
-        !regexFirstname.test(firstname) ||
-        username.length === 0 ||
-        !regexUsername.test(username) ||
-        email.length === 0 ||
-        !regexEmail.test(email) ||
-        password.length === 0 ||
-        !regexPassword.test(password) ||
-        question.length === 0 ||
-        !regexQuestion.test(question) ||
-        reponse.length === 0 ||
-        !regexReponse.test(reponse)
-      ) {
-        return false;
+      if (this.name.length === 0) {
+        return this.$vToastify.error('Name input is empty');
       }
-      /* if (this.avatar === null || this.avatar === undefined) {
+      if (this.firstname.length === 0) {
+        return this.$vToastify.error('Firstname input is empty');
+      }
+      if (this.username.length === 0) {
+        return this.$vToastify.error('Username input is empty');
+      }
+      if (this.email.length === 0) {
+        return this.$vToastify.error('Email input is empty');
+      }
+      if (this.password.length === 0) {
+        return this.$vToastify.error('Password input is empty');
+      }
+      if (this.question.length === 0) {
+        return this.$vToastify.error('Question input is empty');
+      }
+      if (this.reponse.length === 0) {
+        return this.$vToastify.error('Reponse input is empty');
+      }
+      if (!regexName.test(name)) {
+        return this.$vToastify.error("Name doesn't have a correct format");
+      }
+      if (!regexFirstname.test(firstname)) {
+        return this.$vToastify.error("Firstname doesn't have a correct format");
+      }
+      if (!regexUsername.test(username)) {
+        return this.$vToastify.error("Username doesn't have a correct format");
+      }
+      if (!regexEmail.test(email)) {
+        return this.$vToastify.error("Email doesn't have a correct format");
+      }
+      if (!regexPassword.test(password)) {
+        return this.$vToastify.error("Password doesn't have a correct format");
+      }
+      if (!regexQuestion.test(question)) {
+        return this.$vToastify.error("Question doesn't have a correct format");
+      }
+      if (!regexReponse.test(reponse)) {
+        return this.$vToastify.error("Reponse doesn't have a correct format");
+      }
+      if (avatar) {
+        const data = new FormData();
+        data.append('name', name);
+        data.append('firstname', firstname);
+        data.append('username', username);
+        data.append('email', email);
+        data.append('password', password);
+        data.append('question', question);
+        data.append('reponse', reponse);
+        data.append('avatar', avatar);
         return fetch('http://localhost:3000/api/user/signup', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name,
-            firstname,
-            username,
-            email,
-            password,
-            question,
-            reponse,
-          }),
+          body: data,
         })
           .then((response) => response.json())
-          .then((data) => {
-            this.user = data.value;
+          .then(() => {
+            return this.$vToastify.success(
+              'User has been created successfully with a avatar',
+            );
           });
-      } */
+      }
       return fetch('http://localhost:3000/api/user/signup', {
         method: 'POST',
         headers: {
@@ -217,10 +252,18 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.user = data.value;
+          return this.$vToastify.success(
+            'User has been created successfully without an avatar',
+          );
         })
         .catch((error) => {
           this.error = error;
         });
+    },
+    tempStoreImage(e) {
+      console.log(e);
+      const file = e.target.files[0];
+      this.avatar = file;
     },
   },
 };
@@ -228,21 +271,36 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.content {
+.content-signup {
   width: 1000px;
   margin: 0 auto;
   text-align: center;
 }
 
-.content img {
-  width: 275px;
-  height: 150px;
+.content-signup img {
+  width: 350px;
+  height: 200px;
   object-fit: cover;
 }
 
-.content h1 {
+h3,
+h4,
+h5 {
+  font-weight: 300;
+}
+
+.content-signup h2 {
   font-size: 36px;
   font-weight: 400;
+  margin-bottom: 0 !important;
+}
+
+.content-signup h3 {
+  font-size: large;
+}
+
+.content-signup h4 {
+  font-size: medium;
 }
 
 form label {
@@ -278,12 +336,6 @@ button {
   font-family: Nunito, sans-serif;
 }
 
-h3,
-h4,
-h5 {
-  font-weight: 300;
-}
-
 .avatar {
   border: transparent;
   border-radius: initial;
@@ -306,6 +358,11 @@ h5 {
 
 .upload {
   display: none;
+}
+
+.filename {
+  text-align: right;
+  width: 80%;
 }
 
 .design {

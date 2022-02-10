@@ -24,31 +24,29 @@
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
-          <div class="posts">
-            <h1>Créer un post</h1>
-            <form>
-              <input type="text" name="create-post" placeholder="Ecrire ici" />
-              <label for="post-image"><i class="fas fa-camera"></i></label>
-              <input type="file" id="post-image" />
-            </form>
-            <div class="post" v-for="post in posts" :key="post.id">
-              <div class="post-container">
-                <img :src="post.User.avatar" alt="Image de Profil" />
-                <div class="align">
-                  <p>
-                    {{ post.User.name }} {{ post.User.firstname }} <br />
-                    {{ new Date(post.createdAt).toLocaleString() }}
-                  </p>
-                </div>
-              </div>
-              <div class="post-content">
-                <h2>{{ post.title }}</h2>
-                <p>
-                  {{ post.content }}
-                </p>
-                <div class="post-image" v-if="post.image">
-                  <img :src="post.image" alt="Image du Post" />
-                </div>
+          <div class="update">
+            <h1>Modification d'un commentaire</h1>
+            <div class="update-container">
+              <div class="update-form">
+                <form @submit.prevent="submit" class="form-com-edit">
+                  <div class="champ">
+                    <label>Content *</label>
+                    <br />
+                    <textarea
+                      name="content"
+                      placeholder="The text you want to post"
+                      v-model="post.content"
+                      :pattern="patternContent"
+                    ></textarea>
+                  </div>
+                  <br />
+                  <input
+                    type="submit"
+                    name="submit"
+                    value="Modifier le post"
+                    class="btn"
+                  />
+                </form>
               </div>
             </div>
           </div>
@@ -63,31 +61,57 @@ export default {
   name: 'Accueil',
   data() {
     return {
-      posts: [],
+      patternContent:
+        '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\'"?!., _-]{4,255}',
+      comment: {},
     };
   },
+  methods: {
+    fetchCommentData() {
+      const token = localStorage.getItem('token');
+      fetch(
+        `http://localhost:3000/api/comment/${this.$route.params.CommentId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer: ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.comment = data;
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
+        });
+    },
+    submit() {
+      const regexContent =
+        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'"?!., _-]{4,255}$/;
+      const { content } = this.comment;
+      if (!regexContent.test(content)) {
+        return false;
+      }
+      const token = localStorage.getItem('token');
+      return fetch(
+        `http://localhost:3000/api/comment/${this.$route.params.CommentId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content,
+          }),
+        },
+      ).then(() => this.fetchCommentData());
+    },
+  },
   mounted() {
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/post', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer: ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.posts = data;
-      })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
-      });
-    this.options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
+    this.fetchCommentData();
   },
 };
 </script>
@@ -101,12 +125,12 @@ export default {
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: #22262b;
   padding-top: 5vh;
 }
 
 .sidebar {
-  background-color: #2d3036;
+  background-color: #22262b;
   height: 100vh;
   display: inline-flex;
   z-index: 99999;
@@ -169,115 +193,80 @@ export default {
   position: relative;
 }
 
-.posts {
-  padding: 0 3vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  width: calc(100% + 20px);
+.update {
+  background-color: #2d3036;
   height: 100%;
-  background-color: #22262b;
-  border-radius: 30px;
+  border-top-left-radius: 30px;
 }
 
-.posts h1 {
-  font-size: 45px;
+.update h1 {
+  padding-top: 3vh;
   color: white;
-  text-align: left;
+  text-align: center;
 }
 
-.posts form {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.posts form i {
-  padding-left: 2vh;
-  font-size: 48px;
-}
-
-.posts form label i {
-  -webkit-text-stroke: 1px #707070;
-  color: #3a3a3a;
-  -webkit-text-fill-color: transparent;
-  transition: all 450ms ease-in-out;
-}
-
-.posts form label :hover,
-.posts form label :active {
-  -webkit-text-stroke: 1px white;
-}
-
-.posts form input {
-  background-color: #3a3a3a;
-  border: 1px #707070 solid;
-  border-radius: 30px;
-  height: 42px;
+.update-container {
+  text-align: center;
   width: 100%;
-  color: white;
-  padding-left: 2vh;
 }
 
-.posts form input::placeholder {
-  font-family: Nunito, sans-serif;
-  font-size: large;
+.update-container img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
 }
 
-.post-content {
-  text-align: justify;
-}
-
-.post-content h2 {
+.update-form {
   color: white;
 }
 
-#post-image {
+.update-image input {
+  color: white;
+}
+
+.upload {
   display: none;
 }
 
-.post {
-  padding-top: 2vh;
-  display: inline-flex;
-  flex-direction: column;
-  margin: 2vh;
-  width: 100%;
-}
-
-.post p {
+.design {
   color: white;
-  font-size: 20px;
 }
 
-.post p span {
-  font-size: medium;
+.design i {
+  padding: 0.5vh;
 }
 
-.post img {
-  width: 85px;
-  height: 85px;
-  border-radius: 30px;
+.form-com-edit {
+  margin: 2vh;
 }
 
-.post-container {
-  display: inline-flex;
-  align-items: center;
+.champ input,
+.champ textarea {
+  width: 418px;
+  height: 48px;
+  font-family: Nunito, sans-serif;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  border: 1px #707070 solid;
 }
 
-.post-container img {
-  margin: 0;
-}
-
-.align {
-  display: flex;
-  flex-direction: column;
-  padding-left: 2vh;
-}
-
-.post-image img {
-  width: 200px;
+.champ textarea {
   height: 200px;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  margin: 0;
+  resize: none;
+}
+
+.btn {
+  border: 1px solid #a6a6a6;
+  color: white;
+  transition: all 450ms ease-in-out;
+}
+
+.btn:hover {
+  background-color: white;
+  color: #2d3036;
 }
 </style>

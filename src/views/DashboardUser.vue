@@ -21,6 +21,10 @@
               <p><i class="fas fa-comment-alt"></i>Posts</p>
             </router-link>
             <br />
+            <router-link :to="{ name: 'Comment Dashboard' }">
+              <p><i class="fas fa-comment"></i>Comments</p>
+            </router-link>
+            <br />
             <router-link :to="{ name: 'Token Dashboard' }">
               <p><i class="fas fa-ticket-alt"></i>Tokens</p>
             </router-link>
@@ -39,8 +43,8 @@
 
 <script>
 import EventBus from '../EventBus';
-import modifyActionAdmin from '../components/modifyActionAdmin.vue';
-import deleteActionAdmin from '../components/deleteAction.vue';
+import modifyActionAdmin from '../components/ModifyActionAdmin.vue';
+import deleteActionAdmin from '../components/DeleteAction.vue';
 
 export default {
   data() {

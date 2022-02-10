@@ -1,30 +1,34 @@
 <template>
   <div class="test">
-    <div class="content">
-      <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
-      <h1>Connexion</h1>
-      <form @submit.prevent="submit">
-        <label>Identifiant (email ou username) *</label>
-        <input
-          type="text"
-          name="identifiant"
-          placeholder="example@groupomania.fr"
-          v-model="identifiant"
-        />
-        <label>Mot de passe *</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Votre mot de passe"
-          v-model="password"
-          pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$"
-        />
-        <input type="submit" name="submit" value="Se connecter" class="btn" />
-      </form>
-      <h3>Pas encore de compte ? <a href="#">S'inscrire</a></h3>
-      <h4>Connexion avec un pseudonyme</h4>
-      <br />
-      <h5>* = obligatoire</h5>
+    <div class="content-login">
+      <div class="content-login-container">
+        <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
+        <h2>Connexion</h2>
+        <form @submit.prevent="submit">
+          <label>Identifiant (email ou username) *</label>
+          <input
+            type="text"
+            name="identifiant"
+            placeholder="example@groupomania.fr"
+            v-model="identifiant"
+          />
+          <label>Mot de passe *</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Votre mot de passe"
+            v-model="password"
+            pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$"
+          />
+          <input type="submit" name="submit" value="Se connecter" class="btn" />
+        </form>
+        <h3>
+          Pas encore de compte ?
+          <router-link :to="{ name: 'Signup' }">S'inscrire</router-link>
+        </h3>
+        <br />
+        <h4>* = obligatoire</h4>
+      </div>
     </div>
   </div>
 </template>
@@ -107,27 +111,48 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.content {
+.content-login {
   text-align: center;
   width: 1000px;
   margin: 0 auto;
+  height: 100vh;
 }
 
-.content img {
+.content-login img {
   width: 350px;
   height: 200px;
   object-fit: cover;
 }
 
-.content h1 {
+.content-login h2 {
   font-size: 36px;
   font-weight: 400;
+  margin-bottom: 0 !important;
+}
+
+.content-login h3 {
+  font-size: large;
+  font-weight: 300;
+}
+
+.content-login h4 {
+  font-size: medium;
+  font-weight: 300;
+}
+
+.content-login-container {
+  display: inline-flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 form {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
+  padding: 2vh 0;
 }
 
 form label {
@@ -159,11 +184,5 @@ form input a {
   border-radius: 12px;
   color: white;
   margin: 0 auto;
-}
-
-h3,
-h4,
-h5 {
-  font-weight: 300;
 }
 </style>

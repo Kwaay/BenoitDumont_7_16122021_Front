@@ -4,11 +4,8 @@
       <div class="side">
         <div class="side-container">
           <router-link :to="{ name: 'Accueil' }">
-            <p>
-              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
-            </p>
+            <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
           </router-link>
-
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
               <p><i class="fas fa-home"></i>Dashboard</p>
@@ -20,6 +17,10 @@
             <br />
             <router-link :to="{ name: 'Post Dashboard' }">
               <p><i class="fas fa-comment-alt"></i>Posts</p>
+            </router-link>
+            <br />
+            <router-link :to="{ name: 'Comment Dashboard' }">
+              <p><i class="fas fa-comment"></i>Comments</p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Token Dashboard' }">
@@ -57,7 +58,10 @@
               </div>
             </div>
           </div>
-          <div class="package-info"></div>
+          <div class="package-info">
+            <AvailableUpdate stack="back" />
+            <AvailableUpdate stack="front" />
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +69,10 @@
 </template>
 
 <script>
+import AvailableUpdate from '../components/AvailableUpdate.vue';
+
 export default {
+  components: { AvailableUpdate },
   data() {
     return {
       nbUsers: '0',
@@ -74,69 +81,81 @@ export default {
       nbComments: '0',
     };
   },
-  mounted() {
-    const token = localStorage.getItem('token');
-    fetch('http://localhost:3000/api/user/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer:' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbUsers = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-    fetch('http://localhost:3000/api/post/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbPosts = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch('http://localhost:3000/api/reaction/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbReactions = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch('http://localhost:3000/api/comment/', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer' ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.nbComments = data.length;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
+  async created() {
+    this.getUsersCount();
+    this.getPostsCount();
+    this.getReactionsCount();
+    this.getCommentsCount();
   },
   methods: {
-    getPackageInfo() {},
+    getUsersCount() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/user/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer:' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.nbUsers = data.length;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
+    getPostsCount() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/post/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.nbPosts = data.length;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
+    getReactionsCount() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/reaction/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.nbReactions = data.length;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
+    getCommentsCount() {
+      const token = localStorage.getItem('token');
+      fetch('http://localhost:3000/api/comment/', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer' ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.nbComments = data.length;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    },
   },
 };
 </script>
@@ -236,5 +255,13 @@ export default {
 
 .data-container h3 {
   font-size: large;
+}
+
+.package-info {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  padding-top: 4vh;
 }
 </style>

@@ -33,8 +33,31 @@
       </div>
       <div class="middle">
         <div class="middle-container">
-          <h2>Token Dashboard</h2>
-          <data-table :columns="columns" :data="tokenReturned" />
+          <h2>Comment Dashboard</h2>
+          <div class="list-comments">
+            <div class="comment" v-for="comment in comments" :key="comment.id">
+              <div class="comment-container">
+                <img :src="comment.User.avatar" alt="Image de Profil" />
+                <div class="align">
+                  <p>
+                    {{ comment.User.name }} {{ comment.User.firstname }} <br />
+                    {{ new Date(comment.createdAt).toLocaleString() }}
+                  </p>
+                </div>
+              </div>
+              <div class="comment-content">
+                <p>
+                  {{ comment.content }}
+                </p>
+              </div>
+              <div class="comment-actions">
+                <div class="update" @click="updateComment(comment)">
+                  <i class="fa fa-pencil"></i>
+                </div>
+                <deleteAction :data="comment" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -43,112 +66,63 @@
 
 <script>
 import EventBus from '../EventBus';
-import deleteActionAdmin from '../components/DeleteAction.vue';
+import deleteAction from '../components/DeleteAction.vue';
 
 export default {
+  components: { deleteAction },
   data() {
     return {
-      tokens: [],
-      columns: [
-        {
-          key: 'id',
-          title: 'Id',
-          type: 'number',
-        },
-        {
-          key: 'createdAt',
-          title: 'Created At',
-          type: 'string',
-        },
-        {
-          key: 'token',
-          title: 'Token',
-          component: {
-            props: ['data'],
-            render(createElement) {
-              return createElement(
-                'div',
-                {
-                  class: 'token-style',
-                },
-                this.data.token,
-              );
-            },
-          },
-        },
-        {
-          key: 'userAgent',
-          title: 'User Agent',
-          type: 'string',
-        },
-        {
-          key: 'ipAddress',
-          title: 'IP Address',
-          type: 'string',
-        },
-        {
-          title: 'Revoke',
-          component: deleteActionAdmin,
-          sortable: false,
-          searchable: false,
-        },
-      ],
+      comments: [],
     };
   },
+  mounted() {
+    EventBus.$on('deleteActionPressed', this.deleteComment);
+    this.getComments();
+  },
   methods: {
-    getTokens() {
+    getComments() {
       const token = localStorage.getItem('token');
-      fetch('http://localhost:3000/api/token/', {
+      fetch('http://localhost:3000/api/comment/', {
         method: 'GET',
         headers: {
-          Authorization: `Bearer:' ${token}`,
+          Authorization: `Bearer' ${token}`,
           'Content-Type': 'application/json',
         },
       })
         .then((response) => response.json())
         .then((data) => {
-          this.tokens = data;
+          this.comments = data;
         })
         .catch((error) => {
           this.error = error;
         });
     },
-    revokeToken(tokenData) {
+    updateComment(comment) {
+      this.$router.push({
+        name: 'Comment Admin Modification',
+        params: { CommentId: comment.id },
+      });
+    },
+    deleteComment(comment) {
       const validation = window.confirm(
-        'Are you sure you want to delete this token ?',
+        'Are you sure you want to delete this comment ?',
       );
       if (validation === true) {
         const token = localStorage.getItem('token');
-        fetch(`http://localhost:3000/api/token/${tokenData.id}`, {
+        fetch(`http://localhost:3000/api/comment/${comment.id}`, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer:' ${token}`,
             'Content-Type': 'application/json',
           },
-        }).then(() => this.getTokens());
+        }).then(() => this.getComments());
       }
-    },
-  },
-  mounted() {
-    EventBus.$on('deleteActionPressed', this.revokeToken);
-    this.getTokens();
-  },
-  computed: {
-    tokenReturned() {
-      return this.tokens.map((token) => {
-        const parsedCreatedAt = new Date(token.createdAt).toLocaleString();
-        const tokenModified = {
-          ...token,
-          createdAt: parsedCreatedAt,
-        };
-        return tokenModified;
-      });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .content {
   background-color: #22262b;
   display: flex;
@@ -206,27 +180,85 @@ export default {
   color: white;
 }
 
-.middle-container h2 {
-  padding: 5vh 0 0 5vh;
+.list-comments {
+  display: inline-flex;
+  flex-direction: wrap;
+  width: 100%;
 }
 
-.token {
-  border: 1px solid white;
-  margin: 2vh 4vh;
-  border-radius: 30px;
-  padding: 2vh;
+.comment-content {
+  text-align: justify;
+  padding: 0 2vh;
+}
+
+.comment-content h2 {
+  padding: 0;
+  color: white;
+}
+
+.comment {
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.wrap {
-  word-wrap: break-word;
-}
-
-.token-style {
-  word-wrap: break-word;
+  margin: 2.5vh 2.5vh 2.5vh 5vh;
+  padding: 2vh;
+  border: 1px solid white;
+  border-radius: 20px;
+  position: relative;
   max-width: 600px;
+  width: 100%;
+}
+
+.comment p {
+  color: white;
+  font-size: 20px;
+}
+
+.comment p span {
+  font-size: medium;
+}
+
+.comment-container {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 2vh 2vh;
+}
+
+.comment-container img {
+  margin: 0;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.align {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2vh;
+}
+
+.comment-image img {
+  width: 350px;
+  height: 200px;
+  object-fit: cover;
+  margin: 0;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 4vh;
+  bottom: 2vh;
+}
+
+.update {
+  padding: 1vh;
+}
+
+.update :hover {
+  color: yellow;
+  transform: scale(1.11);
 }
 </style>

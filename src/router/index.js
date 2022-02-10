@@ -8,6 +8,7 @@ import Profil from '../views/Profil.vue';
 import DashboardHome from '../views/DashboardHome.vue';
 import DashboardUser from '../views/DashboardUser.vue';
 import DashboardPost from '../views/DashboardPost.vue';
+import DashboardComment from '../views/DashboardComment.vue';
 import DashboardToken from '../views/DashboardToken.vue';
 import UserEdit from '../views/UserEdit.vue';
 import PostEdit from '../views/PostEdit.vue';
@@ -65,6 +66,11 @@ const routes = [
     path: '/admin/post',
     name: 'Post Dashboard',
     component: DashboardPost,
+  },
+  {
+    path: '/admin/comment',
+    name: 'Comment Dashboard',
+    component: DashboardComment,
   },
   {
     path: '/admin/token',
