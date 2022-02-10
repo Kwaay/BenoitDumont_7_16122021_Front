@@ -91,6 +91,7 @@ export default {
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.deletePost);
+    this.getPosts();
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
@@ -102,22 +103,6 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.userConnected = data.user;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
-
-    fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.user = data;
-        this.posts = data.Posts;
       })
       .catch((error) => {
         this.error = error;
@@ -160,6 +145,24 @@ export default {
           },
         }).then(() => this.getPosts());
       }
+    },
+    getPosts() {
+      const token = localStorage.getItem('token');
+      fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.user = data;
+          this.posts = data.Posts;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
     },
   },
 };
@@ -287,7 +290,7 @@ export default {
   border: 1px solid white;
   border-radius: 30px;
   margin: 4vh;
-  padding: 2vh;
+  padding: 4vh;
   position: relative;
 }
 

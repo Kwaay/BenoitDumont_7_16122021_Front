@@ -35,7 +35,7 @@
                     <textarea
                       name="content"
                       placeholder="The text you want to post"
-                      v-model="post.content"
+                      v-model="comment.content"
                       :pattern="patternContent"
                     ></textarea>
                   </div>

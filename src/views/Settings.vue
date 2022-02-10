@@ -92,9 +92,6 @@
               <p>Historique des connexions</p>
             </div>
             <div class="action">
-              <div class="desactiver">
-                <p>Désactiver le compte</p>
-              </div>
               <div class="supprimer">
                 <p>Supprimer le compte</p>
               </div>
@@ -203,7 +200,12 @@ body {
   background-color: #22262b;
   color: white;
   padding: 5vh;
-  border-radius: 30px;
+  border-top-left-radius: 30px;
+  height: 100%;
+}
+
+.settings h1 {
+  padding-bottom: 4vh;
 }
 
 .lang,
@@ -226,6 +228,7 @@ body {
 .history p {
   color: #707070;
   font-size: x-large;
+  margin: 0;
 }
 
 .action {
@@ -233,18 +236,6 @@ body {
   align-items: center;
   justify-content: space-around;
   margin: 5vh;
-}
-
-.desactiver {
-  text-align: center;
-  padding: 2.5vh;
-  width: 20%;
-  border: 1px solid #fff;
-}
-
-.desactiver p {
-  color: #fff;
-  font-size: x-large;
 }
 
 .supprimer {
@@ -257,6 +248,7 @@ body {
 .supprimer p {
   color: #e61919;
   font-size: x-large;
+  margin: 0;
 }
 /* stylelint-disable selector-class-pattern */
 .multiselect__tags {

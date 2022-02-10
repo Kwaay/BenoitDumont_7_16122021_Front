@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="posts">
-            <h1>Créer un post</h1>
+            <h1>{{ $t('ACCUEIL.CREATEPOST') }}</h1>
             <form @submit.prevent="submit">
               <input
                 type="text"
@@ -401,7 +401,7 @@ export default {
   flex-direction: column;
   width: 100%;
   border: 1px solid white;
-  padding: 2vh;
+  padding: 4vh;
   border-radius: 30px;
   margin: 1vh 0;
 }

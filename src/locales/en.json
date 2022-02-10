@@ -1,0 +1,119 @@
+{
+  "ACCUEIL": {
+    "BUTTONPOSTVALUE": "Post",
+    "CONTENTPLACEHOLDER": "Content of the post",
+    "CREATEPOST": "Create a post",
+    "QUESTION": "Question",
+    "RESPONSELABEL": "Response",
+    "SELECTEDIMAGE": "Image Selected",
+    "TITLEPLACEHOLDER": "Title of the post"
+  },
+  "ALTIMAGEPROFILE": "Profile's image",
+  "COMMENTEDIT": {
+    "CONTENTLABEL": "Content",
+    "CONTENTPLACEHOLDER": "The text that you want to post",
+    "SUBMITBUTTON": "Modify this comment",
+    "TITLE": "Modify this comment"
+  },
+  "CONFIRM": {
+    "COMMENT": "Are you sure you want to delete this comment ?",
+    "POST": "Are you sure you want to delete this post ?",
+    "TOKEN": "Are you sure you want to delete this token ?",
+    "USER": "Are you sure you want to delete this user ?"
+  },
+  "DASHBOARD": {
+    "LISTCOMMENTS": "Comments",
+    "LISTDASHBOARD": "Dashboard",
+    "LISTPOST": "Posts",
+    "LISTTOKEN": "Tokens",
+    "LISTUSER": "Users"
+  },
+  "DASHBOARDCOMMENT": {
+    "TITLE": "Comment Dashboard"
+  },
+  "DASHBOARDHOME": {
+    "DEPENDENCIESAPITITLE": "API Dependencies",
+    "DEPENDENCIESDESC": "to update",
+    "DEPENDENCIESFRONTTITLE": "Front Dependencies",
+    "LOADING": "Loading",
+    "NBCOM": "Comments Count",
+    "NBPOSTS": "Posts Count",
+    "NBREACTS": "Reacts Count",
+    "NBUSERS": "Users Count",
+    "TITLE": "Dashboard"
+  },
+  "DASHBOARDPOST": {
+    "ALTMEDIA": "Post's Media",
+    "TITLE": "Post Dashboard"
+  },
+  "DASHBOARDTOKEN": {
+    "TITLE": "Token Dashboard"
+  },
+  "DASHBOARDUSER": {
+    "TITLE": "User Dashboard"
+  },
+  "LOGIN": {
+    "PASSWORDLABEL": "Password",
+    "PASSWORDPLACEHOLDER": "Your password",
+    "TITLE": "Login",
+    "USERNAMEEMAILLABEL": "Username / Email",
+    "USERNAMEEMAILPLACEHOLDER": "example@groupomania.fr"
+  },
+  "POSTEDIT": {
+    "CONTENTPLACEHOLDER": "The text that you want to post",
+    "LABELCONTENT": "Content",
+    "MEDIAOPACITYMESSAGE": "Modify the media",
+    "SUBMITBUTTON": "Modify this post",
+    "TITLE": "Post Modification",
+    "TITLELABEL": "Title",
+    "TITLEPLACEHOLDER": "example: Title"
+  },
+  "PROFIL": {
+    "LATESTPOSTS": "Latest Posts"
+  },
+  "SETTINGS": {
+    "DELETEACCOUNT": "Delete this account",
+    "HISTORYTITLE": "Connexion history",
+    "LANGDESC": "The language chosen for the website",
+    "LANGOPTIONPLACEHOLDER": "Please choose an option",
+    "LANGTITLE": "Language",
+    "SECURITYDESC": "The level of security chosen for the account",
+    "SECURITYTITLE": "Maximal Security",
+    "THEMEDESC": "The theme chosen for the website",
+    "THEMETITLE": "Theme",
+    "TITLE": "Settings"
+  },
+  "SIGNUP": {
+    "AVATARLABEL": "Upload a image",
+    "EMAILLABEL": "Email",
+    "EMAILPLACEHOLDER": "example@domain.fr",
+    "FIRSTNAMELABEL": "Firstname",
+    "FIRSTNAMEPLACEHOLDER": "example: Doe",
+    "NAMELABEL": "Name",
+    "NAMEPLACEHOLDER": "example: John",
+    "PASSWORDLABEL": "Password",
+    "PASSWORDPLACEHOLDER": "Your password",
+    "QUESTIONPLACEHOLDER": "Between 4 and 15 characters",
+    "RESPONSEPLACEHOLDER": "Between 4 et 15 characters",
+    "TITLE": "Sign up",
+    "USERNAMELABEL": "Username",
+    "USERNAMEPLACEHOLDER": "Between 4 and 20 characters"
+  },
+  "USEREDIT": {
+    "EMAILLABEL": "Email",
+    "EMAILPLACEHOLDER": "example@domain.fr",
+    "FIRSTNAMELABEL": "Firstname",
+    "FIRSTNAMEPLACEHOLDER": "example: Doe",
+    "IMGOPACITYMESSAGE": "Modify",
+    "NAMELABEL": "Name",
+    "NAMEPLACEHOLDER": "example: John",
+    "QUESTIONLABEL": "Question",
+    "QUESTIONPLACEHOLDER": "Between 4 et 15 characters",
+    "RESPONSELABEL": "Response",
+    "RESPONSEPLACEHOLDER": "Between 4 and 15 characters",
+    "SUBMITBUTTON": "Modify this user",
+    "TITLE": "User Modification",
+    "USERNAMELABEL": "Username",
+    "USERNAMEPLACEHOLDER": "Between 4 and 20 characters"
+  }
+}
