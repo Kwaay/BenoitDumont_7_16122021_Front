@@ -20,17 +20,17 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img src="../assets/20210503_133718.png" alt="Profile Image" />
+              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="update">
-            <h1>Modification d'utilisateur</h1>
+            <h1>{{ $t('USEREDIT.TITLE') }}</h1>
             <div class="update-container">
               <label for="post-image" class="design">
                 <div class="message">
-                  <img :src="user.avatar" alt="Photo de profil" />
-                  <p>Modifier l'image</p>
+                  <img :src="user.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+                  <p>{{ $t('USEREDIT.IMGOPACITYMESSAGE') }}</p>
                 </div>
                 <input
                   type="file"
@@ -42,66 +42,66 @@
               <div class="update-form">
                 <form @submit.prevent="submit" class="form-user-edit">
                   <div class="champ">
-                    <label>Nom *</label>
+                    <label>{{ $t('USEREDIT.NAMELABEL') }} *</label>
                     <br />
                     <input
                       type="text"
                       name="nom"
-                      placeholder="example: John"
+                      :placeholder="$t('USEREDIT.NAMEPLACEHOLDER')"
                       v-model="user.name"
                       :pattern="patternName"
                     />
                   </div>
                   <div class="champ">
-                    <label>Prénom *</label>
+                    <label>{{ $t('USEREDIT.FIRSTNAMELABEL') }} *</label>
                     <br />
                     <input
                       type="text"
                       name="prenom"
-                      placeholder="example: Doe"
+                      :placeholder="$t('USEREDIT.FIRSTNAMEPLACEHOLDER')"
                       v-model="user.firstname"
                       :pattern="patternFirstname"
                     />
                   </div>
                   <div class="champ">
-                    <label>Pseudonyme *</label>
+                    <label>{{ $t('USEREDIT.USERNAMELABEL') }} *</label>
                     <br />
                     <input
                       type="text"
                       name="username"
-                      placeholder="Entre 4 et 10 caractères"
+                      :placeholder="$t('USEREDIT.USERNAMEPLACEHOLDER')"
                       v-model="user.username"
                       :pattern="patternUsername"
                     />
                   </div>
                   <div class="champ">
-                    <label>Email *</label>
+                    <label>{{ $t('USEREDIT.EMAILLABEL') }} *</label>
                     <br />
                     <input
                       type="email"
                       name="email"
-                      placeholder="example@domain.fr"
+                      :placeholder="$t('USEREDIT.EMAILPLACEHOLDER')"
                       v-model="user.email"
                     />
                   </div>
                   <div class="champ">
-                    <label>Question *</label>
+                    <label>{{ $t('USEREDIT.QUESTIONLABEL') }} *</label>
                     <br />
                     <input
                       type="text"
                       name="question"
-                      placeholder="Entre 4 et 15 caractères"
+                      :placeholder="$t('USEREDIT.QUESTIONPLACEHOLDER')"
                       v-model="user.question"
                       :pattern="patternQuestion"
                     />
                   </div>
                   <div class="champ">
-                    <label>Réponse *</label>
+                    <label>{{ $t('USEREDIT.RESPONSELABEL') }} *</label>
                     <br />
                     <input
                       type="text"
                       name="reponse"
-                      placeholder="Entre 4 et 15 caractères"
+                      :placeholder="$t('USEREDIT.RESPONSEPLACEHOLDER')"
                       v-model="user.reponse"
                       :pattern="patternReponse"
                     />
@@ -110,7 +110,7 @@
                   <input
                     type="submit"
                     name="submit"
-                    value="Modifier l'utilisateur"
+                    :value="$t('USEREDIT.SUBMITBUTTON')"
                     class="btn"
                   />
                 </form>
@@ -142,6 +142,7 @@ export default {
         '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ,.`\'"/ _-]{4,15}',
       /* eslint-enable no-useless-escape */
       user: {},
+      userConnected: {},
     };
   },
   methods: {
@@ -220,6 +221,24 @@ export default {
           this.error = error;
         });
     },
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data.user;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
   mounted() {
     this.fetchUserProfile();

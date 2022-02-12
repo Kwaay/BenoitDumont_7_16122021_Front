@@ -20,16 +20,16 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" alt="Profile Image" />
+              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="profile">
             <div class="profile-container">
               <div class="infos">
-                <img :src="userConnected.avatar" alt="Profile Image" />
+                <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
                 <h1>{{ userConnected.name }} {{ userConnected.firstname }}</h1>
-                <h2>Derniers posts</h2>
+                <h2>{{ $t('PROFIL.LATESTPOSTS') }}</h2>
               </div>
               <div class="latest-posts">
                 <div class="list-posts">
@@ -44,7 +44,7 @@
                         class="post-image"
                         v-if="post.media && isImage(post.media)"
                       >
-                        <img :src="post.media" alt="Image du Post" />
+                        <img :src="post.media" :alt="$t('ALTMEDIA')" />
                       </div>
                       <div
                         class="post-video"

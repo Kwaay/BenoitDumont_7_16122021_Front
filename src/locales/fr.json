@@ -9,11 +9,12 @@
     "TITLEPLACEHOLDER": "Titre du post"
   },
   "ALTIMAGEPROFILE": "Image de profil",
+  "ALTMEDIA": "Media du Post",
   "COMMENTEDIT": {
     "CONTENTLABEL": "Contenu",
     "CONTENTPLACEHOLDER": "Le texte que vous voulez poster",
     "SUBMITBUTTON": "Modifier ce commentaire",
-    "TITLE": "Modifier ce commentaire"
+    "TITLE": "Modification d'un commentaire"
   },
   "CONFIRM": {
     "COMMENT": "Est-ce que vous êtes sûr de vouloir supprimer ce commentaire ?",
@@ -22,7 +23,7 @@
     "USER": "Est-ce que vous êtes sûr de vouloir supprimer cet utilisateur ?"
   },
   "DASHBOARD": {
-    "LISTCOMMENTS": "Commentaires",
+    "LISTCOMMENT": "Commentaires",
     "LISTDASHBOARD": "Tableau de bord",
     "LISTPOST": "Posts",
     "LISTTOKEN": "Jetons",
@@ -35,6 +36,7 @@
     "DEPENDENCIESAPITITLE": "Dépendances API",
     "DEPENDENCIESDESC": "à mettre à jour",
     "DEPENDENCIESFRONTTITLE": "Dépendances Front",
+    "DEPENDENCIESUPTODATE": "Toutes les dépendances sont à jour !",
     "LOADING": "Chargement en cours",
     "NBCOM": "Nombre de commentaires",
     "NBPOSTS": "Nombre de posts",
@@ -43,7 +45,6 @@
     "TITLE": "Tableau de bord"
   },
   "DASHBOARDPOST": {
-    "ALTMEDIA": "Media du Post",
     "TITLE": "Liste des posts"
   },
   "DASHBOARDTOKEN": {
@@ -60,9 +61,10 @@
     "USERNAMEEMAILPLACEHOLDER": "exemple@groupomania.fr"
   },
   "POSTEDIT": {
+    "CONTENTLABEL": "Contenu",
     "CONTENTPLACEHOLDER": "Le texte que vous voulez poster",
-    "LABELCONTENT": "Contenu",
     "MEDIAOPACITYMESSAGE": "Modifier le media",
+    "MEDIAUPLOAD": "Upload un media",
     "SUBMITBUTTON": "Modifier ce post",
     "TITLE": "Modification du post",
     "TITLELABEL": "Titre",

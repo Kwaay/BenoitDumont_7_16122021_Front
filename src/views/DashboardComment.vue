@@ -10,34 +10,42 @@
           </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
-              <p><i class="fas fa-home"></i>Dashboard</p>
+              <p>
+                <i class="fas fa-home"></i>{{ $t('DASHBOARD.LISTDASHBOARD') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'User Dashboard' }">
-              <p><i class="fas fa-user"></i>Utilisateurs</p>
+              <p><i class="fas fa-user"></i>{{ $t('DASHBOARD.LISTUSER') }}</p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Post Dashboard' }">
-              <p><i class="fas fa-comment-alt"></i>Posts</p>
+              <p>
+                <i class="fas fa-comment-alt"></i>{{ $t('DASHBOARD.LISTPOST') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Comment Dashboard' }">
-              <p><i class="fas fa-comment"></i>Comments</p>
+              <p>
+                <i class="fas fa-comment"></i>{{ $t('DASHBOARD.LISTCOMMENT') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Token Dashboard' }">
-              <p><i class="fas fa-ticket-alt"></i>Tokens</p>
+              <p>
+                <i class="fas fa-ticket-alt"></i>{{ $t('DASHBOARD.LISTTOKEN') }}
+              </p>
             </router-link>
           </div>
         </div>
       </div>
       <div class="middle">
         <div class="middle-container">
-          <h2>Comment Dashboard</h2>
+          <h2>{{ $t('DASHBOARDCOMMENT.TITLE') }}</h2>
           <div class="list-comments">
             <div class="comment" v-for="comment in comments" :key="comment.id">
               <div class="comment-container">
-                <img :src="comment.User.avatar" alt="Image de Profil" />
+                <img :src="comment.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
                 <div class="align">
                   <p>
                     {{ comment.User.name }} {{ comment.User.firstname }} <br />
@@ -67,6 +75,7 @@
 <script>
 import EventBus from '../EventBus';
 import deleteAction from '../components/DeleteAction.vue';
+import i18n from '../I18n';
 
 export default {
   components: { deleteAction },
@@ -104,9 +113,7 @@ export default {
       });
     },
     deleteComment(comment) {
-      const validation = window.confirm(
-        'Are you sure you want to delete this comment ?',
-      );
+      const validation = window.confirm(i18n.$t('CONFIRM.COMMENT'));
       if (validation === true) {
         const token = localStorage.getItem('token');
         fetch(`http://localhost:3000/api/comment/${comment.id}`, {

@@ -10,30 +10,38 @@
           </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
-              <p><i class="fas fa-home"></i>Dashboard</p>
+              <p>
+                <i class="fas fa-home"></i>{{ $t('DASHBOARD.LISTDASHBOARD') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'User Dashboard' }">
-              <p><i class="fas fa-user"></i>Utilisateurs</p>
+              <p><i class="fas fa-user"></i>{{ $t('DASHBOARD.LISTUSER') }}</p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Post Dashboard' }">
-              <p><i class="fas fa-comment-alt"></i>Posts</p>
+              <p>
+                <i class="fas fa-comment-alt"></i>{{ $t('DASHBOARD.LISTPOST') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Comment Dashboard' }">
-              <p><i class="fas fa-comment"></i>Comments</p>
+              <p>
+                <i class="fas fa-comment"></i>{{ $t('DASHBOARD.LISTCOMMENT') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Token Dashboard' }">
-              <p><i class="fas fa-ticket-alt"></i>Tokens</p>
+              <p>
+                <i class="fas fa-ticket-alt"></i>{{ $t('DASHBOARD.LISTTOKEN') }}
+              </p>
             </router-link>
           </div>
         </div>
       </div>
       <div class="middle">
         <div class="middle-container">
-          <h2>Token Dashboard</h2>
+          <h2>{{ $t('DASHBOARDTOKEN.TITLE') }}</h2>
           <data-table :columns="columns" :data="tokenReturned" />
         </div>
       </div>
@@ -44,6 +52,7 @@
 <script>
 import EventBus from '../EventBus';
 import deleteActionAdmin from '../components/DeleteAction.vue';
+import i18n from '../I18n';
 
 export default {
   data() {
@@ -114,9 +123,7 @@ export default {
         });
     },
     revokeToken(tokenData) {
-      const validation = window.confirm(
-        'Are you sure you want to delete this token ?',
-      );
+      const validation = window.confirm(i18n.$t('CONFIRM.TOKEN'));
       if (validation === true) {
         const token = localStorage.getItem('token');
         fetch(`http://localhost:3000/api/token/${tokenData.id}`, {

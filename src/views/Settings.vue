@@ -20,21 +20,21 @@
         <div class="box-posts">
           <div class="upside">
             <div class="account">
-              <img src="../assets/20210503_133718.png" alt="Profile Image" />
+              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="settings">
-            <h1>Settings</h1>
+            <h1>{{ $t('SETTINGS.TITLE') }}</h1>
             <div class="lang">
               <div class="text">
-                <h2>Langue</h2>
-                <p>La langue que vous voulez choisir pour le site</p>
+                <h2>{{ $t('SETTINGS.LANGTITLE') }}</h2>
+                <p>{{ $t('SETTINGS.LANGDESC') }}</p>
               </div>
               <div class="params">
                 <multiselect
                   v-model="valueLang"
-                  placeholder="Please choose an option"
+                  :placeholder="$t('SETTINGS.LANGOPTIONSPLACEHOLDER')"
                   label="lang"
                   track-by="lang"
                   :options="[
@@ -64,8 +64,8 @@
             <br />
             <div class="mode">
               <div class="text">
-                <h2>Mode</h2>
-                <p>Le mode que vous voulez choisir pour le site</p>
+                <h2>{{ $t('SETTINGS.THEMETITLE') }}</h2>
+                <p>{{ $t('SETTINGS.THEMEDESC') }}</p>
               </div>
               <div class="params">
                 <input type="checkbox" id="mod" /><label for="mod"
@@ -76,10 +76,8 @@
             <br />
             <div class="security">
               <div class="text">
-                <h2>Confidentialité maximale</h2>
-                <p>
-                  Le niveau de sécurité que vous voulez choisir pour le site
-                </p>
+                <h2>{{ $t('SETTINGS.SECURITYTITLE') }}</h2>
+                <p>{{ $t('SETTINGS.SECURITYDESC') }}</p>
               </div>
               <div class="params">
                 <input type="checkbox" id="security" /><label for="security"
@@ -89,11 +87,11 @@
             </div>
             <br />
             <div class="history">
-              <p>Historique des connexions</p>
+              <p>{{ $t('SETTINGS.HISTORYTITLE') }}</p>
             </div>
             <div class="action">
               <div class="supprimer">
-                <p>Supprimer le compte</p>
+                <p>{{ $t('SETTINGS.DELETEACCOUNT') }}</p>
               </div>
             </div>
           </div>
@@ -108,10 +106,27 @@ export default {
   name: 'Settings',
   data() {
     return {
-      link: 'https://github.com/',
-      success: true,
-      valueLang: '',
+      userConnected: {},
+      UserId: '',
     };
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data.user;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
 };
 </script>

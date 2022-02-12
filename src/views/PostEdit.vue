@@ -20,12 +20,12 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img src="../assets/20210503_133718.png" alt="Profile Image" />
+              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="update">
-            <h1>Modification d'un post</h1>
+            <h1>{{ $t('POSTEDIT.TITLE') }}</h1>
             <div class="update-container">
               <div class="media">
                 <label for="post-image" class="design">
@@ -34,7 +34,7 @@
                       class="post-image"
                       v-if="post.media && isImage(post.media)"
                     >
-                      <img :src="post.media" alt="Image du Post" />
+                      <img :src="post.media" :alt="$t('ALTMEDIA')" />
                     </div>
                     <div
                       class="post-video"
@@ -44,7 +44,7 @@
                         <source :src="post.media" type="video/mp4" />
                       </video>
                     </div>
-                    <p>Modifier le media</p>
+                    <p>{{ $t('POSTEDIT.MEDIAOPACITYMESSAGE') }}</p>
                   </div>
                   <input
                     type="file"
@@ -56,7 +56,8 @@
               </div>
               <div class="upload-image" v-if="post.media === null">
                 <label for="post-image" class="design"
-                  ><i class="fas fa-upload"></i> Uploader une image</label
+                  ><i class="fas fa-upload"></i>
+                  {{ $t('POSTEDIT.MEDIAUPLOAD') }}</label
                 >
                 <input
                   type="file"
@@ -68,22 +69,22 @@
               <div class="update-form">
                 <form @submit.prevent="submit" class="form-post-edit">
                   <div class="champ">
-                    <label>Title *</label>
+                    <label>{{ $t('POSTEDIT.TITLELABEL') }} *</label>
                     <br />
                     <input
                       type="text"
                       name="title"
-                      placeholder="example: Title"
+                      :placeholder="$t('POSTEDIT.TITLEPLACEHOLDER')"
                       v-model="post.title"
                       :pattern="patternTitle"
                     />
                   </div>
                   <div class="champ">
-                    <label>Content *</label>
+                    <label>{{ $t('POSTEDIT.CONTENTLABEL') }} *</label>
                     <br />
                     <textarea
                       name="content"
-                      placeholder="The text you want to post"
+                      :placeholder="$t('POSTEDIT.CONTENTPLACEHOLDER')"
                       v-model="post.content"
                       :pattern="patternContent"
                     ></textarea>
@@ -92,7 +93,7 @@
                   <input
                     type="submit"
                     name="submit"
-                    value="Modifier le post"
+                    :value="$t('POSTEDIT.SUBMITBUTTON')"
                     class="btn"
                   />
                 </form>
@@ -119,6 +120,7 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
+      userConnected: {},
     };
   },
   methods: {
@@ -192,6 +194,24 @@ export default {
       }
       return false;
     },
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data.user;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
   mounted() {
     this.fetchPostData();

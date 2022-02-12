@@ -20,21 +20,21 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img src="../assets/20210503_133718.png" alt="Profile Image" />
+              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
           <div class="update">
-            <h1>Modification d'un commentaire</h1>
+            <h1>{{ $t('COMMENTEDIT.TITLE') }}</h1>
             <div class="update-container">
               <div class="update-form">
                 <form @submit.prevent="submit" class="form-com-edit">
                   <div class="champ">
-                    <label>Content *</label>
+                    <label>{{ $t('COMMENTEDIT.CONTENTLABEL') }} *</label>
                     <br />
                     <textarea
                       name="content"
-                      placeholder="The text you want to post"
+                      :placeholder="$t('COMMENTEDIT.CONTENTPLACEHOLDER')"
                       v-model="comment.content"
                       :pattern="patternContent"
                     ></textarea>
@@ -43,7 +43,7 @@
                   <input
                     type="submit"
                     name="submit"
-                    value="Modifier le post"
+                    :value="$t('COMMENTEDIT.SUBMITBUTTON')"
                     class="btn"
                   />
                 </form>
@@ -64,6 +64,7 @@ export default {
       patternContent:
         '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\'"?!., _-]{4,255}',
       comment: {},
+      userConnected: {},
     };
   },
   methods: {
@@ -109,6 +110,24 @@ export default {
         },
       ).then(() => this.fetchCommentData());
     },
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data.user;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
   mounted() {
     this.fetchCommentData();

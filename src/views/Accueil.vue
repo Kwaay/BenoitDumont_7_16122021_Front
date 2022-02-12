@@ -20,7 +20,7 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" alt="Profile Image" />
+              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
               <i class="fas fa-sort-down"></i>
             </div>
           </div>
@@ -31,26 +31,30 @@
                 type="text"
                 name="title"
                 class="title-form"
-                placeholder="Titre du post"
-                v-model="title"
+                :placeholder="$t('ACCUEIL.TITLEPLACEHOLDER')"
               />
               <input
                 type="text"
                 class="content-form"
-                placeholder="Contenu du post"
+                :placeholder="$t('ACCUEIL.CONTENTPLACEHOLDER')"
                 v-model="content"
               />
               <label for="post-image"><i class="fas fa-camera"></i></label>
               <input type="file" id="post-image" @change="tempStoreImage" />
 
-              <input type="submit" value="Poster" class="btn" />
+              <input
+                type="submit"
+                :value="$t('ACCUEIL.BUTTONPOSTVALUE')"
+                class="btn"
+              />
               <p class="filename" v-if="this.media">
-                Image sélectionnée <i class="fas fa-check-circle"></i>
+                {{ $t('ACCUEIL.SELECTEDIMAGE') }}
+                <i class="fas fa-check-circle"></i>
               </p>
             </form>
             <div class="post" v-for="post in posts" :key="post.id">
               <div class="post-container">
-                <img :src="post.User.avatar" alt="Image de Profil" />
+                <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
                 <div class="align">
                   <p>
                     {{ post.User.name }} {{ post.User.firstname }} <br />
@@ -67,7 +71,7 @@
                   class="post-image"
                   v-if="post.media && isImage(post.media)"
                 >
-                  <img :src="post.media" alt="Image du Post" />
+                  <img :src="post.media" :alt="$t('ALTMEDIA')" />
                 </div>
                 <div
                   class="post-video"

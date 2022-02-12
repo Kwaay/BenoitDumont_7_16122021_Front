@@ -8,52 +8,60 @@
           </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
-              <p><i class="fas fa-home"></i>Dashboard</p>
+              <p>
+                <i class="fas fa-home"></i>{{ $t('DASHBOARD.LISTDASHBOARD') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'User Dashboard' }">
-              <p><i class="fas fa-user"></i>Utilisateurs</p>
+              <p><i class="fas fa-user"></i>{{ $t('DASHBOARD.LISTUSER') }}</p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Post Dashboard' }">
-              <p><i class="fas fa-comment-alt"></i>Posts</p>
+              <p>
+                <i class="fas fa-comment-alt"></i>{{ $t('DASHBOARD.LISTPOST') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Comment Dashboard' }">
-              <p><i class="fas fa-comment"></i>Comments</p>
+              <p>
+                <i class="fas fa-comment"></i>{{ $t('DASHBOARD.LISTCOMMENT') }}
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Token Dashboard' }">
-              <p><i class="fas fa-ticket-alt"></i>Tokens</p>
+              <p>
+                <i class="fas fa-ticket-alt"></i>{{ $t('DASHBOARD.LISTTOKEN') }}
+              </p>
             </router-link>
           </div>
         </div>
       </div>
       <div class="middle">
         <div class="middle-container">
-          <h2>Dashboard</h2>
+          <h2>{{ $t('DASHBOARDHOME.TITLE') }}</h2>
           <div class="data">
             <div class="data-nb-users">
               <div class="data-container">
-                <h3>Nombre d'utilisateurs inscrits</h3>
+                <h3>{{ $t('DASHBOARDHOME.NBUSERS') }}</h3>
                 <span>{{ this.nbUsers }}</span>
               </div>
             </div>
             <div class="data-nb-posts">
               <div class="data-container">
-                <h3>Nombre de posts</h3>
+                <h3>{{ $t('DASHBOARDHOME.NBPOSTS') }}</h3>
                 <span>{{ this.nbPosts }}</span>
               </div>
             </div>
             <div class="data-nb-reactions">
               <div class="data-container">
-                <h3>Nombre de réactions</h3>
+                <h3>{{ $t('DASHBOARDHOME.NBREACTS') }}</h3>
                 <span>{{ this.nbReactions }}</span>
               </div>
             </div>
             <div class="data-nb-commentaires">
               <div class="data-container">
-                <h3>Nombre de commentaires</h3>
+                <h3>{{ $t('DASHBOARDHOME.NBCOM') }}</h3>
                 <span>{{ this.nbComments }}</span>
               </div>
             </div>

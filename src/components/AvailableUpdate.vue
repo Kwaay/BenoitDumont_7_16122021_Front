@@ -1,10 +1,16 @@
 <template>
   <div class="packages-main">
-    <h1>Dépendances {{ stack === 'back' ? 'API' : 'Front' }}</h1>
-    <p>à mettre à jour</p>
+    <h1>
+      {{
+        stack === 'back'
+          ? $t('DASHBOARDHOME.DEPENDENCIESAPITITLE')
+          : $t('DASHBOARDHOME.DEPENDENCIESFRONTTITLE')
+      }}
+    </h1>
+    <p>{{ $t('DASHBOARDHOME.DEPENDENCIESDESC') }}</p>
     <div class="packages" v-if="packagesToUpdate === null">
       <div class="loading-dots">
-        <p>Chargement en cours</p>
+        <p>{{ $t('DASHBOARDHOME.LOADING') }}</p>
         <div class="loading-dots--dot"></div>
         <div class="loading-dots--dot"></div>
         <div class="loading-dots--dot"></div>
@@ -41,7 +47,7 @@
         </ul>
       </div>
       <p v-else>
-        Toutes les dépendances sont à jour !
+        {{ $t('DASHBOARDHOME.DEPENDENCIESUPTODATE') }}
         <i class="fas fa-check-circle"></i>
       </p>
     </div>
