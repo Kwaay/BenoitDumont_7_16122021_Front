@@ -2,68 +2,69 @@
   <div class="test">
     <div class="content-signup">
       <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
-      <h2>Inscription</h2>
+      <h2>{{ $t('SIGNUP.TITLE') }}</h2>
       <form>
         <div class="champ">
-          <label>Nom *</label>
+          <label>{{ $t('SIGNUP.NAMELABEL') }} *</label>
           <br />
           <input
             type="text"
             name="nom"
-            placeholder="example: John"
+            :placeholder="$t('SIGNUP.NAMEPLACEHOLDER')"
             v-model="name"
             :pattern="patternName"
           />
         </div>
         <div class="champ">
-          <label>Prénom *</label>
+          <label>{{ $t('SIGNUP.FIRSTNAMELABEL') }} *</label>
           <br />
           <input
             type="text"
             name="prenom"
-            placeholder="example: Doe"
+            :placeholder="$t('SIGNUP.FIRSTNAMEPLACEHOLDER')"
             v-model="firstname"
             :pattern="patternFirstname"
           />
         </div>
         <div class="champ">
-          <label>Pseudonyme *</label>
+          <label>{{ $t('SIGNUP.USERNAMELABEL') }} *</label>
           <br />
           <input
             type="text"
             name="username"
-            placeholder="Entre 4 et 10 caractères"
+            :placeholder="$t('SIGNUP.USERNAMEPLACEHOLDER')"
             v-model="username"
             :pattern="patternUsername"
           />
         </div>
         <div class="champ">
-          <label>Email *</label>
+          <label>{{ $t('SIGNUP.EMAILLABEL') }} *</label>
           <br />
           <input
             type="email"
             name="email"
-            placeholder="example@domain.fr"
+            :placeholder="$t('SIGNUP.EMAILPLACEHOLDER')"
             v-model="email"
             :pattern="patternEmail"
           />
         </div>
         <div class="champ">
-          <label>Mot de passe *</label>
+          <label>{{ $t('SIGNUP.PASSWORDLABEL') }} *</label>
           <br />
           <input
             type="text"
             name="password"
-            placeholder="Votre mot de passe"
+            :placeholder="$t('SIGNUP.PASSWORDPLACEHOLDER')"
             v-model="password"
             :pattern="patternPassword"
           />
         </div>
-        <div class="champ pos">
-          <label>Avatar</label>
+        <div class="champ">
+          <label>{{ $t('SIGNUP.AVATARLABEL') }}</label>
           <br />
           <label for="post-image" class="design"
-            ><i class="fas fa-upload"></i> Uploader une image</label
+            ><i class="fas fa-upload"></i>
+            {{ $t('SIGNUP.AVATARSUBMIT') }}</label
           >
           <input
             type="file"
@@ -73,26 +74,26 @@
           />
         </div>
         <p class="filename" v-if="this.avatar">
-          Image sélectionnée <i class="fas fa-check-circle"></i>
+          {{ $t('SIGNUP.SELECTEDIMAGE') }} <i class="fas fa-check-circle"></i>
         </p>
         <div class="champ">
-          <label>Question *</label>
+          <label>{{ $t('SIGNUP.QUESTIONLABEL') }} *</label>
           <br />
           <input
             type="text"
             name="question"
-            placeholder="Entre 4 et 15 caractères"
+            :placeholder="$t('SIGNUP.QUESTIONPLACEHOLDER')"
             v-model="question"
             :pattern="patternQuestion"
           />
         </div>
         <div class="champ">
-          <label>Réponse *</label>
+          <label>{{ $t('SIGNUP.RESPONSELABEL') }} *</label>
           <br />
           <input
             type="text"
             name="reponse"
-            placeholder="Entre 4 et 15 caractères"
+            :placeholder="$t('SIGNUP.RESPONSEPLACEHOLDER')"
             v-model="reponse"
             :pattern="patternReponse"
           />
@@ -101,16 +102,18 @@
         <input
           type="submit"
           name="submit"
-          value="Se connecter"
+          :value="$t('SIGNUP.SUBMITBUTTON')"
           class="btn"
           @click.prevent="submit"
         />
       </form>
       <h3>
-        Déjà inscrit ?
-        <router-link :to="{ name: 'Login' }">Se connecter</router-link>
+        {{ $t('SIGNUP.ALREADYREGISTER') }}
+        <router-link :to="{ name: 'Login' }">{{
+          $t('SIGNUP.SWITCHREGISTERLOGIN')
+        }}</router-link>
       </h3>
-      <h4>* = obligatoire</h4>
+      <h4>* = {{ $t('SIGNUP.REQUIRED') }}</h4>
     </div>
   </div>
 </template>
@@ -261,7 +264,6 @@ export default {
         });
     },
     tempStoreImage(e) {
-      console.log(e);
       const file = e.target.files[0];
       this.avatar = file;
     },

@@ -3,31 +3,38 @@
     <div class="content-login">
       <div class="content-login-container">
         <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
-        <h2>Connexion</h2>
+        <h2>{{ $t('LOGIN.TITLE') }}</h2>
         <form @submit.prevent="submit">
-          <label>Identifiant (email ou username) *</label>
+          <label>{{ $t('LOGIN.USERNAMEEMAILLABEL') }} *</label>
           <input
             type="text"
             name="identifiant"
-            placeholder="example@groupomania.fr"
+            :placeholder="$t('LOGIN.USERNAMEEMAILPLACEHOLDER')"
             v-model="identifiant"
           />
-          <label>Mot de passe *</label>
+          <label>{{ $t('LOGIN.PASSWORDLABEL') }} *</label>
           <input
             type="password"
             name="password"
-            placeholder="Votre mot de passe"
+            :placeholder="$t('LOGIN.PASSWORDPLACEHOLDER')"
             v-model="password"
             pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$"
           />
-          <input type="submit" name="submit" value="Se connecter" class="btn" />
+          <input
+            type="submit"
+            name="submit"
+            :value="$t('LOGIN.SUBMITBUTTON')"
+            class="btn"
+          />
         </form>
         <h3>
-          Pas encore de compte ?
-          <router-link :to="{ name: 'Signup' }">S'inscrire</router-link>
+          {{ $t('LOGIN.DONTHAVEACCOUNT') }}
+          <router-link :to="{ name: 'Signup' }">{{
+            $t('LOGIN.SWITCHLOGINREGISTER')
+          }}</router-link>
         </h3>
         <br />
-        <h4>* = obligatoire</h4>
+        <h4>* = {{ $t('LOGIN.REQUIRED') }}</h4>
       </div>
     </div>
   </div>

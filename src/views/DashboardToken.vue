@@ -143,7 +143,7 @@ export default {
   computed: {
     tokenReturned() {
       return this.tokens.map((token) => {
-        const parsedCreatedAt = new Date(token.createdAt).toLocaleString();
+        const parsedCreatedAt = this.formatDate(token.createdAt);
         const tokenModified = {
           ...token,
           createdAt: parsedCreatedAt,

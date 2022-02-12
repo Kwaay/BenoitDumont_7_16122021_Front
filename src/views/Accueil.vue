@@ -58,7 +58,7 @@
                 <div class="align">
                   <p>
                     {{ post.User.name }} {{ post.User.firstname }} <br />
-                    {{ new Date(post.createdAt).toLocaleString() }}
+                    {{ formatDate(post.createdAt) }}
                   </p>
                 </div>
               </div>

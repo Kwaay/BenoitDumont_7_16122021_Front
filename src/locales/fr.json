@@ -54,8 +54,12 @@
     "TITLE": "Liste des utilisateurs"
   },
   "LOGIN": {
+    "DONTHAVEACCOUNT": "Vous n'avez pas encore de compte ?",
     "PASSWORDLABEL": "Mot de passe",
     "PASSWORDPLACEHOLDER": "Votre mot de passe",
+    "REQUIRED": "obligatoire",
+    "SUBMITBUTTON": "Se connecter",
+    "SWITCHLOGINREGISTER": "S'inscrire",
     "TITLE": "Connexion",
     "USERNAMEEMAILLABEL": "Pseudonyme / Email",
     "USERNAMEEMAILPLACEHOLDER": "exemple@groupomania.fr"
@@ -86,7 +90,9 @@
     "TITLE": "Paramètres"
   },
   "SIGNUP": {
-    "AVATARLABEL": "Ajouter une image",
+    "ALREADYREGISTER": "Vous avez déjà un compte ?",
+    "AVATARLABEL": "Avatar",
+    "AVATARSUBMIT": "Uploader une image",
     "EMAILLABEL": "Email",
     "EMAILPLACEHOLDER": "exemple@domain.fr",
     "FIRSTNAMELABEL": "Prénom",
@@ -95,8 +101,14 @@
     "NAMEPLACEHOLDER": "exemple: John",
     "PASSWORDLABEL": "Mot de passe",
     "PASSWORDPLACEHOLDER": "Votre mot de passe",
+    "QUESTIONLABEL": "Question",
     "QUESTIONPLACEHOLDER": "Entre 4 et 15 caractères",
+    "REQUIRED": "obligatoire",
+    "RESPONSELABEL": "Réponse",
     "RESPONSEPLACEHOLDER": "Entre 4 et 15 caractères",
+    "SELECTEDIMAGE": "Image sélectionnée",
+    "SUBMITBUTTON": "S'inscrire",
+    "SWITCHREGISTERLOGIN": "Se connecter",
     "TITLE": "S'inscrire",
     "USERNAMELABEL": "Pseudonyme",
     "USERNAMEPLACEHOLDER": "Entre 4 et 20 caractères"

@@ -12,6 +12,15 @@ Vue.use(VueToastify);
 Vue.component('data-table', DataTable);
 
 Vue.config.productionTip = false;
+Vue.mixin({
+  methods: {
+    formatDate(date) {
+      return new Date(date).toLocaleString(
+        this.$i18n.locale === 'en' ? 'en-US' : 'fr-FR',
+      );
+    },
+  },
+});
 
 new Vue({
   router,

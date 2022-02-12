@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Register from '../views/Register.vue';
+import Signup from '../views/Signup.vue';
 import Login from '../views/Login.vue';
 import Accueil from '../views/Accueil.vue';
 import Settings from '../views/Settings.vue';
@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/signup',
     name: 'Signup',
-    component: Register,
+    component: Signup,
   },
   {
     path: '/login',

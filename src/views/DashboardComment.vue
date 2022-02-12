@@ -49,7 +49,7 @@
                 <div class="align">
                   <p>
                     {{ comment.User.name }} {{ comment.User.firstname }} <br />
-                    {{ new Date(comment.createdAt).toLocaleString() }}
+                    {{ formatDate(comment.createdAt) }}
                   </p>
                 </div>
               </div>

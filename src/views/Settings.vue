@@ -4,7 +4,7 @@
       <div class="sidebar">
         <div class="icon">
           <img src="../assets/logo_white.png" alt="Logo White" />
-          <router-link :to="{ name: 'Accueil' }"
+          <router-link :to="{ name: 'Profil', params: { UserId: this.UserId } }"
             ><i class="fas fa-home"></i
           ></router-link>
           <router-link :to="{ name: 'Profil' }"
@@ -34,7 +34,7 @@
               <div class="params">
                 <multiselect
                   v-model="valueLang"
-                  :placeholder="$t('SETTINGS.LANGOPTIONSPLACEHOLDER')"
+                  :placeholder="$t('SETTINGS.LANGOPTIONPLACEHOLDER')"
                   label="lang"
                   track-by="lang"
                   :options="[
@@ -108,6 +108,7 @@ export default {
     return {
       userConnected: {},
       UserId: '',
+      valueLang: '',
     };
   },
   created() {

@@ -113,8 +113,8 @@ export default {
   computed: {
     userReturned() {
       return this.users.map((user) => {
-        const parsedCreatedAt = new Date(user.createdAt).toLocaleString();
-        const parsedUpdatedAt = new Date(user.updatedAt).toLocaleString();
+        const parsedCreatedAt = this.formatDate(user.createdAt);
+        const parsedUpdatedAt = this.formatDate(user.updatedAt);
         const userModified = {
           ...user,
           updatedAt: parsedUpdatedAt,

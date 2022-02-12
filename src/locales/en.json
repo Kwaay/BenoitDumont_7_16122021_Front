@@ -1,12 +1,12 @@
 {
   "ACCUEIL": {
-    "BUTTONPOSTVALUE": "Post",
-    "CONTENTPLACEHOLDER": "Content of the post",
+    "BUTTONPOSTVALUE": "Create",
+    "CONTENTPLACEHOLDER": "Post Content",
     "CREATEPOST": "Create a post",
     "QUESTION": "Question",
     "RESPONSELABEL": "Response",
     "SELECTEDIMAGE": "Image Selected",
-    "TITLEPLACEHOLDER": "Title of the post"
+    "TITLEPLACEHOLDER": "Post Title"
   },
   "ALTIMAGEPROFILE": "Profile's image",
   "ALTMEDIA": "Post's Media",
@@ -54,10 +54,14 @@
     "TITLE": "User Dashboard"
   },
   "LOGIN": {
+    "DONTHAVEACCOUNT": "You don't have an account already ?",
     "PASSWORDLABEL": "Password",
     "PASSWORDPLACEHOLDER": "Your password",
+    "REQUIRED": "required",
+    "SUBMITBUTTON": "Connect",
+    "SWITCHLOGINREGISTER": "Sign up",
     "TITLE": "Login",
-    "USERNAMEEMAILLABEL": "Username / Email",
+    "USERNAMEEMAILLABEL": "Email / Username",
     "USERNAMEEMAILPLACEHOLDER": "example@groupomania.fr"
   },
   "POSTEDIT": {
@@ -86,7 +90,9 @@
     "TITLE": "Settings"
   },
   "SIGNUP": {
-    "AVATARLABEL": "Upload a image",
+    "ALREADYREGISTER": "You already have a account ?",
+    "AVATARLABEL": "Avatar",
+    "AVATARSUBMIT": "Upload a image",
     "EMAILLABEL": "Email",
     "EMAILPLACEHOLDER": "example@domain.fr",
     "FIRSTNAMELABEL": "Firstname",
@@ -95,8 +101,14 @@
     "NAMEPLACEHOLDER": "example: John",
     "PASSWORDLABEL": "Password",
     "PASSWORDPLACEHOLDER": "Your password",
+    "QUESTIONLABEL": "Question",
     "QUESTIONPLACEHOLDER": "Between 4 and 15 characters",
-    "RESPONSEPLACEHOLDER": "Between 4 et 15 characters",
+    "REQUIRED": "required",
+    "RESPONSELABEL": "Response",
+    "RESPONSEPLACEHOLDER": "Between 4 and 15 characters",
+    "SELECTEDIMAGE": "Image Selected",
+    "SUBMITBUTTON": "Sign up",
+    "SWITCHREGISTERLOGIN": "Login",
     "TITLE": "Sign up",
     "USERNAMELABEL": "Username",
     "USERNAMEPLACEHOLDER": "Between 4 and 20 characters"

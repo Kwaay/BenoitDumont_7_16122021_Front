@@ -36,7 +36,7 @@
                   <div class="post" v-for="post in posts" :key="post.id">
                     <div class="post-title">
                       <h2>{{ post.title }}</h2>
-                      <p>{{ new Date(post.createdAt).toLocaleString() }}</p>
+                      <p>{{ formatDate(post.createdAt) }}</p>
                     </div>
                     <div class="post-content">
                       {{ post.content }}
