@@ -155,6 +155,7 @@ export default {
       });
     },
     deleteUser(userData) {
+      // eslint-disable-next-line no-alert
       const validation = window.confirm(i18n.$t('CONFIRM.USER'));
       if (validation === true) {
         const token = localStorage.getItem('token');

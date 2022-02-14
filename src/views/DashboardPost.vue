@@ -150,6 +150,7 @@ export default {
       });
     },
     deletePost(post) {
+      // eslint-disable-next-line no-alert
       const validation = window.confirm(i18n.$t('CONFIRM.POST'));
       if (validation === true) {
         const token = localStorage.getItem('token');

@@ -11,15 +11,10 @@ module.exports = {
   css: {
     loaderOptions: {
       scss: {
+        // eslint-disable-next-line global-require
         implementation: require('sass'),
-        //sassOptions: {
         additionalData: `@import "./src/scss/main.scss";`,
-        /*includePathss: [
-            './src/scss/main.scss'
-          ]*/
-        //}
       },
     },
   },
 };
-

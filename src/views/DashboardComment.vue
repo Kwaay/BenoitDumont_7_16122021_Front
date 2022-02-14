@@ -115,6 +115,7 @@ export default {
       });
     },
     deleteComment(comment) {
+      // eslint-disable-next-line no-alert
       const validation = window.confirm(i18n.$t('CONFIRM.COMMENT'));
       if (validation === true) {
         const token = localStorage.getItem('token');
