@@ -1,7 +1,7 @@
 <template>
   <div class="test">
     <div class="content-signup">
-      <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
+      <img :src="this.getImage()" alt="Logo Groupomania" />
       <h2>{{ $t('SIGNUP.TITLE') }}</h2>
       <form>
         <div class="champ">
@@ -119,6 +119,9 @@
 </template>
 
 <script>
+import LogoBlack from '../assets/logo_full_black.png';
+import LogoWhite from '../assets/logo_full_white.png';
+
 export default {
   name: 'Register',
   data() {
@@ -267,21 +270,37 @@ export default {
       const file = e.target.files[0];
       this.avatar = file;
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+.test {
+  background-color: var(--app-background-color);
+}
+
 .content-signup {
   width: 1000px;
   margin: 0 auto;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .content-signup img {
   width: 350px;
-  height: 200px;
+  height: 150px;
   object-fit: cover;
 }
 
@@ -295,18 +314,30 @@ h5 {
   font-size: 36px;
   font-weight: 400;
   margin-bottom: 0 !important;
+  color: var(--app-text-primary-color);
 }
 
 .content-signup h3 {
   font-size: large;
+  color: var(--app-text-primary-color);
+}
+
+form input a {
+  color: black;
+}
+
+.content-signup h3 a {
+  color: var(--app-text-primary-color);
 }
 
 .content-signup h4 {
   font-size: medium;
+  color: var(--app-text-primary-color);
 }
 
 form label {
   font-size: 18px;
+  color: var(--app-text-primary-color);
 }
 
 form input {
@@ -317,20 +348,28 @@ form input {
   font-size: 18px;
   border-radius: 12px;
   border: 1px #707070 solid;
+  background-color: var(--app-input-background-color);
 }
 
-form input a {
-  color: black;
+form input::placeholder {
+  color: var(--app-input-placeholder-color);
 }
 
 .btn {
   width: 190px;
   height: 60px;
-  background-color: #f3512f;
+  background: var(--app-text-primary-color);
   border: transparent;
   border-radius: 12px;
-  color: white;
+  color: var(--app-background-color);
   margin: 1.5vh;
+  transition: all 450ms ease-in-out;
+
+  &:hover {
+    background: var(--app-background-color);
+    color: var(--app-text-primary-color);
+    border: 1px solid var(--app-text-primary-color);
+  }
 }
 
 button {
@@ -364,11 +403,14 @@ button {
 
 .filename {
   text-align: right;
-  width: 80%;
+  width: 85%;
+  color: var(--app-text-primary-color);
+  margin: 0 auto;
 }
 
 .design {
-  background-color: white;
+  background-color: var(--app-input-background-color);
+  color: var(--app-input-placeholder-color);
   border-radius: 12px;
   border: 1px #707070 solid;
   display: flex;

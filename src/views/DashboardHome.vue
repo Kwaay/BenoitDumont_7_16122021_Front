@@ -4,7 +4,7 @@
       <div class="side">
         <div class="side-container">
           <router-link :to="{ name: 'Accueil' }">
-            <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+            <img :src="this.getImage()" alt="Logo Groupomania" />
           </router-link>
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
@@ -78,6 +78,8 @@
 
 <script>
 import AvailableUpdate from '../components/AvailableUpdate.vue';
+import LogoWhite from '../assets/logo_full_white.png';
+import LogoBlack from '../assets/logo_full_black.png';
 
 export default {
   components: { AvailableUpdate },
@@ -164,20 +166,27 @@ export default {
           this.error = error;
         });
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   padding-top: 5vh;
 }
 
@@ -191,6 +200,7 @@ export default {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  background-color: var(--app-sidebar-color);
 }
 
 .side-container img {
@@ -207,6 +217,11 @@ export default {
 
 .icons a {
   text-decoration: none;
+  color: var(--app-text-primary-color) !important;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .icons a i {
@@ -221,9 +236,13 @@ export default {
 }
 
 .middle {
-  background-color: #2d3036;
   width: 100%;
-  color: white;
+  color: var(--app-text-sidebar-color) !important;
+}
+
+.middle-container h2 {
+  padding: 5vh 0 0 5vh;
+  color: var(--app-text-primary-color);
 }
 
 .data {
@@ -231,21 +250,21 @@ export default {
   justify-content: space-between;
   padding-top: 2vh;
   flex-wrap: wrap;
+  margin: 0 5vh;
 }
 
 .data-nb-users,
 .data-nb-posts,
 .data-nb-reactions,
 .data-nb-commentaires {
-  margin: 2vh 5vh;
   padding: 2vh;
   display: inline-flex;
   align-items: center;
   flex-direction: column;
-  background-color: #3a3a3a;
-  color: white;
+  background-color: var(--app-input-background-color);
+  color: var(--app-text-primary-color);
   border-radius: 10px;
-  min-width: 320px;
+  min-width: 300px;
 }
 
 .data-nb-users span,

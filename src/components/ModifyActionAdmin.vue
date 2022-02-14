@@ -29,7 +29,6 @@ export default {
 }
 
 .component-modify :hover {
-  transition: all 450ms ease-in-out;
   color: orange;
   transform: scale(1.11);
 }

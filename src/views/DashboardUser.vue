@@ -5,7 +5,7 @@
         <div class="side-container">
           <router-link :to="{ name: 'Accueil' }">
             <p>
-              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+              <img :src="this.getImage()" alt="Logo Groupomania" />
             </p>
           </router-link>
           <div class="icons">
@@ -54,6 +54,8 @@ import EventBus from '../EventBus';
 import modifyActionAdmin from '../components/ModifyActionAdmin.vue';
 import deleteActionAdmin from '../components/DeleteAction.vue';
 import i18n from '../I18n';
+import LogoWhite from '../assets/logo_full_white.png';
+import LogoBlack from '../assets/logo_full_black.png';
 
 export default {
   data() {
@@ -165,6 +167,13 @@ export default {
         }).then(() => this.getUsers());
       }
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
   created() {
     this.listenEventBus();
@@ -175,9 +184,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: var(--app-sidebar-color);
   display: flex;
 }
 
@@ -214,6 +223,11 @@ export default {
 
 .icons a {
   text-decoration: none;
+  color: var(--app-text-primary-color);
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .icons a i {
@@ -228,13 +242,13 @@ export default {
 }
 
 .middle {
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   width: 100%;
 }
 
 .middle-container h2 {
   padding: 5vh 0 0 5vh;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .list-users {
@@ -244,8 +258,8 @@ export default {
 }
 
 .user {
-  color: white;
-  border: 1px solid white;
+  color: var(--app-text-primary-color);
+  border: 1px solid var(--app-text-primary-color);
   margin: 2vh 4vh;
   border-radius: 30px;
   max-width: 150px;

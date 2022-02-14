@@ -175,8 +175,8 @@ export default {
 <style scoped lang="scss">
 .packages-main {
   padding-top: 2vh;
-  background-color: #3a3a3a;
-  color: white;
+  background-color: var(--app-input-background-color);
+  color: var(--app-text-primary-color);
   border-radius: 10px;
   min-width: 500px;
   text-align: center;
@@ -211,7 +211,7 @@ export default {
 
   &--dot {
     animation: dot-keyframes 1.5s infinite ease-in-out;
-    background-color: white;
+    background-color: var(--app-text-primary-color);
     border-radius: 10px;
     display: inline-block;
     margin: 0.5vh;
@@ -229,8 +229,12 @@ export default {
 }
 
 .packages-container li {
-  padding: 0.5vh;
+  text-align: left;
   list-style-type: circle;
+}
+
+.packages-container a {
+  color: var(--app-text-primary-color);
 }
 
 .version {
@@ -244,14 +248,14 @@ export default {
 }
 
 .majorupdate {
-  color: #e7903c !important;
+  color: var(--app-major-update-color) !important;
 }
 
 .minorupdate {
-  color: #ffd700 !important;
+  color: var(--app-minor-update-color) !important;
 }
 
 .patchupdate {
-  color: #00d400 !important;
+  color: var(--app-patch-update-color) !important;
 }
 </style>

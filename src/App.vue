@@ -5,7 +5,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    const htmlElement = document.documentElement;
+    const theme = localStorage.getItem('theme') || 'dark';
+    htmlElement.setAttribute('theme', theme);
+  },
+};
 </script>
 
 <style lang="scss">
@@ -22,10 +28,6 @@ body {
 #app {
   font-family: Nunito, sans-serif;
   color: #020202;
-}
-
-#app a {
-  color: #a6a6a6;
 }
 
 .vt-content {

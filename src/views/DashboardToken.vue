@@ -5,7 +5,7 @@
         <div class="side-container">
           <router-link :to="{ name: 'Accueil' }">
             <p>
-              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+              <img :src="this.getImage()" alt="Logo Groupomania" />
             </p>
           </router-link>
           <div class="icons">
@@ -53,6 +53,8 @@
 import EventBus from '../EventBus';
 import deleteActionAdmin from '../components/DeleteAction.vue';
 import i18n from '../I18n';
+import LogoBlack from '../assets/logo_full_black.png';
+import LogoWhite from '../assets/logo_full_white.png';
 
 export default {
   data() {
@@ -135,6 +137,13 @@ export default {
         }).then(() => this.getTokens());
       }
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.revokeToken);
@@ -155,16 +164,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   padding-top: 5vh;
 }
 
@@ -194,6 +203,11 @@ export default {
 
 .icons a {
   text-decoration: none;
+  color: var(--app-action-icons-color);
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .icons a i {
@@ -208,9 +222,9 @@ export default {
 }
 
 .middle {
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   width: 100%;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .middle-container h2 {
@@ -218,7 +232,7 @@ export default {
 }
 
 .token {
-  border: 1px solid white;
+  border: 1px solid var(--app-text-primary-color);
   margin: 2vh 4vh;
   border-radius: 30px;
   padding: 2vh;
@@ -230,10 +244,5 @@ export default {
 
 .wrap {
   word-wrap: break-word;
-}
-
-.token-style {
-  word-wrap: break-word;
-  max-width: 600px;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="content">
       <div class="sidebar">
         <div class="icons">
-          <img src="../assets/logo_white.png" alt="Logo White" />
+          <img :src="this.getImage()" alt="Logo" />
           <router-link :to="{ name: 'Accueil' }"
             ><i class="fas fa-home"></i
           ></router-link>
@@ -50,7 +50,7 @@
                         class="post-video"
                         v-if="post.media && isVideo(post.media)"
                       >
-                        <video controls width="250">
+                        <video controls width="350" height="200">
                           <source :src="post.media" type="video/mp4" />
                         </video>
                       </div>
@@ -75,6 +75,8 @@
 <script>
 import EventBus from '../EventBus';
 import deleteAction from '../components/DeleteAction.vue';
+import LogoWhite from '../assets/logo_white.png';
+import LogoBlack from '../assets/logo_black.png';
 
 export default {
   components: { deleteAction },
@@ -164,25 +166,32 @@ export default {
           this.error = error;
         });
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   padding-top: 5vh;
 }
 
 .sidebar {
-  background-color: #2d3036;
+  background-color: var(--app-sidebar-color);
   display: inline-flex;
   z-index: 99999;
   width: 100%;
@@ -204,10 +213,10 @@ export default {
 
 .icons a {
   transition: color 450ms ease-in-out;
+  color: var(--app-text-primary-color) !important;
 
   &:hover {
     opacity: 0.8;
-    color: white;
   }
 }
 
@@ -232,7 +241,7 @@ export default {
 .account {
   display: inline-flex;
   align-items: center;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .account img {
@@ -249,10 +258,10 @@ export default {
   overflow-y: scroll;
   width: calc(100% + 20px);
   height: 100%;
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   border-radius: 30px;
   padding-bottom: 10vh;
-  color: white;
+  color: var(--app-text-primary-color);
   border-top-left-radius: 30px;
 }
 
@@ -268,7 +277,7 @@ export default {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 1px solid white;
+  border: 1px solid var(--app-text-primary-color);
   object-fit: cover;
 }
 
@@ -282,16 +291,16 @@ export default {
 
 .list-posts {
   border-radius: 30px;
-  max-width: 800px;
   margin: 0 auto;
 }
 
 .post {
-  border: 1px solid white;
+  border: 1px solid var(--app-text-primary-color);
   border-radius: 30px;
   margin: 4vh;
   padding: 4vh;
   position: relative;
+  font-size: 20px;
 }
 
 .post-content {

@@ -2,7 +2,7 @@
   <div class="test">
     <div class="content-login">
       <div class="content-login-container">
-        <img src="../assets/logo_full_black.png" alt="Logo Groupomania" />
+        <img :src="this.getImage()" alt="Logo Groupomania" />
         <h2>{{ $t('LOGIN.TITLE') }}</h2>
         <form @submit.prevent="submit">
           <label>{{ $t('LOGIN.USERNAMEEMAILLABEL') }} *</label>
@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import LogoBlack from '../assets/logo_full_black.png';
+import LogoWhite from '../assets/logo_full_white.png';
+
 export default {
   name: 'Login',
   data() {
@@ -112,22 +115,35 @@ export default {
         });
       return true;
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+.test {
+  background-color: var(--app-background-color);
+}
+
 .content-login {
-  text-align: center;
   width: 1000px;
   margin: 0 auto;
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .content-login img {
   width: 350px;
-  height: 200px;
+  height: 150px;
   object-fit: cover;
 }
 
@@ -135,16 +151,27 @@ export default {
   font-size: 36px;
   font-weight: 400;
   margin-bottom: 0 !important;
+  color: var(--app-text-primary-color);
 }
 
 .content-login h3 {
   font-size: large;
   font-weight: 300;
+  color: var(--app-text-primary-color);
+}
+
+form input a {
+  color: black;
+}
+
+.content-login h3 a {
+  color: var(--app-text-primary-color);
 }
 
 .content-login h4 {
   font-size: medium;
   font-weight: 300;
+  color: var(--app-text-primary-color);
 }
 
 .content-login-container {
@@ -166,6 +193,7 @@ form label {
   font-size: 18px;
   text-align: left;
   margin-bottom: 14px;
+  color: var(--app-text-primary-color);
 }
 
 form input {
@@ -177,19 +205,26 @@ form input {
   margin-bottom: 30px;
   border-radius: 12px;
   border: 1px #707070 solid;
+  background-color: var(--app-input-background-color);
 }
 
-form input a {
-  color: black;
+form input::placeholder {
+  color: var(--app-input-placeholder-color);
 }
 
 .btn {
   width: 190px;
   height: 60px;
-  background-color: #f3512f;
+  background-color: var(--app-text-primary-color);
   border: transparent;
   border-radius: 12px;
-  color: white;
+  color: var(--app-background-color);
   margin: 0 auto;
+
+  &:hover {
+    background: var(--app-background-color);
+    color: var(--app-text-primary-color);
+    border: 1px solid var(--app-text-primary-color);
+  }
 }
 </style>

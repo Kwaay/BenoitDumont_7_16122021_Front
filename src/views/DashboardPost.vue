@@ -5,7 +5,7 @@
         <div class="side-container">
           <router-link :to="{ name: 'Accueil' }">
             <p>
-              <img src="../assets/logo_full_white.png" alt="Logo Groupomania" />
+              <img :src="this.getImage()" alt="Logo Groupomania" />
             </p>
           </router-link>
           <div class="icons">
@@ -91,6 +91,8 @@
 import EventBus from '../EventBus';
 import deleteAction from '../components/DeleteAction.vue';
 import i18n from '../I18n';
+import LogoBlack from '../assets/logo_full_black.png';
+import LogoWhite from '../assets/logo_full_white.png';
 
 export default {
   components: { deleteAction },
@@ -160,20 +162,27 @@ export default {
         }).then(() => this.getPosts());
       }
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: var(--app-sidebar-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: var(--app-sidebar-color);
   padding-top: 5vh;
 }
 
@@ -203,6 +212,12 @@ export default {
 
 .icons a {
   text-decoration: none;
+  color: var(--app-action-icons-color);
+  transition: all 450ms ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .icons a i {
@@ -217,14 +232,18 @@ export default {
 }
 
 .middle {
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   width: 100%;
-  color: white;
+  color: var(--app-text-primary-color);
+}
+
+.middle-container h2 {
+  padding: 5vh 0 0 5vh;
 }
 
 .list-posts {
   display: inline-flex;
-  flex-direction: wrap;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -235,7 +254,7 @@ export default {
 
 .post-content h2 {
   padding: 0;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .post {
@@ -243,15 +262,14 @@ export default {
   flex-direction: column;
   margin: 2.5vh 2.5vh 2.5vh 5vh;
   padding: 2vh;
-  border: 1px solid white;
+  border: 1px solid var(--app-text-primary-color);
   border-radius: 20px;
   position: relative;
-  max-width: 600px;
   width: 100%;
 }
 
 .post p {
-  color: white;
+  color: var(--app-text-primary-color);
   font-size: 20px;
 }
 
@@ -282,8 +300,6 @@ export default {
 .post-image {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: flex-end;
 }
 
 .post-image img {

@@ -3,7 +3,7 @@
     <div class="content">
       <div class="sidebar">
         <div class="icons">
-          <img src="../assets/logo_white.png" alt="Logo White" />
+          <img :src="this.getImage()" alt="Logo" />
           <router-link :to="{ name: 'Accueil' }"
             ><i class="fas fa-home"></i
           ></router-link>
@@ -77,7 +77,7 @@
                   class="post-video"
                   v-if="post.media && isVideo(post.media)"
                 >
-                  <video controls width="250">
+                  <video controls width="350" height="200">
                     <source :src="post.media" type="video/mp4" />
                   </video>
                 </div>
@@ -91,6 +91,9 @@
 </template>
 
 <script>
+import LogoWhite from '../assets/logo_white.png';
+import LogoBlack from '../assets/logo_black.png';
+
 export default {
   name: 'Accueil',
   data() {
@@ -223,25 +226,32 @@ export default {
       const file = e.target.files[0];
       this.media = file;
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .content {
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   padding-top: 5vh;
 }
 
 .sidebar {
-  background-color: #22262b;
+  background-color: var(--app-sidebar-color);
   display: inline-flex;
   z-index: 99999;
   width: 100%;
@@ -263,10 +273,10 @@ export default {
 
 .icons a {
   transition: color 450ms ease-in-out;
+  color: var(--app-text-primary-color) !important;
 
   &:hover {
     opacity: 0.8;
-    color: white;
   }
 }
 
@@ -287,7 +297,7 @@ export default {
 .account {
   display: inline-flex;
   align-items: center;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .account img {
@@ -309,7 +319,7 @@ export default {
   overflow-y: scroll;
   width: calc(100% + 20px);
   height: 100%;
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   border-radius: 30px;
   padding-bottom: 10vh;
   position: relative;
@@ -317,7 +327,7 @@ export default {
 
 .posts h1 {
   font-size: 45px;
-  color: white;
+  color: var(--app-text-primary-color);
   text-align: left;
   margin-bottom: 0;
 }
@@ -336,7 +346,7 @@ export default {
   position: absolute;
   right: 1px;
   bottom: -1vh;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .filename i {
@@ -370,16 +380,20 @@ export default {
 
 .posts form label :hover,
 .posts form label :active {
-  -webkit-text-stroke: 1px white;
+  -webkit-text-stroke: 1px var(--app-text-primary-color);
 }
 
 .posts form input {
-  background-color: #3a3a3a;
+  background-color: var(--app-input-background-color);
   border: 1px #707070 solid;
   border-radius: 30px;
   height: 42px;
   width: 100%;
-  color: white;
+  color: var(--app-text-primary-color);
+}
+
+.posts form input:focus-visible {
+  outline: 1px solid var(--app-border-color);
 }
 
 .posts form input::placeholder {
@@ -393,7 +407,7 @@ export default {
 }
 
 .post-content h2 {
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 #post-image {
@@ -404,14 +418,14 @@ export default {
   display: inline-flex;
   flex-direction: column;
   width: 100%;
-  border: 1px solid white;
+  border: 1px solid var(--app-text-primary-color);
   padding: 4vh;
   border-radius: 30px;
   margin: 1vh 0;
 }
 
 .post p {
-  color: white;
+  color: var(--app-text-primary-color);
   font-size: 20px;
 }
 

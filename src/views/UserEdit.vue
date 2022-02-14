@@ -248,19 +248,19 @@ export default {
 
 <style scoped lang="scss">
 .content {
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   padding-top: 5vh;
 }
 
 .sidebar {
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   height: 100vh;
   display: inline-flex;
   z-index: 99999;
@@ -293,7 +293,7 @@ export default {
 
   &:hover {
     opacity: 0.8;
-    color: white;
+    color: var(--app-text-primary-color);
   }
 }
 
@@ -307,7 +307,7 @@ export default {
 .account {
   display: inline-flex;
   align-items: center;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .account img {
@@ -331,7 +331,7 @@ export default {
 
 .update h1 {
   padding: 5vh;
-  color: white;
+  color: var(--app-text-primary-color);
   text-align: center;
 }
 
@@ -349,7 +349,7 @@ export default {
 }
 
 .update-form {
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .upload {
@@ -378,7 +378,7 @@ export default {
 
 .message:hover p {
   display: block;
-  color: white;
+  color: var(--app-text-primary-color);
   transition: all 450ms ease-in-out;
 }
 
@@ -408,12 +408,12 @@ export default {
 
 .btn {
   border: 1px solid #a6a6a6;
-  color: white;
+  color: var(--app-text-primary-color);
   transition: all 450ms ease-in-out;
 }
 
 .btn:hover {
-  background-color: white;
+  background-color: var(--app-text-primary-color);
   color: #2d3036;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="contents">
       <div class="sidebar">
         <div class="icon">
-          <img src="../assets/logo_white.png" alt="Logo White" />
+          <img :src="this.getImage()" alt="Logo" />
           <router-link :to="{ name: 'Profil', params: { UserId: this.UserId } }"
             ><i class="fas fa-home"></i
           ></router-link>
@@ -49,6 +49,7 @@
                   ]"
                   :option-height="2"
                   :show-labels="false"
+                  @input="switchLanguage"
                 >
                   <template slot="singleLabel" slot-scope="props">
                     <span class="fi" :class="props.option.flag"></span>
@@ -61,19 +62,20 @@
                 </multiselect>
               </div>
             </div>
-            <br />
             <div class="mode">
               <div class="text">
                 <h2>{{ $t('SETTINGS.THEMETITLE') }}</h2>
                 <p>{{ $t('SETTINGS.THEMEDESC') }}</p>
               </div>
-              <div class="params">
-                <input type="checkbox" id="mod" /><label for="mod"
-                  >Toggle</label
-                >
+              <div class="colors">
+                <input
+                  type="checkbox"
+                  id="mod"
+                  class="colors"
+                  v-model="darkMode"
+                /><label for="mod" class="colors">Toggle</label>
               </div>
             </div>
-            <br />
             <div class="security">
               <div class="text">
                 <h2>{{ $t('SETTINGS.SECURITYTITLE') }}</h2>
@@ -85,7 +87,6 @@
                 >
               </div>
             </div>
-            <br />
             <div class="history">
               <p>{{ $t('SETTINGS.HISTORYTITLE') }}</p>
             </div>
@@ -102,13 +103,20 @@
 </template>
 
 <script>
+import LogoWhite from '../assets/logo_white.png';
+import LogoBlack from '../assets/logo_black.png';
+
 export default {
   name: 'Settings',
   data() {
     return {
       userConnected: {},
       UserId: '',
-      valueLang: '',
+      valueLang: {
+        flag: localStorage.getItem('lang') === 'English' ? 'fi-us' : 'fi-fr',
+        lang: localStorage.getItem('lang') || 'Français',
+      },
+      darkMode: true,
     };
   },
   created() {
@@ -129,28 +137,46 @@ export default {
         return this.$vToastify.error(`An error occurred: ${error}`);
       });
   },
+  methods: {
+    switchLanguage() {
+      if (this.valueLang === null) return;
+
+      localStorage.setItem('lang', this.valueLang.lang);
+      this.$i18n.locale = this.valueLang.lang === 'Français' ? 'fr' : 'en';
+    },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
+  },
+  watch: {
+    darkMode(value) {
+      const htmlElement = document.documentElement;
+      localStorage.setItem('theme', value ? 'dark' : 'light');
+      htmlElement.setAttribute('theme', value ? 'dark' : 'light');
+    },
+  },
 };
 </script>
 
 <style>
-body {
-  background: #f1f1f1;
-}
-
 .contents {
-  background-color: #22262b;
+  background-color: var(--app-background-color);
   display: flex;
 }
 
 .content-container {
   display: flex;
   justify-content: space-between;
-  background-color: #2d3036;
+  background-color: var(--app-background-color);
   padding-top: 5vh;
 }
 
 .sidebar {
-  background-color: #2d3036;
+  background-color: var(--app-sidebar-color);
   height: 100vh;
   display: inline-flex;
   z-index: 99999;
@@ -178,10 +204,13 @@ body {
   padding: 1vh;
 }
 
-.icon a :hover {
+.icon a {
   transition: color 450ms ease-in-out;
+  color: var(--app-text-primary-color);
+}
+
+.icon a :hover {
   opacity: 0.8;
-  color: white;
 }
 
 .upside {
@@ -194,7 +223,7 @@ body {
 .account {
   display: inline-flex;
   align-items: center;
-  color: white;
+  color: var(--app-text-primary-color);
 }
 
 .account img {
@@ -213,8 +242,8 @@ body {
 }
 
 .settings {
-  background-color: #22262b;
-  color: white;
+  background-color: var(--app-background-color);
+  color: var(--app-text-primary-color);
   padding: 5vh;
   border-top-left-radius: 30px;
   height: 100%;
@@ -230,6 +259,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 4vh;
 }
 
 .history {
@@ -268,7 +298,8 @@ body {
 }
 /* stylelint-disable selector-class-pattern */
 .multiselect__tags {
-  background-color: #22262b !important;
+  background-color: var(--app-background-color) !important;
+  border: 1px solid var(--app-text-primary-color);
 }
 
 .multiselect__select {
@@ -293,7 +324,7 @@ body {
 }
 
 .multiselect__input {
-  background: #22262b !important;
+  background: var(--app-background-color) !important;
   color: #adadad;
 }
 
@@ -302,17 +333,17 @@ body {
 }
 
 .multiselect__single {
-  background-color: #22262b !important;
+  background-color: var(--app-background-color) !important;
 }
 
 .multiselect__option {
-  background: #22262b !important;
+  background: var(--app-background-color) !important;
 }
 
 /* stylelint-enable selector-class-pattern */
 .colored {
   vertical-align: middle;
-  color: #a6a6a6;
+  color: var(--app-text-primary-color);
 }
 
 .params input {
@@ -326,7 +357,7 @@ body {
   text-indent: -9999px;
   width: 70px;
   height: 40px;
-  background: grey;
+  background: #e61919;
   display: block;
   border-radius: 100px;
   position: relative;
@@ -339,16 +370,50 @@ body {
   left: 5px;
   width: 30px;
   height: 30px;
-  background: #fff;
+  background: var(--app-background-color);
   border-radius: 90px;
   transition: 0.3s;
 }
 
+.colors label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 70px;
+  height: 40px;
+  background: var(--app-action-icons-color);
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+
+.colors input {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
 .params input:checked + label {
-  background: #78797d;
+  background: green;
+}
+
+.colors label::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  background: var(--app-background-color);
+  border-radius: 90px;
+  transition: 0.3s;
 }
 
 .params input:checked + label::after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+.colors input:checked + label::after {
   left: calc(100% - 5px);
   transform: translateX(-100%);
 }
