@@ -29,12 +29,4 @@ body {
   font-family: Nunito, sans-serif;
   color: #020202;
 }
-
-.vt-content {
-  padding: 1.5vh;
-}
-
-.vt-notification-container {
-  font-family: Nunito, sans-serif;
-}
 </style>

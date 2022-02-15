@@ -322,7 +322,7 @@ export default {
 }
 
 .update :hover {
-  color: yellow;
+  color: var(--app-text-primary-color);
   transform: scale(1.11);
 }
 </style>

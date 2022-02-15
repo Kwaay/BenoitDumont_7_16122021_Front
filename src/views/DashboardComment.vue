@@ -279,10 +279,11 @@ export default {
 
 .update {
   padding: 1vh;
+  transition: all 450ms ease-in-out;
 }
 
 .update :hover {
-  color: yellow;
+  color: var(--app-text-primary-color);
   transform: scale(1.11);
 }
 </style>

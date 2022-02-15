@@ -3,7 +3,7 @@
     <div class="content">
       <div class="sidebar">
         <div class="icons">
-          <img src="../assets/logo_white.png" alt="Logo White" />
+          <img :src="this.getImage()" alt="Logo" />
           <router-link :to="{ name: 'Accueil' }"
             ><i class="fas fa-home"></i
           ></router-link>
@@ -21,8 +21,18 @@
           <div class="up">
             <div class="account">
               <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-              <i class="fas fa-sort-down"></i>
+              <i
+                @click="toggleLogout()"
+                v-if="this.menuDisplayed === false"
+                class="fas fa-sort-down"
+              ></i>
+              <i @click="toggleLogout()" v-else class="fas fa-sort-up"></i>
             </div>
+            <transition name="logout">
+              <div class="logout" v-if="this.menuDisplayed === true">
+                <p><i class="fas fa-sign-out-alt"></i>Logout</p>
+              </div>
+            </transition>
           </div>
           <div class="update">
             <h1>{{ $t('COMMENTEDIT.TITLE') }}</h1>
@@ -57,6 +67,9 @@
 </template>
 
 <script>
+import LogoBlack from '../assets/logo_black.png';
+import LogoWhite from '../assets/logo_white.png';
+
 export default {
   name: 'Accueil',
   data() {
@@ -65,6 +78,7 @@ export default {
         '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\'"?!., _-]{4,255}',
       comment: {},
       userConnected: {},
+      menuDisplayed: false,
     };
   },
   methods: {
@@ -110,6 +124,16 @@ export default {
         },
       ).then(() => this.fetchCommentData());
     },
+    getImage() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        return LogoBlack;
+      }
+      return LogoWhite;
+    },
+    toggleLogout() {
+      this.menuDisplayed = !this.menuDisplayed;
+    },
   },
   created() {
     const token = localStorage.getItem('token');
@@ -149,18 +173,11 @@ export default {
 }
 
 .sidebar {
-  background-color: var(--app-background-color);
+  background-color: var(--app-sidebar-color);
   height: 100vh;
   display: inline-flex;
   z-index: 99999;
   width: 100%;
-}
-
-.sidebar img {
-  margin: 2vh;
-  width: 85px;
-  height: 85px;
-  object-fit: cover;
 }
 
 .icons {
@@ -172,6 +189,13 @@ export default {
   height: 70%;
 }
 
+.icons img {
+  margin: 2vh;
+  width: 85px;
+  height: 85px;
+  object-fit: cover;
+}
+
 .icons i {
   font-size: 32px;
   padding: 1vh;
@@ -179,10 +203,10 @@ export default {
 
 .icons a {
   transition: color 450ms ease-in-out;
+  color: var(--app-text-primary-color);
 
   &:hover {
     opacity: 0.8;
-    color: var(--app-text-primary-color);
   }
 }
 
@@ -190,13 +214,15 @@ export default {
   height: 10vh;
   display: flex;
   justify-content: flex-end;
-  padding: 4vh;
+  padding-right: 4vh;
+  position: relative;
 }
 
 .account {
   display: inline-flex;
   align-items: center;
   color: var(--app-text-primary-color);
+  padding: 2vh;
 }
 
 .account img {
@@ -207,13 +233,46 @@ export default {
   border: 1px solid #2d3036;
 }
 
+.account i {
+  padding-left: 1vh;
+}
+
+.logout {
+  height: 5vh;
+  padding: 1.5vh;
+  position: absolute;
+  bottom: 0;
+  background: var(--app-action-icons-color);
+  z-index: 99999;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  transform: translateY(100%);
+}
+
+.logout p {
+  color: var(--app-background-color);
+}
+
+.logout i {
+  padding: 0.5vh;
+}
+
+.logout-enter {
+  opacity: 0.5;
+}
+
+.logout-enter-active {
+  opacity: 1;
+}
+
 .box-posts {
   overflow: hidden;
   position: relative;
+  width: 100%;
 }
 
 .update {
-  background-color: #2d3036;
+  background: var(--app-background-color);
   height: 100%;
   border-top-left-radius: 30px;
 }
@@ -286,6 +345,6 @@ export default {
 
 .btn:hover {
   background-color: var(--app-text-primary-color);
-  color: #2d3036;
+  color: var(--app-background-color);
 }
 </style>

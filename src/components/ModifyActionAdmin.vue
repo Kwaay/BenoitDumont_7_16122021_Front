@@ -29,7 +29,7 @@ export default {
 }
 
 .component-modify :hover {
-  color: orange;
+  color: var(--app-primary-color);
   transform: scale(1.11);
 }
 </style>

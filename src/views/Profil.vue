@@ -21,8 +21,18 @@
           <div class="up">
             <div class="account">
               <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-              <i class="fas fa-sort-down"></i>
+              <i
+                @click="toggleLogout()"
+                v-if="this.menuDisplayed === false"
+                class="fas fa-sort-down"
+              ></i>
+              <i @click="toggleLogout()" v-else class="fas fa-sort-up"></i>
             </div>
+            <transition name="logout">
+              <div class="logout" v-if="this.menuDisplayed === true">
+                <p><i class="fas fa-sign-out-alt"></i>Logout</p>
+              </div>
+            </transition>
           </div>
           <div class="profile">
             <div class="profile-container">
@@ -89,6 +99,7 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
+      menuDisplayed: false,
     };
   },
   mounted() {
@@ -134,6 +145,7 @@ export default {
       });
     },
     deletePost(post) {
+      // eslint-disable-next-line no-alert
       const validation = window.confirm(
         'Are you sure you want to delete this post ?',
       );
@@ -173,6 +185,9 @@ export default {
       }
       return LogoWhite;
     },
+    toggleLogout() {
+      this.menuDisplayed = !this.menuDisplayed;
+    },
   },
 };
 </script>
@@ -195,6 +210,7 @@ export default {
   display: inline-flex;
   z-index: 99999;
   width: 100%;
+  height: 100vh;
 }
 
 .icons {
@@ -227,11 +243,18 @@ export default {
   object-fit: cover;
 }
 
+.box-posts {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
 .up {
   height: 10vh;
   display: flex;
   justify-content: flex-end;
-  padding: 4vh;
+  padding-right: 4vh;
+  position: relative;
 }
 
 .post-title {
@@ -242,6 +265,11 @@ export default {
   display: inline-flex;
   align-items: center;
   color: var(--app-text-primary-color);
+  padding: 2vh;
+}
+
+.account i {
+  padding-left: 1vh;
 }
 
 .account img {
@@ -250,6 +278,34 @@ export default {
   object-fit: cover;
   border-radius: 30px;
   border: 1px solid #2d3036;
+}
+
+.logout {
+  height: 5vh;
+  padding: 1.5vh;
+  position: absolute;
+  bottom: 0;
+  background: var(--app-text-primary-color);
+  z-index: 99999;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  transform: translateY(100%);
+}
+
+.logout i {
+  padding: 0.5vh;
+}
+
+.logout p {
+  color: var(--app-background-color);
+}
+
+.logout-enter {
+  opacity: 0.5;
+}
+
+.logout-enter-active {
+  opacity: 1;
 }
 
 .profile {
@@ -333,7 +389,7 @@ export default {
 }
 
 .update :hover {
-  color: yellow;
+  color: var(--app-text-primary-color);
   transform: scale(1.11);
 }
 </style>

@@ -18,11 +18,21 @@
           ></router-link>
         </div>
         <div class="box-posts">
-          <div class="upside">
+          <div class="up">
             <div class="account">
               <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-              <i class="fas fa-sort-down"></i>
+              <i
+                @click="toggleLogout()"
+                v-if="this.menuDisplayed === false"
+                class="fas fa-sort-down"
+              ></i>
+              <i @click="toggleLogout()" v-else class="fas fa-sort-up"></i>
             </div>
+            <transition name="logout">
+              <div class="logout" v-if="this.menuDisplayed === true">
+                <p><i class="fas fa-sign-out-alt"></i>Logout</p>
+              </div>
+            </transition>
           </div>
           <div class="settings">
             <h1>{{ $t('SETTINGS.TITLE') }}</h1>
@@ -117,6 +127,7 @@ export default {
         lang: localStorage.getItem('lang') || 'Français',
       },
       darkMode: true,
+      menuDisplayed: false,
     };
   },
   created() {
@@ -151,6 +162,9 @@ export default {
       }
       return LogoWhite;
     },
+    toggleLogout() {
+      this.menuDisplayed = !this.menuDisplayed;
+    },
   },
   watch: {
     darkMode(value) {
@@ -162,7 +176,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .contents {
   background-color: var(--app-background-color);
   display: flex;
@@ -213,17 +227,23 @@ export default {
   opacity: 0.8;
 }
 
-.upside {
+.up {
   height: 10vh;
   display: flex;
   justify-content: flex-end;
-  padding: 4vh;
+  padding-right: 4vh;
+  position: relative;
 }
 
 .account {
   display: inline-flex;
   align-items: center;
   color: var(--app-text-primary-color);
+  padding: 2vh;
+}
+
+.account i {
+  padding-left: 1vh;
 }
 
 .account img {
@@ -232,7 +252,34 @@ export default {
   object-fit: cover;
   border-radius: 30px;
   border: 1px solid #2d3036;
-  margin: 2vh;
+}
+
+.logout {
+  height: 5vh;
+  padding: 1.5vh;
+  position: absolute;
+  bottom: 0;
+  background: var(--app-text-primary-color);
+  z-index: 99999;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  transform: translateY(100%);
+}
+
+.logout i {
+  padding: 0.5vh;
+}
+
+.logout p {
+  color: var(--app-background-color);
+}
+
+.logout-enter {
+  opacity: 0.5;
+}
+
+.logout-enter-active {
+  opacity: 1;
 }
 
 .box-posts {
@@ -296,51 +343,7 @@ export default {
   font-size: x-large;
   margin: 0;
 }
-/* stylelint-disable selector-class-pattern */
-.multiselect__tags {
-  background-color: var(--app-background-color) !important;
-  border: 1px solid var(--app-text-primary-color);
-}
 
-.multiselect__select {
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.multiselect__tags span img {
-  width: 16px;
-  height: 16px;
-  border: 1px solid black;
-  border-radius: 50%;
-  vertical-align: middle;
-}
-
-.multiselect__element span img {
-  width: 16px;
-  height: 16px;
-  border: 1px solid black;
-  border-radius: 50%;
-  vertical-align: middle;
-}
-
-.multiselect__input {
-  background: var(--app-background-color) !important;
-  color: #adadad;
-}
-
-.multiselect ::placeholder {
-  color: #adadad;
-}
-
-.multiselect__single {
-  background-color: var(--app-background-color) !important;
-}
-
-.multiselect__option {
-  background: var(--app-background-color) !important;
-}
-
-/* stylelint-enable selector-class-pattern */
 .colored {
   vertical-align: middle;
   color: var(--app-text-primary-color);

@@ -300,7 +300,7 @@ export default {
 .update :hover {
   transition: all 450ms ease-in-out;
   transform: scale(1.11);
-  color: yellow;
+  color: var(--app-text-primary-color);
 }
 
 .delete {

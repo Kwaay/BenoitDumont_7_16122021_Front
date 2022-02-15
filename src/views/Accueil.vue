@@ -21,8 +21,18 @@
           <div class="up">
             <div class="account">
               <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-              <i class="fas fa-sort-down"></i>
+              <i
+                @click="toggleLogout()"
+                v-if="this.menuDisplayed === false"
+                class="fas fa-sort-down"
+              ></i>
+              <i @click="toggleLogout()" v-else class="fas fa-sort-up"></i>
             </div>
+            <transition name="logout">
+              <div class="logout" v-if="this.menuDisplayed === true">
+                <p><i class="fas fa-sign-out-alt"></i>Logout</p>
+              </div>
+            </transition>
           </div>
           <div class="posts">
             <h1>{{ $t('ACCUEIL.CREATEPOST') }}</h1>
@@ -82,6 +92,12 @@
                   </video>
                 </div>
               </div>
+              <div class="post-actions">
+                <div class="update" @click="updatePost(post)">
+                  <i class="fa fa-pencil"></i>
+                </div>
+                <deleteAction :data="post" />
+              </div>
             </div>
           </div>
         </div>
@@ -91,11 +107,14 @@
 </template>
 
 <script>
+import EventBus from '../EventBus';
+import deleteAction from '../components/DeleteAction.vue';
 import LogoWhite from '../assets/logo_white.png';
 import LogoBlack from '../assets/logo_black.png';
 
 export default {
   name: 'Accueil',
+  components: { deleteAction },
   data() {
     return {
       userConnected: {},
@@ -108,6 +127,7 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
+      menuDisplayed: false,
     };
   },
   created() {
@@ -129,6 +149,7 @@ export default {
       });
   },
   mounted() {
+    EventBus.$on('deleteActionPressed', this.deletePost);
     this.fetchPosts();
   },
   methods: {
@@ -233,6 +254,31 @@ export default {
       }
       return LogoWhite;
     },
+    toggleLogout() {
+      this.menuDisplayed = !this.menuDisplayed;
+    },
+    updatePost(post) {
+      this.$router.push({
+        name: 'Post Admin Modification',
+        params: { PostId: post.id },
+      });
+    },
+    deletePost(post) {
+      // eslint-disable-next-line no-alert
+      const validation = window.confirm(
+        'Are you sure you want to delete this post ?',
+      );
+      if (validation === true) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/post/${post.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => this.fetchPosts());
+      }
+    },
   },
 };
 </script>
@@ -255,6 +301,7 @@ export default {
   display: inline-flex;
   z-index: 99999;
   width: 100%;
+  height: 100vh;
 }
 
 .icons {
@@ -291,13 +338,15 @@ export default {
   height: 10vh;
   display: flex;
   justify-content: flex-end;
-  padding: 4vh;
+  padding-right: 4vh;
+  position: relative;
 }
 
 .account {
   display: inline-flex;
   align-items: center;
   color: var(--app-text-primary-color);
+  padding: 2vh;
 }
 
 .account img {
@@ -306,6 +355,34 @@ export default {
   object-fit: cover;
   border-radius: 30px;
   border: 1px solid #2d3036;
+}
+
+.account i {
+  padding-left: 1vh;
+}
+
+.logout {
+  height: 5vh;
+  padding: 1.5vh;
+  position: absolute;
+  bottom: 0;
+  background: var(--app-action-icons-color);
+  z-index: 99999;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  transform: translateY(100%);
+}
+
+.logout i {
+  padding: 0.5vh;
+}
+
+.logout-enter {
+  opacity: 0.5;
+}
+
+.logout-enter-active {
+  opacity: 1;
 }
 
 .box-posts {
@@ -378,6 +455,11 @@ export default {
   cursor: pointer;
 }
 
+.update :hover {
+  color: var(--app-text-primary-color);
+  transform: scale(1.11);
+}
+
 .posts form label :hover,
 .posts form label :active {
   -webkit-text-stroke: 1px var(--app-text-primary-color);
@@ -414,6 +496,16 @@ export default {
   display: none;
 }
 
+.post-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 4vh;
+  top: 2vh;
+  color: var(--app-text-primary-color);
+}
+
 .post {
   display: inline-flex;
   flex-direction: column;
@@ -422,6 +514,8 @@ export default {
   padding: 4vh;
   border-radius: 30px;
   margin: 1vh 0;
+  position: relative;
+  font-size: 20px;
 }
 
 .post p {
@@ -457,5 +551,9 @@ export default {
   height: 200px;
   object-fit: cover;
   margin: 0;
+}
+
+.update {
+  padding: 1vh;
 }
 </style>
