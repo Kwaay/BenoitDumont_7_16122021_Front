@@ -92,9 +92,12 @@
                 <p>{{ $t('SETTINGS.SECURITYDESC') }}</p>
               </div>
               <div class="params">
-                <input type="checkbox" id="security" /><label for="security"
-                  >Toggle</label
-                >
+                <input
+                  type="checkbox"
+                  id="security"
+                  v-model="userConnected.maxSecurity"
+                  @change="toggleMaxSecurity"
+                /><label for="security">Toggle</label>
               </div>
             </div>
             <div class="history">
@@ -170,6 +173,26 @@ export default {
     },
     toggleLogout() {
       this.menuDisplayed = !this.menuDisplayed;
+    },
+    toggleMaxSecurity() {
+      const token = localStorage.getItem('token');
+      fetch(`http://localhost:3000/api/user/${this.userConnected.id}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          maxSecurity: this.userConnected.maxSecurity,
+        }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          return this.$vToastify.success(`Successfully modified`);
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
+        });
     },
   },
   watch: {
