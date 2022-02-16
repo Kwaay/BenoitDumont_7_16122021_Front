@@ -46,6 +46,12 @@ import LogoWhite from '../assets/logo_full_white.png';
 
 export default {
   name: 'Login',
+  metaInfo() {
+    const title = this.$t('LOGIN.TITLE');
+    return {
+      title,
+    };
+  },
   data() {
     return {
       identifiant: '',

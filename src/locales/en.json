@@ -6,6 +6,7 @@
     "QUESTION": "Question",
     "RESPONSELABEL": "Response",
     "SELECTEDIMAGE": "Image Selected",
+    "TITLE": "Home",
     "TITLEPLACEHOLDER": "Post Title"
   },
   "ALTIMAGEPROFILE": "Profile's image",
@@ -64,6 +65,7 @@
     "USERNAMEEMAILLABEL": "Email / Username",
     "USERNAMEEMAILPLACEHOLDER": "example@groupomania.fr"
   },
+  "LOGOUT": "Logout",
   "POSTEDIT": {
     "CONTENTLABEL": "Content",
     "CONTENTPLACEHOLDER": "The text that you want to post",
@@ -75,7 +77,8 @@
     "TITLEPLACEHOLDER": "example: Title"
   },
   "PROFIL": {
-    "LATESTPOSTS": "Latest Posts"
+    "LATESTPOSTS": "Latest Posts",
+    "TITLE": "Profile"
   },
   "SETTINGS": {
     "DELETEACCOUNT": "Delete this account",

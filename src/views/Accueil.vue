@@ -30,7 +30,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p><i class="fas fa-sign-out-alt"></i>Logout</p>
+                <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
               </div>
             </transition>
           </div>
@@ -92,7 +92,12 @@
                   </video>
                 </div>
               </div>
-              <div class="post-actions">
+              <div
+                class="post-actions"
+                v-if="
+                  userConnected.id === post.User.id || userConnected.rank === 1
+                "
+              >
                 <div class="update" @click="updatePost(post)">
                   <i class="fa fa-pencil"></i>
                 </div>
@@ -114,6 +119,12 @@ import LogoBlack from '../assets/logo_black.png';
 
 export default {
   name: 'Accueil',
+  metaInfo() {
+    const title = this.$t('ACCUEIL.TITLE');
+    return {
+      title,
+    };
+  },
   components: { deleteAction },
   data() {
     return {
@@ -359,6 +370,7 @@ export default {
 
 .account i {
   padding-left: 1vh;
+  cursor: pointer;
 }
 
 .logout {
@@ -371,6 +383,7 @@ export default {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   transform: translateY(100%);
+  cursor: pointer;
 }
 
 .logout i {

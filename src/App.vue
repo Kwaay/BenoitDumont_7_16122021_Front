@@ -11,6 +11,12 @@ export default {
     const theme = localStorage.getItem('theme') || 'dark';
     htmlElement.setAttribute('theme', theme);
   },
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: 'Groupomania',
+    // all titles will be injected into this template
+    titleTemplate: ' Groupomania | %s',
+  },
 };
 </script>
 

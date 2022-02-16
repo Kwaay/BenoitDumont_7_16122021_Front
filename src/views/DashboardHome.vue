@@ -34,6 +34,9 @@
                 <i class="fas fa-ticket-alt"></i>{{ $t('DASHBOARD.LISTTOKEN') }}
               </p>
             </router-link>
+            <div class="logout">
+              <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -82,6 +85,12 @@ import LogoWhite from '../assets/logo_full_white.png';
 import LogoBlack from '../assets/logo_full_black.png';
 
 export default {
+  metaInfo() {
+    const title = this.$t('DASHBOARDHOME.TITLE');
+    return {
+      title,
+    };
+  },
   components: { AvailableUpdate },
   data() {
     return {
@@ -201,6 +210,7 @@ export default {
   align-items: center;
   height: 100vh;
   background-color: var(--app-sidebar-color);
+  position: relative;
 }
 
 .side-container img {
@@ -224,6 +234,11 @@ export default {
   }
 }
 
+.logout i {
+  margin: 1vh;
+  font-size: 24px;
+}
+
 .icons a i {
   margin: 1vh;
   font-size: 24px;
@@ -233,6 +248,13 @@ export default {
   font-size: 16px;
   display: flex;
   align-items: center;
+}
+
+.logout {
+  position: absolute;
+  bottom: 2vh;
+  color: var(--app-text-primary-color);
+  cursor: pointer;
 }
 
 .middle {

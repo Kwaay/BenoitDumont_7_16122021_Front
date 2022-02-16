@@ -11,7 +11,7 @@ const messages = {
 Vue.use(VueI18n);
 
 const i18n = new VueI18n({
-  locale: 'en', // set locale
+  locale: localStorage.getItem('lang') === 'English' ? 'en' : 'fr', // set locale
   messages, // set locale messages
 });
 

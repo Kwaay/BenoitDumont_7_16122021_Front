@@ -30,7 +30,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p><i class="fas fa-sign-out-alt"></i>Logout</p>
+                <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
               </div>
             </transition>
           </div>
@@ -118,6 +118,12 @@ import LogoBlack from '../assets/logo_black.png';
 
 export default {
   name: 'Settings',
+  metaInfo() {
+    const title = this.$t('SETTINGS.TITLE');
+    return {
+      title,
+    };
+  },
   data() {
     return {
       userConnected: {},
@@ -244,6 +250,7 @@ export default {
 
 .account i {
   padding-left: 1vh;
+  cursor: pointer;
 }
 
 .account img {
@@ -264,6 +271,7 @@ export default {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   transform: translateY(100%);
+  cursor: pointer;
 }
 
 .logout i {

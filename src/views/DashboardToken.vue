@@ -57,6 +57,12 @@ import LogoBlack from '../assets/logo_full_black.png';
 import LogoWhite from '../assets/logo_full_white.png';
 
 export default {
+  metaInfo() {
+    const title = this.$t('DASHBOARDTOKEN.TITLE');
+    return {
+      title,
+    };
+  },
   data() {
     return {
       tokens: [],

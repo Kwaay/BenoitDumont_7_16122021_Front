@@ -58,6 +58,12 @@ import LogoWhite from '../assets/logo_full_white.png';
 import LogoBlack from '../assets/logo_full_black.png';
 
 export default {
+  metaInfo() {
+    const title = this.$t('DASHBOARDUSER.TITLE');
+    return {
+      title,
+    };
+  },
   data() {
     return {
       users: [],

@@ -124,6 +124,12 @@ import LogoWhite from '../assets/logo_full_white.png';
 
 export default {
   name: 'Register',
+  metaInfo() {
+    const title = this.$t('SIGNUP.TITLE');
+    return {
+      title,
+    };
+  },
   data() {
     return {
       /* eslint-disable no-useless-escape */
