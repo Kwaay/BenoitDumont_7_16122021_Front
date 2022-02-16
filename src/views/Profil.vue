@@ -168,6 +168,11 @@ export default {
     },
     getPosts() {
       const token = localStorage.getItem('token');
+      if (
+        typeof this.$route.params.UserId !== 'number' ||
+        this.$route.params.UserId < 1
+      )
+        return;
       fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
         method: 'GET',
         headers: {

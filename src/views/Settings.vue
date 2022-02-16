@@ -176,6 +176,11 @@ export default {
     },
     toggleMaxSecurity() {
       const token = localStorage.getItem('token');
+      if (
+        typeof this.userConnected.id !== 'number' ||
+        this.userConnected.id < 1
+      )
+        return;
       fetch(`http://localhost:3000/api/user/${this.userConnected.id}`, {
         method: 'PATCH',
         headers: {
