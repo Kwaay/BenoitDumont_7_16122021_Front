@@ -4,18 +4,20 @@
       <div class="sidebar">
         <div class="icons">
           <img :src="this.getImage()" alt="Logo" />
-          <router-link :to="{ name: 'Accueil' }"
-            ><i class="fas fa-home"></i
-          ></router-link>
-          <router-link :to="{ name: 'Profil' }"
-            ><i class="fas fa-user"></i
-          ></router-link>
-          <router-link :to="{ name: 'Settings' }"
-            ><i class="fas fa-cog"></i
-          ></router-link>
-          <router-link :to="{ name: 'Home Dashboard' }"
-            ><i class="fas fa-tools"></i
-          ></router-link>
+          <div class="icon-container">
+            <router-link :to="{ name: 'Accueil' }"
+              ><i class="fas fa-home"></i
+            ></router-link>
+            <router-link :to="{ name: 'Profil', params: { UserId: UserId } }"
+              ><i class="fas fa-user"></i
+            ></router-link>
+            <router-link :to="{ name: 'Settings' }"
+              ><i class="fas fa-cog"></i
+            ></router-link>
+            <router-link :to="{ name: 'Home Dashboard' }"
+              ><i class="fas fa-tools"></i
+            ></router-link>
+          </div>
         </div>
         <div class="box-posts">
           <div class="up">
@@ -300,6 +302,15 @@ export default {
   }
 }
 
+.icon-container {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: color 450ms ease-in-out;
+  height: 70%;
+}
+
 .up {
   height: 10vh;
   display: flex;
@@ -333,7 +344,7 @@ export default {
   padding: 1.5vh;
   position: absolute;
   bottom: 0;
-  background: var(--app-text-primary-color);
+  background: var(--app-background-color);
   z-index: 99999;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
@@ -346,7 +357,7 @@ export default {
 }
 
 .logout p {
-  color: var(--app-background-color);
+  color: var(--app-text-primary-color);
 }
 
 .logout-enter {
@@ -370,7 +381,7 @@ export default {
 }
 
 .update h1 {
-  padding-top: 3vh;
+  padding: 3vh 0;
   color: var(--app-text-primary-color);
   text-align: center;
 }
@@ -390,6 +401,7 @@ export default {
 
 .update-form {
   color: var(--app-text-primary-color);
+  padding: 2vh;
 }
 
 .update-image input {
@@ -440,7 +452,8 @@ export default {
 
 .champ input,
 .champ textarea {
-  width: 418px;
+  max-width: 418px;
+  width: 100%;
   height: 48px;
   font-family: Nunito, sans-serif;
   text-align: center;
@@ -464,5 +477,57 @@ export default {
 .btn:hover {
   background-color: var(--app-text-primary-color);
   color: var(--app-background-color);
+}
+@media (max-width: 700px) {
+  .sidebar {
+    display: initial;
+  }
+
+  .box-posts {
+    position: initial;
+  }
+
+  .icons {
+    height: initial;
+  }
+
+  .icon-container {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    height: initial;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 2vh;
+    background: var(--app-sidebar-color);
+    z-index: 9999;
+    margin-top: 5vh;
+  }
+
+  .up {
+    position: absolute;
+    top: 3vh;
+    right: 2vh;
+    padding-right: 0;
+  }
+
+  .update {
+    border-top-left-radius: 0;
+  }
+
+  .form-post-edit {
+    width: 100%;
+    margin: 0;
+    padding-top: 2vh;
+    padding-bottom: 15vh;
+  }
+
+  .logout {
+    height: 8vh;
+    padding: 0.5vh;
+    width: 100%;
+    text-align: center;
+  }
 }
 </style>
