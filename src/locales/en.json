@@ -54,6 +54,18 @@
   "DASHBOARDUSER": {
     "TITLE": "User Dashboard"
   },
+  "DATATABLE": {
+    "CREATEDAT": "Created At",
+    "DELETE": "Delete",
+    "FIRSTNAME": "Firstname",
+    "IPADDRESS": "Ip Address",
+    "MODIFY": "Modify",
+    "NAME": "Name",
+    "REVOKE": "Revoke",
+    "TOKEN": "Token",
+    "UPDATEDAT": "Updated At",
+    "USERNAME": "Username"
+  },
   "LOGIN": {
     "DONTHAVEACCOUNT": "You don't have an account already ?",
     "PASSWORDLABEL": "Password",

@@ -4,18 +4,20 @@
       <div class="sidebar">
         <div class="icons">
           <img :src="this.getImage()" alt="Logo" />
-          <router-link :to="{ name: 'Accueil' }"
-            ><i class="fas fa-home"></i
-          ></router-link>
-          <router-link :to="{ name: 'Profil' }"
-            ><i class="fas fa-user"></i
-          ></router-link>
-          <router-link :to="{ name: 'Settings' }"
-            ><i class="fas fa-cog"></i
-          ></router-link>
-          <router-link :to="{ name: 'Home Dashboard' }"
-            ><i class="fas fa-tools"></i
-          ></router-link>
+          <div class="icon-container">
+            <router-link :to="{ name: 'Accueil' }"
+              ><i class="fas fa-home"></i
+            ></router-link>
+            <router-link :to="{ name: 'Profil' }"
+              ><i class="fas fa-user"></i
+            ></router-link>
+            <router-link :to="{ name: 'Settings' }"
+              ><i class="fas fa-cog"></i
+            ></router-link>
+            <router-link :to="{ name: 'Home Dashboard' }"
+              ><i class="fas fa-tools"></i
+            ></router-link>
+          </div>
         </div>
         <div class="box-posts">
           <div class="up">
@@ -110,7 +112,6 @@ export default {
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.deletePost);
-    this.getPosts();
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
@@ -126,6 +127,7 @@ export default {
       .catch((error) => {
         this.error = error;
       });
+    this.getPosts();
   },
   methods: {
     isImage(media) {
@@ -168,11 +170,7 @@ export default {
     },
     getPosts() {
       const token = localStorage.getItem('token');
-      if (
-        typeof this.$route.params.UserId !== 'number' ||
-        this.$route.params.UserId < 1
-      )
-        return;
+      console.log(this.$route.params.UserId);
       fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
         method: 'GET',
         headers: {
@@ -225,6 +223,15 @@ export default {
 }
 
 .icons {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: color 450ms ease-in-out;
+  height: 70%;
+}
+
+.icon-container {
   display: inline-flex;
   align-items: center;
   flex-direction: column;
@@ -404,5 +411,218 @@ export default {
 .update :hover {
   color: var(--app-text-primary-color);
   transform: scale(1.11);
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    display: initial;
+    height: initial;
+  }
+
+  .box-posts {
+    position: initial;
+    padding-bottom: 10vh;
+  }
+
+  .icon {
+    height: 0;
+  }
+
+  .icons {
+    height: initial;
+  }
+
+  .logout {
+    height: 8vh;
+    padding: 0.5vh;
+    width: 100%;
+    text-align: center;
+  }
+
+  .icon-container {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    height: initial;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 2vh;
+    background: var(--app-sidebar-color);
+    z-index: 9999;
+    margin-top: 5vh;
+  }
+
+  .up {
+    position: absolute;
+    top: 2vh;
+    right: 2vh;
+    padding-right: 0;
+  }
+
+  .post {
+    padding: 2vh;
+  }
+
+  .align {
+    text-align: center;
+  }
+
+  .posts {
+    margin-bottom: 0;
+    height: initial;
+    padding: 2vh 2.5vh;
+    width: initial;
+  }
+
+  .posts h1 {
+    text-align: center;
+  }
+
+  .posts form {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .post-container {
+    flex-direction: column;
+  }
+
+  .post-content {
+    padding-top: 0;
+    padding-bottom: 4vh;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    padding-top: 2vh;
+  }
+
+  .post-video video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .post-actions {
+    justify-content: center;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    top: initial;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    display: initial;
+    height: initial;
+  }
+
+  .box-posts {
+    position: initial;
+    padding-bottom: 10vh;
+  }
+
+  .icon {
+    height: 0;
+  }
+
+  .icons {
+    height: initial;
+  }
+
+  .logout {
+    height: 8vh;
+    padding: 0.5vh;
+    width: 100%;
+    text-align: center;
+  }
+
+  .icon-container {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    height: initial;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 2vh;
+    background: var(--app-sidebar-color);
+    z-index: 9999;
+    margin-top: 5vh;
+  }
+
+  .profile {
+    padding: 0;
+    border-radius: 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    width: initial;
+  }
+
+  .up {
+    position: absolute;
+    top: 2vh;
+    right: 2vh;
+    padding-right: 0;
+  }
+
+  .post {
+    padding: 2vh;
+    margin: 2vh;
+  }
+
+  .align {
+    text-align: center;
+  }
+
+  .posts {
+    margin-bottom: 0;
+    height: initial;
+    padding: 2vh 2.5vh;
+    width: initial;
+  }
+
+  .posts h1 {
+    text-align: center;
+  }
+
+  .posts form {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .post-title {
+    text-align: center;
+  }
+
+  .post-container {
+    flex-direction: column;
+  }
+
+  .post-content {
+    padding-top: 0;
+    padding-bottom: 4vh;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    padding-top: 2vh;
+  }
+
+  .post-video video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .post-actions {
+    justify-content: center;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    top: initial;
+  }
 }
 </style>

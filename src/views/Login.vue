@@ -110,7 +110,12 @@ export default {
           password: this.password,
         }),
       })
-        .then((response) => response.json())
+        .then((response, error) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw error;
+        })
         .then((data) => {
           this.user = data.value;
           localStorage.setItem('token', data.token);
@@ -119,7 +124,7 @@ export default {
         .catch((error) => {
           return this.$vToastify.error(`An error occurred: ${error}`);
         });
-      return true;
+      return false;
     },
     getImage() {
       const theme = localStorage.getItem('theme');
@@ -139,7 +144,8 @@ export default {
 }
 
 .content-login {
-  width: 1000px;
+  max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -148,9 +154,11 @@ export default {
 }
 
 .content-login img {
-  width: 350px;
+  max-width: 350px;
+  width: 100%;
   height: 150px;
   object-fit: cover;
+  padding: 2vh;
 }
 
 .content-login h2 {
@@ -164,6 +172,8 @@ export default {
   font-size: large;
   font-weight: 300;
   color: var(--app-text-primary-color);
+  padding: 2vh;
+  text-align: center;
 }
 
 form input a {
@@ -192,7 +202,8 @@ form {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2vh 0;
+  padding: 2vh;
+  width: 100%;
 }
 
 form label {
@@ -203,7 +214,8 @@ form label {
 }
 
 form input {
-  width: 418px;
+  width: 100%;
+  max-width: 418px;
   height: 48px;
   font-family: Nunito, sans-serif;
   text-align: center;

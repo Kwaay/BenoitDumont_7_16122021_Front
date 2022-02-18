@@ -75,17 +75,17 @@ export default {
         },
         {
           key: 'name',
-          title: 'Name',
+          title: this.$t('DATATABLE.NAME'),
           type: 'string',
         },
         {
           key: 'firstname',
-          title: 'Firstname',
+          title: this.$t('DATATABLE.FIRSTNAME'),
           type: 'string',
         },
         {
           key: 'username',
-          title: 'Username',
+          title: this.$t('DATATABLE.USERNAME'),
           type: 'string',
         },
         {
@@ -95,22 +95,22 @@ export default {
         },
         {
           key: 'createdAt',
-          title: 'Created At',
+          title: this.$t('DATATABLE.CREATEDAT'),
           type: 'string',
         },
         {
           key: 'updatedAt',
-          title: 'Updated At',
+          title: this.$t('DATATABLE.UPDATEDAT'),
           type: 'string',
         },
         {
-          title: 'Modify',
+          title: this.$t('DATATABLE.MODIFY'),
           component: modifyActionAdmin,
           sortable: false,
           searchable: false,
         },
         {
-          title: 'Delete',
+          title: this.$t('DATATABLE.DELETE'),
           component: deleteActionAdmin,
           sortable: false,
           searchable: false,

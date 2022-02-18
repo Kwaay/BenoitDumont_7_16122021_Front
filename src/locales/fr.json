@@ -54,6 +54,18 @@
   "DASHBOARDUSER": {
     "TITLE": "Liste des utilisateurs"
   },
+  "DATATABLE": {
+    "CREATEDAT": "Créé le",
+    "DELETE": "Supprimer",
+    "FIRSTNAME": "Prénom",
+    "IPADDRESS": "Adresse IP",
+    "MODIFY": "Modifier",
+    "NAME": "Nom",
+    "REVOKE": "Révoquer",
+    "TOKEN": "Jeton",
+    "UPDATEDAT": "Modifié le",
+    "USERNAME": "Pseudonyme"
+  },
   "LOGIN": {
     "DONTHAVEACCOUNT": "Vous n'avez pas encore de compte ?",
     "PASSWORDLABEL": "Mot de passe",

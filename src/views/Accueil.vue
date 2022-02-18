@@ -4,18 +4,20 @@
       <div class="sidebar">
         <div class="icons">
           <img :src="this.getImage()" alt="Logo" />
-          <router-link :to="{ name: 'Accueil' }"
-            ><i class="fas fa-home"></i
-          ></router-link>
-          <router-link :to="{ name: 'Profil', params: { UserId: this.UserId } }"
-            ><i class="fas fa-user"></i
-          ></router-link>
-          <router-link :to="{ name: 'Settings' }"
-            ><i class="fas fa-cog"></i
-          ></router-link>
-          <router-link :to="{ name: 'Home Dashboard' }"
-            ><i class="fas fa-tools"></i
-          ></router-link>
+          <div class="icon-container">
+            <router-link :to="{ name: 'Accueil' }"
+              ><i class="fas fa-home"></i
+            ></router-link>
+            <router-link :to="{ name: 'Profil', params: { UserId: UserId } }"
+              ><i class="fas fa-user"></i
+            ></router-link>
+            <router-link :to="{ name: 'Settings' }"
+              ><i class="fas fa-cog"></i
+            ></router-link>
+            <router-link :to="{ name: 'Home Dashboard' }"
+              ><i class="fas fa-tools"></i
+            ></router-link>
+          </div>
         </div>
         <div class="box-posts">
           <div class="up">
@@ -345,6 +347,15 @@ export default {
   object-fit: cover;
 }
 
+.icon-container {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: color 450ms ease-in-out;
+  height: 70%;
+}
+
 .up {
   height: 10vh;
   display: flex;
@@ -378,7 +389,7 @@ export default {
   padding: 1.5vh;
   position: absolute;
   bottom: 0;
-  background: var(--app-action-icons-color);
+  background: var(--app-text-primary-color);
   z-index: 99999;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
@@ -388,6 +399,10 @@ export default {
 
 .logout i {
   padding: 0.5vh;
+}
+
+.logout p {
+  color: var(--app-background-color);
 }
 
 .logout-enter {
@@ -568,5 +583,105 @@ export default {
 
 .update {
   padding: 1vh;
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    display: initial;
+    height: initial;
+  }
+
+  .box-posts {
+    position: initial;
+    padding-bottom: 10vh;
+  }
+
+  .icon {
+    height: 0;
+  }
+
+  .icons {
+    height: initial;
+  }
+
+  .logout {
+    height: 8vh;
+    padding: 0.5vh;
+    width: 100%;
+    text-align: center;
+  }
+
+  .icon-container {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    height: initial;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 2vh;
+    background: var(--app-sidebar-color);
+    z-index: 9999;
+    margin-top: 5vh;
+  }
+
+  .up {
+    position: absolute;
+    top: 2vh;
+    right: 2vh;
+    padding-right: 0;
+  }
+
+  .post {
+    padding: 2vh;
+  }
+
+  .align {
+    text-align: center;
+  }
+
+  .posts {
+    margin-bottom: 0;
+    height: initial;
+    padding: 2vh 2.5vh;
+    width: initial;
+  }
+
+  .posts h1 {
+    text-align: center;
+  }
+
+  .posts form {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .post-container {
+    flex-direction: column;
+  }
+
+  .post-content {
+    padding-top: 0;
+    padding-bottom: 4vh;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    padding-top: 2vh;
+  }
+
+  .post-video video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .post-actions {
+    justify-content: center;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    top: initial;
+  }
 }
 </style>

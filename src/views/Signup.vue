@@ -294,7 +294,8 @@ export default {
 }
 
 .content-signup {
-  width: 1000px;
+  max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
   min-height: 100vh;
@@ -305,9 +306,11 @@ export default {
 }
 
 .content-signup img {
-  width: 350px;
+  max-width: 350px;
+  width: 100%;
   height: 150px;
   object-fit: cover;
+  padding: 2vh;
 }
 
 h3,
@@ -341,13 +344,19 @@ form input a {
   color: var(--app-text-primary-color);
 }
 
+form {
+  padding: 2vh;
+  width: 100%;
+}
+
 form label {
   font-size: 18px;
   color: var(--app-text-primary-color);
 }
 
 form input {
-  width: 418px;
+  max-width: 418px;
+  width: 100%;
   height: 48px;
   font-family: Nunito, sans-serif;
   text-align: center;
@@ -392,6 +401,7 @@ button {
   display: inline-flex;
   flex-direction: column;
   padding: 1.5vh;
+  width: 100%;
 }
 
 .champ label {
@@ -408,8 +418,7 @@ button {
 }
 
 .filename {
-  text-align: right;
-  width: 85%;
+  width: 100%;
   color: var(--app-text-primary-color);
   margin: 0 auto;
 }
@@ -423,7 +432,8 @@ button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 418px;
+  max-width: 418px;
+  width: 100%;
   height: 48px;
 }
 </style>

@@ -74,12 +74,12 @@ export default {
         },
         {
           key: 'createdAt',
-          title: 'Created At',
+          title: this.$t('DATATABLE.CREATEDAT'),
           type: 'string',
         },
         {
           key: 'token',
-          title: 'Token',
+          title: this.$t('DATATABLE.TOKEN'),
           component: {
             props: ['data'],
             render(createElement) {
@@ -100,11 +100,11 @@ export default {
         },
         {
           key: 'ipAddress',
-          title: 'IP Address',
+          title: this.$t('DATATABLE.IPADDRESS'),
           type: 'string',
         },
         {
-          title: 'Revoke',
+          title: this.$t('DATATABLE.REVOKE'),
           component: deleteActionAdmin,
           sortable: false,
           searchable: false,
