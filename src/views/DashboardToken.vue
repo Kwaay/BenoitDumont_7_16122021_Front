@@ -11,31 +11,41 @@
           <div class="icons">
             <router-link :to="{ name: 'Home Dashboard' }">
               <p>
-                <i class="fas fa-home"></i>{{ $t('DASHBOARD.LISTDASHBOARD') }}
+                <i class="fas fa-home"></i>
+                <span>{{ $t('DASHBOARD.LISTDASHBOARD') }}</span>
               </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'User Dashboard' }">
-              <p><i class="fas fa-user"></i>{{ $t('DASHBOARD.LISTUSER') }}</p>
+              <p>
+                <i class="fas fa-user"></i>
+                <span>{{ $t('DASHBOARD.LISTUSER') }}</span>
+              </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Post Dashboard' }">
               <p>
-                <i class="fas fa-comment-alt"></i>{{ $t('DASHBOARD.LISTPOST') }}
+                <i class="fas fa-comment-alt"></i>
+                <span>{{ $t('DASHBOARD.LISTPOST') }}</span>
               </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Comment Dashboard' }">
               <p>
-                <i class="fas fa-comment"></i>{{ $t('DASHBOARD.LISTCOMMENT') }}
+                <i class="fas fa-comment"></i>
+                <span>{{ $t('DASHBOARD.LISTCOMMENT') }}</span>
               </p>
             </router-link>
             <br />
             <router-link :to="{ name: 'Token Dashboard' }">
               <p>
-                <i class="fas fa-ticket-alt"></i>{{ $t('DASHBOARD.LISTTOKEN') }}
+                <i class="fas fa-ticket-alt"></i>
+                <span>{{ $t('DASHBOARD.LISTTOKEN') }}</span>
               </p>
             </router-link>
+          </div>
+          <div class="logout">
+            <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
           </div>
         </div>
       </div>
@@ -194,6 +204,7 @@ export default {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  background: var(--app-sidebar-color);
 }
 
 .side-container img {
@@ -217,6 +228,11 @@ export default {
   }
 }
 
+.logout i {
+  margin: 1vh;
+  font-size: 24px;
+}
+
 .icons a i {
   margin: 1vh;
   font-size: 24px;
@@ -226,6 +242,13 @@ export default {
   font-size: 16px;
   display: flex;
   align-items: center;
+}
+
+.logout {
+  position: absolute;
+  bottom: 2vh;
+  color: var(--app-text-primary-color);
+  cursor: pointer;
 }
 
 .middle {
@@ -251,5 +274,64 @@ export default {
 
 .wrap {
   word-wrap: break-word;
+}
+@media (max-width: 700px) {
+  .content {
+    display: initial;
+  }
+
+  .side {
+    height: initial;
+  }
+
+  .side-container {
+    height: 20vh;
+    width: 100%;
+    position: initial;
+  }
+
+  .icons {
+    flex-direction: row;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    background: var(--app-sidebar-color);
+    padding: 2vh 2vh 0;
+    z-index: 9999;
+    justify-content: space-between;
+  }
+
+  .icons span {
+    display: none;
+  }
+
+  .data {
+    justify-content: center;
+  }
+
+  .middle-container h2 {
+    text-align: center;
+    padding: 0;
+    padding-top: 4vh;
+  }
+
+  .package-info {
+    height: 100%;
+    padding-bottom: 10vh;
+  }
+
+  .data-container span {
+    padding: 1vh;
+  }
+
+  .logout {
+    top: 12vh;
+    bottom: initial;
+  }
+
+  .data-table {
+    padding-bottom: 10vh;
+  }
 }
 </style>

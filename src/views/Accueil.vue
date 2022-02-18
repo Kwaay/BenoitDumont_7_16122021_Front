@@ -640,6 +640,10 @@ export default {
     text-align: center;
   }
 
+  .list-posts {
+    padding-bottom: 10vh;
+  }
+
   .posts {
     margin-bottom: 0;
     height: initial;

@@ -178,8 +178,10 @@ export default {
   background-color: var(--app-input-background-color);
   color: var(--app-text-primary-color);
   border-radius: 10px;
-  min-width: 500px;
+  max-width: 500px;
+  width: 100%;
   text-align: center;
+  margin: 2vh;
 }
 
 .packages-main p {
@@ -257,5 +259,24 @@ export default {
 
 .patchupdate {
   color: var(--app-patch-update-color) !important;
+}
+
+@media (max-width: 700px) {
+  .packages-main {
+    margin: 2vh;
+  }
+
+  .packages-container {
+    margin: 2vh;
+    padding: 0 2vh;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  .packages-container ul {
+    margin: 2vh;
+  }
 }
 </style>
