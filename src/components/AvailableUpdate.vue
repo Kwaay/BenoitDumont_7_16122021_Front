@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     async getDependencies() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       try {
         const response = await fetch(
           'http://localhost:3000/api/config/dependencies',
@@ -108,7 +108,7 @@ export default {
       }
     },
     async getDevDependencies() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       try {
         const response = await fetch(
           'http://localhost:3000/api/config/devdependencies',
@@ -127,7 +127,7 @@ export default {
       }
     },
     checkDependenciesUpdate() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/config/checkUpdatesDependencies', {
         method: 'POST',
         headers: {

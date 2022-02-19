@@ -15,7 +15,7 @@
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1"
+              v-if="userConnected.rank === 1 || userConnected.rank === 2"
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -99,7 +99,9 @@
               <div
                 class="post-actions"
                 v-if="
-                  userConnected.id === post.User.id || userConnected.rank === 1
+                  userConnected.id === post.User.id ||
+                  userConnected.rank === 1 ||
+                  userConnected.rank === 2
                 "
               >
                 <div class="update" @click="updatePost(post)">
@@ -146,7 +148,7 @@ export default {
     };
   },
   created() {
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -169,7 +171,7 @@ export default {
   },
   methods: {
     fetchPosts() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/post', {
         method: 'GET',
         headers: {
@@ -218,7 +220,7 @@ export default {
       if (!regexContent.test(this.content)) {
         return this.$vToastify.error("Content doesn't have a correct format");
       }
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       if (this.media) {
         const data = new FormData();
         data.append('media', this.media);
@@ -284,7 +286,7 @@ export default {
         'Are you sure you want to delete this post ?',
       );
       if (validation === true) {
-        const token = localStorage.getItem('token');
+        const { token } = JSON.parse(localStorage.getItem('token'));
         fetch(`http://localhost:3000/api/post/${post.id}`, {
           method: 'DELETE',
           headers: {

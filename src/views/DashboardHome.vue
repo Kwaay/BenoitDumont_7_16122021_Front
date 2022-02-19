@@ -8,7 +8,7 @@
           </router-link>
           <div class="icons">
             <router-link
-              v-if="userConnected.rank === 1"
+              v-if="userConnected.rank === 1 || userConnected.rank === 2"
               :to="{ name: 'Home Dashboard' }"
             >
               <p>
@@ -126,7 +126,7 @@ export default {
     this.getPostsCount();
     this.getReactionsCount();
     this.getCommentsCount();
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     getUsersCount() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/user/', {
         method: 'GET',
         headers: {
@@ -162,7 +162,7 @@ export default {
         });
     },
     getPostsCount() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/post/', {
         method: 'GET',
         headers: {
@@ -179,7 +179,7 @@ export default {
         });
     },
     getReactionsCount() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/reaction/', {
         method: 'GET',
         headers: {
@@ -196,7 +196,7 @@ export default {
         });
     },
     getCommentsCount() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/comment/', {
         method: 'GET',
         headers: {

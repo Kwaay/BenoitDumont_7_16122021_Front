@@ -15,7 +15,7 @@
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1"
+              v-if="userConnected.rank === 1 || userConnected.rank === 2"
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     fetchPostData() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'GET',
         headers: {
@@ -169,7 +169,7 @@ export default {
     updateMedia(e) {
       const data = new FormData();
       data.append('media', e.target.files[0]);
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'PATCH',
         headers: {
@@ -187,7 +187,7 @@ export default {
       if (!regexTitle.test(title) || !regexContent.test(content)) {
         return false;
       }
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       return fetch(
         `http://localhost:3000/api/post/${this.$route.params.PostId}`,
         {
@@ -231,7 +231,7 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {

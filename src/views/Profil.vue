@@ -15,7 +15,7 @@
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1"
+              v-if="userConnected.rank === 1 || userConnected.rank === 2"
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -114,7 +114,7 @@ export default {
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.deletePost);
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -160,7 +160,7 @@ export default {
         'Are you sure you want to delete this post ?',
       );
       if (validation === true) {
-        const token = localStorage.getItem('token');
+        const { token } = JSON.parse(localStorage.getItem('token'));
         fetch(`http://localhost:3000/api/post/${post.id}`, {
           method: 'DELETE',
           headers: {
@@ -171,9 +171,9 @@ export default {
       }
     },
     getPosts() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       if (
-        typeof this.$route.params.UserId !== 'string' ||
+        typeof this.$route.params.UserId !== 'number' ||
         this.$route.params.UserId < 1
       )
         return;

@@ -162,7 +162,7 @@ export default {
       EventBus.$on('modifyActionPressed', this.modifyUser);
     },
     getUsers() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch('http://localhost:3000/api/user/', {
         method: 'GET',
         headers: {
@@ -188,7 +188,7 @@ export default {
       // eslint-disable-next-line no-alert
       const validation = window.confirm(i18n.$t('CONFIRM.USER'));
       if (validation === true) {
-        const token = localStorage.getItem('token');
+        const { token } = JSON.parse(localStorage.getItem('token'));
         fetch(`http://localhost:3000/api/user/${userData.id}`, {
           method: 'DELETE',
           headers: {
@@ -210,7 +210,7 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -460,12 +460,14 @@ export default {
     right: 0;
     bottom: initial;
     text-align: center;
+    position: absolute;
   }
 
   .account {
     bottom: initial;
     top: 3vh;
     right: 2vh;
+    position: absolute;
   }
 
   .account i {

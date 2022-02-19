@@ -96,7 +96,11 @@ export default {
           .then((data) => {
             this.user = data;
             localStorage.removeItem('token');
-            localStorage.setItem('token', data.token);
+            const tokenData = JSON.stringify({
+              token: data.token,
+              date: Date.now(),
+            });
+            localStorage.setItem('token', tokenData);
             setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
             return this.$vToastify.success('Successfully Login');
           });
@@ -121,7 +125,11 @@ export default {
         .then((data) => {
           this.user = data;
           localStorage.removeItem('token');
-          localStorage.setItem('token', data.token);
+          const tokenData = JSON.stringify({
+            token: data.token,
+            date: Date.now(),
+          });
+          localStorage.setItem('token', tokenData);
           setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
           return this.$vToastify.success('Successfully Login');
         })

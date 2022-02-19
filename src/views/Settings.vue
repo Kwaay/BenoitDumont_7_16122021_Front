@@ -16,7 +16,7 @@
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1"
+              v-if="userConnected.rank === 1 || userConnected.rank === 2"
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -194,7 +194,7 @@ export default {
     };
   },
   created() {
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -233,7 +233,7 @@ export default {
       this.tokenListDisplayed = !this.tokenListDisplayed;
     },
     toggleMaxSecurity() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       if (
         typeof this.userConnected.id !== 'number' ||
         this.userConnected.id < 1
@@ -258,7 +258,7 @@ export default {
         });
     },
     getTokens() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch(`http://localhost:3000/api/token/user/${this.userConnected.id}`, {
         method: 'GET',
         headers: {
@@ -275,7 +275,7 @@ export default {
         });
     },
     deleteUser() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch(`http://localhost:3000/api/user/${this.userConnected.id}`, {
         method: 'DELETE',
         headers: {

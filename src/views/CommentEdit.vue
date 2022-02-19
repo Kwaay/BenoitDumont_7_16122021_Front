@@ -15,7 +15,7 @@
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1"
+              v-if="userConnected.rank === 1 || userConnected.rank === 2"
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     fetchCommentData() {
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       fetch(
         `http://localhost:3000/api/comment/${this.$route.params.CommentId}`,
         {
@@ -120,7 +120,7 @@ export default {
       if (!regexContent.test(content)) {
         return false;
       }
-      const token = localStorage.getItem('token');
+      const { token } = JSON.parse(localStorage.getItem('token'));
       return fetch(
         `http://localhost:3000/api/comment/${this.$route.params.CommentId}`,
         {
@@ -147,7 +147,7 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('token'));
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
