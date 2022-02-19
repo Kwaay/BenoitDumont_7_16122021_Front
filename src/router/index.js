@@ -100,4 +100,17 @@ const router = new VueRouter({
   routes,
 });
 
+/* router.beforeEach(() => {
+  const token = localStorage.getItem('token');
+  if (token === undefined || token.length < 1) {
+    router.push({ name: 'Login' });
+  }
+  
+  if (res.status === 401) {
+    router.push({ name: 'Login' });
+  }
+  return true;
+});
+*/
+
 export default router;

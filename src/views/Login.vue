@@ -95,7 +95,9 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.user = data;
+            localStorage.removeItem('token');
             localStorage.setItem('token', data.token);
+            setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
             return this.$vToastify.success('Successfully Login');
           });
       }
@@ -117,8 +119,10 @@ export default {
           throw error;
         })
         .then((data) => {
-          this.user = data.value;
+          this.user = data;
+          localStorage.removeItem('token');
           localStorage.setItem('token', data.token);
+          setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
           return this.$vToastify.success('Successfully Login');
         })
         .catch((error) => {

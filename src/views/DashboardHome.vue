@@ -7,7 +7,10 @@
             <img :src="this.getImage()" alt="Logo Groupomania" />
           </router-link>
           <div class="icons">
-            <router-link :to="{ name: 'Home Dashboard' }">
+            <router-link
+              v-if="userConnected.rank === 1"
+              :to="{ name: 'Home Dashboard' }"
+            >
               <p>
                 <i class="fas fa-home"></i>
                 <span>{{ $t('DASHBOARD.LISTDASHBOARD') }}</span>
@@ -42,8 +45,17 @@
               </p>
             </router-link>
           </div>
-          <div class="logout">
+          <div class="logout" v-if="this.menuDisplayed === true">
             <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+          </div>
+          <div class="account">
+            <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+            <i
+              @click="toggleLogout()"
+              v-if="this.menuDisplayed === false"
+              class="fas fa-sort-down"
+            ></i>
+            <i @click="toggleLogout()" v-else class="fas fa-sort-up"></i>
           </div>
         </div>
       </div>
@@ -105,6 +117,8 @@ export default {
       nbPosts: '0',
       nbReactions: '0',
       nbComments: '0',
+      userConnected: {},
+      menuDisplayed: false,
     };
   },
   async created() {
@@ -112,6 +126,22 @@ export default {
     this.getPostsCount();
     this.getReactionsCount();
     this.getCommentsCount();
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data.user;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
   methods: {
     getUsersCount() {
@@ -189,6 +219,9 @@ export default {
       }
       return LogoWhite;
     },
+    toggleLogout() {
+      this.menuDisplayed = !this.menuDisplayed;
+    },
   },
 };
 </script>
@@ -197,6 +230,7 @@ export default {
 .content {
   background-color: var(--app-background-color);
   display: flex;
+  height: 100%;
 }
 
 .content-container {
@@ -245,6 +279,11 @@ export default {
   font-size: 24px;
 }
 
+.account i {
+  padding-left: 1vh;
+  cursor: pointer;
+}
+
 .icons a i {
   margin: 1vh;
   font-size: 24px;
@@ -256,16 +295,41 @@ export default {
   align-items: center;
 }
 
+.account {
+  display: inline-flex;
+  align-items: center;
+  color: var(--app-text-primary-color);
+  padding: 2vh;
+  position: absolute;
+  bottom: 1vh;
+  margin: 0 2vh;
+}
+
+.account img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 30px;
+  border: 1px solid #2d3036;
+  margin: 0;
+}
+
 .logout {
   position: absolute;
-  bottom: 2vh;
+  bottom: 10vh;
   color: var(--app-text-primary-color);
   cursor: pointer;
+}
+
+.middle {
+  width: 100%;
 }
 
 .middle-container {
   width: 100%;
   background: var(--app-background-color) !important;
+  padding: 2vh;
+  min-height: 100vh;
 }
 
 .middle-container h2 {
@@ -276,9 +340,9 @@ export default {
 .data {
   display: flex;
   justify-content: space-between;
-  padding-top: 2vh;
   flex-wrap: wrap;
-  margin: 0 5vh;
+  width: 100%;
+  padding: 2vh 3vh 0;
 }
 
 .data-nb-users,
@@ -292,7 +356,7 @@ export default {
   background-color: var(--app-input-background-color);
   color: var(--app-text-primary-color);
   border-radius: 10px;
-  max-width: 300px;
+  max-width: 250px;
   width: 100%;
   margin: 2vh;
 }
@@ -335,6 +399,7 @@ export default {
     height: 20vh;
     width: 100%;
     position: initial;
+    align-items: initial;
   }
 
   .icons {
@@ -355,6 +420,7 @@ export default {
 
   .data {
     justify-content: center;
+    margin: 0;
   }
 
   .middle-container h2 {
@@ -374,7 +440,27 @@ export default {
 
   .logout {
     top: 12vh;
+    left: 0;
+    right: 0;
     bottom: initial;
+    text-align: center;
+  }
+
+  .account {
+    bottom: initial;
+    top: 3vh;
+    right: 2vh;
+  }
+}
+@media (max-width: 400px) {
+  .side-container a img {
+    max-width: 175px;
+    width: 50%;
+  }
+
+  .account {
+    margin: 0;
+    right: 1vh;
   }
 }
 </style>

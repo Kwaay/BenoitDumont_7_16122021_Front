@@ -241,6 +241,7 @@ export default {
         })
           .then((response) => response.json())
           .then(() => {
+            setTimeout(() => this.$router.push({ name: 'Login' }), 4000);
             return this.$vToastify.success(
               'User has been created successfully with a avatar',
             );
@@ -262,8 +263,8 @@ export default {
         }),
       })
         .then((response) => response.json())
-        .then((data) => {
-          this.user = data.value;
+        .then(() => {
+          setTimeout(() => this.$router.push({ name: 'Login' }), 4000);
           return this.$vToastify.success(
             'User has been created successfully without an avatar',
           );
@@ -359,6 +360,7 @@ form input {
   width: 100%;
   height: 48px;
   font-family: Nunito, sans-serif;
+  color: var(--app-text-primary-color);
   text-align: center;
   font-size: 18px;
   border-radius: 12px;
@@ -402,6 +404,7 @@ button {
   flex-direction: column;
   padding: 1.5vh;
   width: 100%;
+  max-width: 400px;
 }
 
 .champ label {

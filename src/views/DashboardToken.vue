@@ -9,7 +9,10 @@
             </p>
           </router-link>
           <div class="icons">
-            <router-link :to="{ name: 'Home Dashboard' }">
+            <router-link
+              v-if="userConnected.rank === 1"
+              :to="{ name: 'Home Dashboard' }"
+            >
               <p>
                 <i class="fas fa-home"></i>
                 <span>{{ $t('DASHBOARD.LISTDASHBOARD') }}</span>
@@ -44,8 +47,17 @@
               </p>
             </router-link>
           </div>
-          <div class="logout">
+          <div class="logout" v-if="this.menuDisplayed === true">
             <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+          </div>
+          <div class="account">
+            <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+            <i
+              @click="toggleLogout()"
+              v-if="this.menuDisplayed === false"
+              class="fas fa-sort-down"
+            ></i>
+            <i @click="toggleLogout()" v-else class="fas fa-sort-up"></i>
           </div>
         </div>
       </div>
@@ -120,6 +132,8 @@ export default {
           searchable: false,
         },
       ],
+      userConnected: {},
+      menuDisplayed: false,
     };
   },
   methods: {
@@ -161,10 +175,31 @@ export default {
       }
       return LogoWhite;
     },
+    toggleLogout() {
+      this.menuDisplayed = !this.menuDisplayed;
+    },
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.revokeToken);
     this.getTokens();
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer: ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.userConnected = data.user;
+        this.UserId = data.user.id;
+      })
+      .catch((error) => {
+        return this.$vToastify.error(`An error occurred: ${error}`);
+      });
   },
   computed: {
     tokenReturned() {
@@ -195,7 +230,7 @@ export default {
 }
 
 .side {
-  height: 100vh;
+  min-height: 100vh;
   flex-shrink: 2;
 }
 
@@ -203,7 +238,7 @@ export default {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  height: 100%;
   background: var(--app-sidebar-color);
 }
 
@@ -233,6 +268,11 @@ export default {
   font-size: 24px;
 }
 
+.account i {
+  padding-left: 1vh;
+  cursor: pointer;
+}
+
 .icons a i {
   margin: 1vh;
   font-size: 24px;
@@ -245,8 +285,8 @@ export default {
 }
 
 .logout {
-  position: absolute;
-  bottom: 2vh;
+  position: fixed;
+  bottom: 10vh;
   color: var(--app-text-primary-color);
   cursor: pointer;
 }
@@ -275,6 +315,26 @@ export default {
 .wrap {
   word-wrap: break-word;
 }
+
+.account {
+  display: inline-flex;
+  align-items: center;
+  color: var(--app-text-primary-color);
+  padding: 2vh;
+  position: fixed;
+  bottom: 1vh;
+  margin: 0 2vh;
+}
+
+.account img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 30px;
+  border: 1px solid #2d3036;
+  margin: 0;
+}
+
 @media (max-width: 700px) {
   .content {
     display: initial;
@@ -288,6 +348,7 @@ export default {
     height: 20vh;
     width: 100%;
     position: initial;
+    align-items: initial;
   }
 
   .icons {
@@ -325,13 +386,38 @@ export default {
     padding: 1vh;
   }
 
-  .logout {
-    top: 12vh;
-    bottom: initial;
-  }
-
   .data-table {
     padding-bottom: 10vh;
+  }
+
+  .logout {
+    top: 12vh;
+    left: 0;
+    right: 0;
+    bottom: initial;
+    text-align: center;
+  }
+
+  .account {
+    bottom: initial;
+    top: 3vh;
+    right: 2vh;
+  }
+
+  .account i {
+    padding-left: 1vh;
+    cursor: pointer;
+  }
+}
+@media (max-width: 400px) {
+  .side-container a img {
+    max-width: 175px;
+    width: 50%;
+  }
+
+  .account {
+    margin: 0;
+    right: 1vh;
   }
 }
 </style>

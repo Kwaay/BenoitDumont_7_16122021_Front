@@ -14,7 +14,9 @@
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
-            <router-link :to="{ name: 'Home Dashboard' }"
+            <router-link
+              v-if="userConnected.rank === 1"
+              :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
           </div>

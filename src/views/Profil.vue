@@ -14,7 +14,9 @@
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
-            <router-link :to="{ name: 'Home Dashboard' }"
+            <router-link
+              v-if="userConnected.rank === 1"
+              :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
           </div>
@@ -170,7 +172,11 @@ export default {
     },
     getPosts() {
       const token = localStorage.getItem('token');
-      console.log(this.$route.params.UserId);
+      if (
+        typeof this.$route.params.UserId !== 'string' ||
+        this.$route.params.UserId < 1
+      )
+        return;
       fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
         method: 'GET',
         headers: {
