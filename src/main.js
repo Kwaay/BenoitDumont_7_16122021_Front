@@ -21,6 +21,10 @@ Vue.mixin({
         this.$i18n.locale === 'en' ? 'en-US' : 'fr-FR',
       );
     },
+    logout() {
+      localStorage.removeItem('token');
+      router.push({ name: 'Login' });
+    },
   },
 });
 

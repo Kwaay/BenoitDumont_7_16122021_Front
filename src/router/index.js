@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Signup from '../views/Signup.vue';
 import Login from '../views/Login.vue';
 import Accueil from '../views/Accueil.vue';
+import Post from '../views/Post.vue';
 import Settings from '../views/Settings.vue';
 import Profil from '../views/Profil.vue';
 import DashboardHome from '../views/DashboardHome.vue';
@@ -37,6 +38,14 @@ const routes = [
     path: '/',
     name: 'Accueil',
     component: Accueil,
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: '/post/:PostId',
+    name: 'Post',
+    component: Post,
     meta: {
       auth: true,
     },

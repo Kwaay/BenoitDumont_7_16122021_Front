@@ -34,7 +34,9 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+                <p @click="logout()">
+                  <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
+                </p>
               </div>
             </transition>
           </div>

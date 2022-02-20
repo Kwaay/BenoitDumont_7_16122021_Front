@@ -6,11 +6,11 @@
           <img :src="this.getImage()" alt="Logo" />
           <div class="icon-container">
             <router-link :to="{ name: 'Accueil' }"
-              ><i class="fas fa-user"></i
+              ><i class="fas fa-home"></i
             ></router-link>
             <router-link
               :to="{ name: 'Profil', params: { UserId: this.UserId } }"
-              ><i class="fas fa-home"></i
+              ><i class="fas fa-user"></i
             ></router-link>
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
@@ -35,7 +35,9 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+                <p @click="logout()">
+                  <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
+                </p>
               </div>
             </transition>
           </div>

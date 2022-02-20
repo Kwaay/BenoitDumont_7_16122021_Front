@@ -46,7 +46,9 @@
             </router-link>
           </div>
           <div class="logout" v-if="this.menuDisplayed === true">
-            <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+            <p @click="logout()">
+              <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
+            </p>
           </div>
           <div class="account">
             <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />

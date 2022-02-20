@@ -34,7 +34,9 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p><i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}</p>
+                <p @click="logout()">
+                  <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
+                </p>
               </div>
             </transition>
           </div>
@@ -68,24 +70,44 @@
             </form>
             <div class="post" v-for="post in posts" :key="post.id">
               <div class="post-container">
-                <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+                <router-link
+                  :to="{ name: 'Profil', params: { UserId: post.UserId } }"
+                >
+                  <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+                </router-link>
                 <div class="align">
-                  <p>
-                    {{ post.User.name }} {{ post.User.firstname }} <br />
-                    {{ formatDate(post.createdAt) }}
-                  </p>
+                  <router-link
+                    :to="{ name: 'Profil', params: { UserId: post.UserId } }"
+                  >
+                    <p>
+                      {{ post.User.name }} {{ post.User.firstname }} <br />
+                      {{ formatDate(post.createdAt) }}
+                    </p>
+                  </router-link>
                 </div>
               </div>
               <div class="post-content">
-                <h2>{{ post.title }}</h2>
-                <p>
-                  {{ post.content }}
-                </p>
+                <router-link
+                  :to="{ name: 'Post', params: { PostId: post.id } }"
+                >
+                  <h2>{{ post.title }}</h2>
+                </router-link>
+                <router-link
+                  :to="{ name: 'Post', params: { PostId: post.id } }"
+                >
+                  <p>
+                    {{ post.content }}
+                  </p>
+                </router-link>
                 <div
                   class="post-image"
                   v-if="post.media && isImage(post.media)"
                 >
-                  <img :src="post.media" :alt="$t('ALTMEDIA')" />
+                  <router-link
+                    :to="{ name: 'Post', params: { PostId: post.id } }"
+                  >
+                    <img :src="post.media" :alt="$t('ALTMEDIA')" />
+                  </router-link>
                 </div>
                 <div
                   class="post-video"
@@ -108,6 +130,21 @@
                   <i class="fa fa-pencil"></i>
                 </div>
                 <deleteAction :data="post" />
+              </div>
+              <div class="post-infos">
+                <router-link
+                  :to="{ name: 'Post', params: { PostId: post.id } }"
+                >
+                  <p>{{ post.Reactions.length }} <span>Réactions</span></p>
+                </router-link>
+                <router-link
+                  :to="{ name: 'Post', params: { PostId: post.id } }"
+                >
+                  <p>
+                    {{ post.Comments.length }}
+                    <span>Commentaires</span>
+                  </p>
+                </router-link>
               </div>
             </div>
           </div>
@@ -145,6 +182,7 @@ export default {
         video: ['mp4', 'avi'],
       },
       menuDisplayed: false,
+      commentsDisplayed: false,
     };
   },
   created() {
@@ -333,6 +371,14 @@ export default {
 .icons i {
   font-size: 32px;
   padding: 1vh;
+}
+
+.align a {
+  text-decoration: none;
+}
+
+.post a {
+  text-decoration: none;
 }
 
 .icons a {
@@ -538,12 +584,26 @@ export default {
   color: var(--app-text-primary-color);
 }
 
+.post-infos {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  bottom: 0;
+  right: 2vh;
+}
+
+.post-infos p {
+  padding: 1vh;
+  cursor: pointer;
+}
+
 .post {
   display: inline-flex;
   flex-direction: column;
   width: 100%;
   border: 1px solid var(--app-text-primary-color);
-  padding: 4vh;
+  padding: 4vh 0 0 4vh;
   border-radius: 30px;
   margin: 1vh 0;
   position: relative;
