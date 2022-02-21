@@ -75,9 +75,17 @@ const routes = [
     },
   },
   {
-    path: '/admin/post/:PostId/edit',
+    path: '/post/:PostId/edit',
     name: 'Post Modification',
     component: PostEdit,
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: '/comment/:CommentId/edit',
+    name: 'Comment Modification',
+    component: CommentEdit,
     meta: {
       auth: true,
     },
@@ -118,30 +126,6 @@ const routes = [
     path: '/admin/token',
     name: 'Token Dashboard',
     component: DashboardToken,
-    meta: {
-      auth: true,
-    },
-  },
-  {
-    path: '/admin/user/:UserId/edit',
-    name: 'User Admin Modification',
-    component: UserEdit,
-    meta: {
-      auth: true,
-    },
-  },
-  {
-    path: '/admin/post/:PostId/edit',
-    name: 'Post Admin Modification',
-    component: PostEdit,
-    meta: {
-      auth: true,
-    },
-  },
-  {
-    path: '/admin/comment/:CommentId/edit',
-    name: 'Comment Admin Modification',
-    component: CommentEdit,
     meta: {
       auth: true,
     },

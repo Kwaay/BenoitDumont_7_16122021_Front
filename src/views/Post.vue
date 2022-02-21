@@ -1,5 +1,5 @@
 <template>
-  <div class="test">
+  <div class="test" v-if="post">
     <div class="content">
       <div class="sidebar">
         <div class="icons">
@@ -42,53 +42,85 @@
           </div>
           <div class="page">
             <div class="post">
-              <div class="post-container">
-                <div class="post-title">
-                  <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-                  <div class="align">
-                    <p>
-                      {{ post.User.name }} {{ post.User.firstname }} <br />
-                      {{ formatDate(post.createdAt) }}
-                    </p>
-                  </div>
-                </div>
-                <div class="post-content">
-                  <h2>{{ post.title }}</h2>
+              <div class="post-title">
+                <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+                <div class="align">
                   <p>
-                    {{ post.content }}
+                    {{ post.User.name }} {{ post.User.firstname }} <br />
+                    {{ formatDate(post.createdAt) }}
                   </p>
                 </div>
-                <div
-                  class="post-image"
-                  v-if="post.media && isImage(post.media)"
-                >
-                  <img :src="post.media" :alt="$t('ALTMEDIA')" />
+              </div>
+              <div class="post-content">
+                <h2>{{ post.title }}</h2>
+                <p>
+                  {{ post.content }}
+                </p>
+              </div>
+              <div class="post-image" v-if="post.media && isImage(post.media)">
+                <img :src="post.media" :alt="$t('ALTMEDIA')" />
+              </div>
+              <div class="post-video" v-if="post.media && isVideo(post.media)">
+                <video controls width="350" height="200">
+                  <source :src="post.media" type="video/mp4" />
+                </video>
+              </div>
+              <div
+                class="post-actions"
+                v-if="
+                  userConnected.id === post.User.id ||
+                  userConnected.rank === 1 ||
+                  userConnected.rank === 2
+                "
+              >
+                <div class="update" @click="updatePost(post)">
+                  <i class="fa fa-pencil"></i>
                 </div>
-                <div
-                  class="post-video"
-                  v-if="post.media && isVideo(post.media)"
-                >
-                  <video controls width="350" height="200">
-                    <source :src="post.media" type="video/mp4" />
-                  </video>
-                </div>
-                <div
-                  class="post-actions"
-                  v-if="
-                    userConnected.id === post.User.id ||
-                    userConnected.rank === 1 ||
-                    userConnected.rank === 2
-                  "
-                >
-                  <div class="update" @click="updatePost(post)">
-                    <i class="fa fa-pencil"></i>
+                <deleteAction :data="post" />
+              </div>
+              <div class="reactions">
+                <h3>Réactions :</h3>
+                <div class="reactions-container">
+                  <div
+                    class="likes-on"
+                    v-if="hasLiked"
+                    @click="toggleReaction(1)"
+                  >
+                    <i class="fas fa-thumbs-up"></i>
+                    <span>{{ likes.length }}</span>
                   </div>
-                  <deleteAction :data="post" />
+                  <div class="likes-off" v-else @click="toggleReaction(1)">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span>{{ likes.length }}</span>
+                  </div>
+                  <div
+                    class="dislikes-on"
+                    v-if="hasDisliked"
+                    @click="toggleReaction(2)"
+                  >
+                    <i class="fas fa-thumbs-down"></i>
+                    <span>{{ dislikes.length }}</span>
+                  </div>
+                  <div class="dislikes-off" v-else @click="toggleReaction(2)">
+                    <i class="fas fa-thumbs-down"></i>
+                    <span>{{ dislikes.length }}</span>
+                  </div>
+                  <div
+                    class="loves-on"
+                    v-if="hasLoved"
+                    @click="toggleReaction(3)"
+                  >
+                    <i class="fas fa-heart"></i>
+                    <span>{{ loves.length }}</span>
+                  </div>
+                  <div class="loves-off" v-else @click="toggleReaction(3)">
+                    <i class="fas fa-heart"></i>
+                    <span>{{ loves.length }}</span>
+                  </div>
                 </div>
-                <div class="reactions"></div>
               </div>
             </div>
-            <ul class="comments" v-if="post.Comments">
+            <ul class="comments" v-if="post.Comments.length !== 0">
               <li
                 class="comment"
                 v-for="comment in post.Comments"
@@ -101,7 +133,22 @@
                     {{ formatDate(comment.createdAt) }}
                   </p>
                 </div>
-                <p class="commentContent">{{ comment.content }}</p>
+                <div class="comment-content">
+                  <p>{{ comment.content }}</p>
+                </div>
+                <div
+                  class="comment-actions"
+                  v-if="
+                    userConnected.id === comment.User.id ||
+                    userConnected.rank === 1 ||
+                    userConnected.rank === 2
+                  "
+                >
+                  <div class="update" @click="updateComment(comment)">
+                    <i class="fa fa-pencil"></i>
+                  </div>
+                  <deleteAction :data="comment" />
+                </div>
               </li>
             </ul>
           </div>
@@ -129,7 +176,7 @@ export default {
   },
   data() {
     return {
-      post: {},
+      post: null,
       supportedExtensions: {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
@@ -173,6 +220,18 @@ export default {
       }
       return false;
     },
+    updatePost(post) {
+      this.$router.push({
+        name: 'Post Modification',
+        params: { PostId: post.id },
+      });
+    },
+    updateComment(comment) {
+      this.$router.push({
+        name: 'Post Modification',
+        params: { CommentId: comment.id },
+      });
+    },
     getImage() {
       const theme = localStorage.getItem('theme');
       if (theme === 'light') {
@@ -182,6 +241,79 @@ export default {
     },
     toggleLogout() {
       this.menuDisplayed = !this.menuDisplayed;
+    },
+    toggleReaction(type) {
+      const existingReaction =
+        this.hasLiked ?? this.hasDisliked ?? this.hasLoved;
+      if (!existingReaction) {
+        return this.addReaction(type);
+      }
+      if (+existingReaction.type === type) {
+        return this.deleteReaction(existingReaction.id);
+      }
+      return this.updateReaction(existingReaction.id, type);
+    },
+    addReaction(type) {
+      const { token } = JSON.parse(localStorage.getItem('token'));
+      fetch(`http://localhost:3000/api/reaction/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          PostId: +this.$route.params.PostId,
+          type,
+        }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          this.fetchPostData();
+          return this.$vToastify.success('Successfully Created the Reaction');
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
+        });
+    },
+    deleteReaction(reactionId) {
+      const { token } = JSON.parse(localStorage.getItem('token'));
+      fetch(`http://localhost:3000/api/reaction/${reactionId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then(() => {
+          this.fetchPostData();
+          return this.$vToastify.success('Successfully Deleted the Reaction');
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
+        });
+    },
+    updateReaction(reactionId, type) {
+      const { token } = JSON.parse(localStorage.getItem('token'));
+      fetch(`http://localhost:3000/api/reaction/${reactionId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          PostId: +this.$route.params.PostId,
+          type,
+        }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          this.fetchPostData();
+          return this.$vToastify.success('Successfully Modified the Reaction');
+        })
+        .catch((error) => {
+          return this.$vToastify.error(`An error occurred: ${error}`);
+        });
     },
   },
   created() {
@@ -204,6 +336,32 @@ export default {
   },
   mounted() {
     this.fetchPostData();
+  },
+  computed: {
+    likes() {
+      return this.post.Reactions.filter((reaction) => reaction.type === '1');
+    },
+    dislikes() {
+      return this.post.Reactions.filter((reaction) => reaction.type === '2');
+    },
+    loves() {
+      return this.post.Reactions.filter((reaction) => reaction.type === '3');
+    },
+    hasLiked() {
+      return this.likes.find(
+        (reaction) => reaction.UserId === this.userConnected.id,
+      );
+    },
+    hasDisliked() {
+      return this.dislikes.find(
+        (reaction) => reaction.UserId === this.userConnected.id,
+      );
+    },
+    hasLoved() {
+      return this.loves.find(
+        (reaction) => reaction.UserId === this.userConnected.id,
+      );
+    },
   },
 };
 </script>
@@ -358,32 +516,30 @@ export default {
   width: 50%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  border-right: solid 2vh var(--app-sidebar-color);
+  align-items: stretch;
   height: 100%;
-}
-
-.post-container {
+  flex-grow: 1;
   color: var(--app-text-primary-color);
   padding: 5vh;
-  height: 100%;
   position: relative;
+  flex-direction: column;
 }
 
-.post-container img {
+.post img {
   width: 85px;
   height: 85px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.post-content p {
+.post p {
   font-size: large;
 }
 
 .post-image img {
-  width: 800px;
-  height: 400px;
+  max-width: 800px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 0;
   margin: 0;
@@ -405,6 +561,7 @@ export default {
   height: 100%;
   padding-bottom: 10vh;
   overflow-x: hidden;
+  border-left: solid 2vh var(--app-sidebar-color);
 }
 
 .comment-container h1 {
@@ -419,6 +576,7 @@ export default {
   margin: 2vh;
   border-radius: 30px;
   list-style-type: none;
+  position: relative;
 }
 
 .comment img {
@@ -433,14 +591,62 @@ export default {
 }
 
 .comment-title {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   padding-bottom: 4vh;
+  width: 100%;
 }
 
 .comment-title p {
   padding-left: 2vh;
   font-size: large;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 5vh;
+  top: 5vh;
+  color: var(--app-text-primary-color);
+}
+
+.reactions {
+  height: 100%;
+  padding: 2vh 0;
+}
+
+.reactions-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 25%;
+}
+
+.likes-off i,
+.dislikes-off i,
+.loves-off i {
+  padding: 1vh;
+  font-size: large;
+}
+
+.likes-on i {
+  padding: 1vh;
+  font-size: large;
+  color: green;
+}
+
+.dislikes-on i {
+  padding: 1vh;
+  font-size: large;
+  color: red;
+}
+
+.loves-on i {
+  padding: 1vh;
+  font-size: large;
+  color: red;
 }
 
 @media (max-width: 700px) {
@@ -477,11 +683,57 @@ export default {
     padding-right: 0;
   }
 
+  .page {
+    display: block;
+    border-top-left-radius: 0;
+  }
+
+  .post {
+    width: 100%;
+  }
+
+  .comments {
+    border-left: 0;
+  }
+
   .logout {
     height: 8vh;
     padding: 0.5vh;
     width: 100%;
     text-align: center;
+  }
+}
+@media (max-width: 400px) {
+  .comment-title {
+    flex-direction: column;
+  }
+
+  .comment-title p {
+    text-align: center;
+  }
+
+  .comment-content p {
+    padding-bottom: 5vh;
+  }
+
+  .reactions-container {
+    width: 100%;
+  }
+
+  .post-actions {
+    right: 0;
+    left: 0;
+    bottom: 1vh;
+    top: initial;
+    justify-content: center;
+  }
+
+  .comment-actions {
+    right: 0;
+    left: 0;
+    bottom: 1vh;
+    top: initial;
+    justify-content: center;
   }
 }
 </style>

@@ -314,7 +314,7 @@ export default {
     },
     updatePost(post) {
       this.$router.push({
-        name: 'Post Admin Modification',
+        name: 'Post Modification',
         params: { PostId: post.id },
       });
     },

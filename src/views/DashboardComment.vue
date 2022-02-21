@@ -160,7 +160,7 @@ export default {
     },
     updateComment(comment) {
       this.$router.push({
-        name: 'Comment Admin Modification',
+        name: 'Comment Modification',
         params: { CommentId: comment.id },
       });
     },

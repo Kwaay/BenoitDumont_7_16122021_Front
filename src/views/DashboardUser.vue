@@ -75,7 +75,7 @@
 
 <script>
 import EventBus from '../EventBus';
-import modifyActionAdmin from '../components/ModifyActionAdmin.vue';
+import modifyActionAdmin from '../components/ModifyAction.vue';
 import deleteActionAdmin from '../components/DeleteAction.vue';
 import i18n from '../I18n';
 import LogoWhite from '../assets/logo_full_white.png';
@@ -182,7 +182,7 @@ export default {
     },
     modifyUser(userData) {
       this.$router.push({
-        name: 'User Admin Modification',
+        name: 'User Modification',
         params: { UserId: userData.id },
       });
     },
