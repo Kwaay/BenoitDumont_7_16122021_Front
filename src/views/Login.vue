@@ -95,12 +95,11 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.user = data;
-            localStorage.removeItem('token');
-            const tokenData = JSON.stringify({
+            const tokenData = {
               token: data.token,
               date: Date.now(),
-            });
-            localStorage.setItem('token', tokenData);
+            };
+            this.$store.dispatch('saveToken', tokenData);
             setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
             return this.$vToastify.success('Successfully Login');
           });
@@ -124,12 +123,11 @@ export default {
         })
         .then((data) => {
           this.user = data;
-          localStorage.removeItem('token');
-          const tokenData = JSON.stringify({
+          const tokenData = {
             token: data.token,
             date: Date.now(),
-          });
-          localStorage.setItem('token', tokenData);
+          };
+          this.$store.dispatch('saveToken', tokenData);
           setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
           return this.$vToastify.success('Successfully Login');
         })
@@ -236,6 +234,7 @@ form input {
   border-radius: 12px;
   border: 1px #707070 solid;
   background-color: var(--app-input-background-color);
+  color: var(--app-text-primary-color);
 }
 
 form input::placeholder {

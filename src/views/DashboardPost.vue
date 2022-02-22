@@ -10,7 +10,10 @@
           </router-link>
           <div class="icons">
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
             >
               <p>
@@ -19,7 +22,10 @@
               </p>
             </router-link>
             <br />
-            <router-link :to="{ name: 'User Dashboard' }">
+            <router-link
+              v-if="$store.state.connectedUser.rank === 1"
+              :to="{ name: 'User Dashboard' }"
+            >
               <p>
                 <i class="fas fa-user"></i>
                 <span>{{ $t('DASHBOARD.LISTUSER') }}</span>
@@ -40,7 +46,10 @@
               </p>
             </router-link>
             <br />
-            <router-link :to="{ name: 'Token Dashboard' }">
+            <router-link
+              v-if="$store.state.connectedUser.rank === 1"
+              :to="{ name: 'Token Dashboard' }"
+            >
               <p>
                 <i class="fas fa-ticket-alt"></i>
                 <span>{{ $t('DASHBOARD.LISTTOKEN') }}</span>
@@ -48,12 +57,15 @@
             </router-link>
           </div>
           <div class="logout" v-if="this.menuDisplayed === true">
-            <p @click="logout()">
+            <p @click="$store.dispatch('logout')">
               <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
             </p>
           </div>
           <div class="account">
-            <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+            <img
+              :src="$store.state.connectedUser.avatar"
+              :alt="$t('ALTIMAGEPROFILE')"
+            />
             <i
               @click="toggleLogout()"
               v-if="this.menuDisplayed === false"
@@ -114,7 +126,6 @@
 <script>
 import EventBus from '../EventBus';
 import deleteAction from '../components/DeleteAction.vue';
-import i18n from '../I18n';
 import LogoBlack from '../assets/logo_full_black.png';
 import LogoWhite from '../assets/logo_full_white.png';
 
@@ -133,7 +144,7 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
-      userConnected: {},
+
       menuDisplayed: false,
     };
   },
@@ -142,7 +153,7 @@ export default {
     this.getPosts();
   },
   created() {
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -152,7 +163,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
         this.UserId = data.user.id;
       })
       .catch((error) => {
@@ -177,7 +188,7 @@ export default {
       return false;
     },
     getPosts() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/post/', {
         method: 'GET',
         headers: {
@@ -201,9 +212,9 @@ export default {
     },
     deletePost(post) {
       // eslint-disable-next-line no-alert
-      const validation = window.confirm(i18n.$t('CONFIRM.POST'));
+      const validation = window.confirm(this.$t('CONFIRM.POST'));
       if (validation === true) {
-        const { token } = JSON.parse(localStorage.getItem('token'));
+        const { token } = this.$store.state.token;
         fetch(`http://localhost:3000/api/post/${post.id}`, {
           method: 'DELETE',
           headers: {

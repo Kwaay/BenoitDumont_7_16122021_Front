@@ -11,6 +11,9 @@
   },
   "ALTIMAGEPROFILE": "Profile's image",
   "ALTMEDIA": "Post's Media",
+  "COMMENT": {
+    "SUCCESS": "Comment has been successfully created"
+  },
   "COMMENTEDIT": {
     "CONTENTLABEL": "Content",
     "CONTENTPLACEHOLDER": "The text that you want to post",

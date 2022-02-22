@@ -8,14 +8,21 @@
             <router-link :to="{ name: 'Accueil' }"
               ><i class="fas fa-home"></i
             ></router-link>
-            <router-link :to="{ name: 'Profil' }"
+            <router-link
+              :to="{
+                name: 'Profil',
+                params: { UserId: $store.state.connectedUser.id },
+              }"
               ><i class="fas fa-user"></i
             ></router-link>
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -24,7 +31,10 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+              <img
+                :src="$store.state.connectedUser.avatar"
+                :alt="$t('ALTIMAGEPROFILE')"
+              />
               <i
                 @click="toggleLogout()"
                 v-if="this.menuDisplayed === false"
@@ -34,7 +44,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p @click="logout()">
+                <p @click="$store.dispatch('logout')">
                   <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
                 </p>
               </div>
@@ -43,13 +53,26 @@
           <div class="profile">
             <div class="profile-container">
               <div class="infos">
-                <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-                <h1>{{ userConnected.name }} {{ userConnected.firstname }}</h1>
+                <img
+                  :src="$store.state.connectedUser.avatar"
+                  :alt="$t('ALTIMAGEPROFILE')"
+                />
+                <h1>
+                  {{ $store.state.connectedUser.name }}
+                  {{ $store.state.connectedUser.firstname }}
+                </h1>
                 <h2>{{ $t('PROFIL.LATESTPOSTS') }}</h2>
               </div>
-              <div class="latest-posts">
+              <div
+                class="latest-posts"
+                v-if="$store.state.myPosts.length !== 0"
+              >
                 <div class="list-posts">
-                  <div class="post" v-for="post in posts" :key="post.id">
+                  <div
+                    class="post"
+                    v-for="post in $store.state.myPosts"
+                    :key="post.id"
+                  >
                     <div class="post-title">
                       <h2>{{ post.title }}</h2>
                       <p>{{ formatDate(post.createdAt) }}</p>
@@ -76,9 +99,29 @@
                         </div>
                         <deleteAction :data="post" />
                       </div>
+                      <div class="post-infos">
+                        <router-link
+                          :to="{ name: 'Post', params: { PostId: post.id } }"
+                        >
+                          <p>
+                            {{ post.Reactions.length }} <span>Réactions</span>
+                          </p>
+                        </router-link>
+                        <router-link
+                          :to="{ name: 'Post', params: { PostId: post.id } }"
+                        >
+                          <p>
+                            {{ post.Comments.length }}
+                            <span>Commentaires</span>
+                          </p>
+                        </router-link>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="no-posts" v-else>
+                <h2>Cet utilisateur n'a pas de posts</h2>
               </div>
             </div>
           </div>
@@ -104,9 +147,6 @@ export default {
   components: { deleteAction },
   data() {
     return {
-      userConnected: {},
-      user: {},
-      posts: [],
       supportedExtensions: {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
@@ -116,7 +156,7 @@ export default {
   },
   mounted() {
     EventBus.$on('deleteActionPressed', this.deletePost);
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -126,7 +166,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
       })
       .catch((error) => {
         this.error = error;
@@ -162,7 +202,7 @@ export default {
         'Are you sure you want to delete this post ?',
       );
       if (validation === true) {
-        const { token } = JSON.parse(localStorage.getItem('token'));
+        const { token } = this.$store.state.token;
         fetch(`http://localhost:3000/api/post/${post.id}`, {
           method: 'DELETE',
           headers: {
@@ -173,12 +213,7 @@ export default {
       }
     },
     getPosts() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
-      if (
-        typeof this.$route.params.UserId !== 'number' ||
-        this.$route.params.UserId < 1
-      )
-        return;
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
         method: 'GET',
         headers: {
@@ -188,8 +223,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          this.user = data;
-          this.posts = data.Posts;
+          this.$store.dispatch('saveMyPosts', data.Posts);
         })
         .catch((error) => {
           this.error = error;
@@ -251,6 +285,10 @@ export default {
 .icons i {
   font-size: 32px;
   padding: 1vh;
+}
+
+.post a {
+  text-decoration: none;
 }
 
 .icons a {
@@ -378,11 +416,19 @@ export default {
   margin: 0 auto;
 }
 
+.no-posts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50vh;
+}
+
 .post {
   border: 1px solid var(--app-text-primary-color);
   border-radius: 30px;
   margin: 4vh;
-  padding: 4vh;
+  padding: 4vh 0 0 4vh;
   position: relative;
   font-size: 20px;
 }
@@ -421,104 +467,20 @@ export default {
   transform: scale(1.11);
 }
 
-@media (max-width: 700px) {
-  .sidebar {
-    display: initial;
-    height: initial;
-  }
+.post-infos {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  bottom: 0;
+  right: 2vh;
+}
 
-  .box-posts {
-    position: initial;
-    padding-bottom: 10vh;
-  }
-
-  .icon {
-    height: 0;
-  }
-
-  .icons {
-    height: initial;
-  }
-
-  .logout {
-    height: 8vh;
-    padding: 0.5vh;
-    width: 100%;
-    text-align: center;
-  }
-
-  .icon-container {
-    flex-direction: row;
-    position: fixed;
-    bottom: 0;
-    height: initial;
-    width: 100%;
-    left: 0;
-    right: 0;
-    padding: 2vh;
-    background: var(--app-sidebar-color);
-    z-index: 9999;
-    margin-top: 5vh;
-  }
-
-  .up {
-    position: absolute;
-    top: 2vh;
-    right: 2vh;
-    padding-right: 0;
-  }
-
-  .post {
-    padding: 2vh;
-  }
-
-  .align {
-    text-align: center;
-  }
-
-  .posts {
-    margin-bottom: 0;
-    height: initial;
-    padding: 2vh 2.5vh;
-    width: initial;
-  }
-
-  .posts h1 {
-    text-align: center;
-  }
-
-  .posts form {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .post-container {
-    flex-direction: column;
-  }
-
-  .post-content {
-    padding-top: 0;
-    padding-bottom: 4vh;
-  }
-
-  .post-image img {
-    width: 100%;
-    height: 100%;
-    padding-top: 2vh;
-  }
-
-  .post-video video {
-    width: 100%;
-    height: 100%;
-  }
-
-  .post-actions {
-    justify-content: center;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    top: initial;
-  }
+.post-infos p {
+  padding: 1vh;
+  cursor: pointer;
+  font-size: medium;
+  color: var(--app-text-primary-color);
 }
 
 @media (max-width: 700px) {
@@ -543,8 +505,9 @@ export default {
   .logout {
     height: 8vh;
     padding: 0.5vh;
-    width: 100%;
     text-align: center;
+    bottom: -4vh;
+    right: -1vh;
   }
 
   .icon-container {
@@ -561,14 +524,6 @@ export default {
     margin-top: 5vh;
   }
 
-  .profile {
-    padding: 0;
-    border-radius: 0;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    width: initial;
-  }
-
   .up {
     position: absolute;
     top: 2vh;
@@ -578,10 +533,15 @@ export default {
 
   .post {
     padding: 2vh;
+    position: relative;
     margin: 2vh;
   }
 
   .align {
+    text-align: center;
+  }
+
+  .no-posts h2 {
     text-align: center;
   }
 
@@ -599,10 +559,6 @@ export default {
   .posts form {
     flex-direction: column;
     gap: 20px;
-  }
-
-  .post-title {
-    text-align: center;
   }
 
   .post-container {
@@ -631,6 +587,20 @@ export default {
     left: 0;
     bottom: 0;
     top: initial;
+  }
+
+  .profile {
+    padding: 0;
+    border-radius: 0;
+    width: initial;
+  }
+
+  .post-title {
+    text-align: center;
+  }
+
+  .post-infos {
+    right: initial;
   }
 }
 </style>

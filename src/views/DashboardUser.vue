@@ -9,17 +9,17 @@
             </p>
           </router-link>
           <div class="icons">
-            <router-link
-              v-if="userConnected.rank === 1"
-              :to="{ name: 'Home Dashboard' }"
-            >
+            <router-link :to="{ name: 'Home Dashboard' }">
               <p>
                 <i class="fas fa-home"></i>
                 <span>{{ $t('DASHBOARD.LISTDASHBOARD') }}</span>
               </p>
             </router-link>
             <br />
-            <router-link :to="{ name: 'User Dashboard' }">
+            <router-link
+              :to="{ name: 'User Dashboard' }"
+              v-if="$store.state.connectedUser.rank === 1"
+            >
               <p>
                 <i class="fas fa-user"></i>
                 <span>{{ $t('DASHBOARD.LISTUSER') }}</span>
@@ -40,7 +40,10 @@
               </p>
             </router-link>
             <br />
-            <router-link :to="{ name: 'Token Dashboard' }">
+            <router-link
+              :to="{ name: 'Token Dashboard' }"
+              v-if="$store.state.connectedUser.rank === 1"
+            >
               <p>
                 <i class="fas fa-ticket-alt"></i>
                 <span>{{ $t('DASHBOARD.LISTTOKEN') }}</span>
@@ -48,12 +51,15 @@
             </router-link>
           </div>
           <div class="logout" v-if="this.menuDisplayed === true">
-            <p @click="logout()">
+            <p @click="$store.dispatch('logout')">
               <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
             </p>
           </div>
           <div class="account">
-            <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+            <img
+              :src="$store.state.connectedUser.avatar"
+              :alt="$t('ALTIMAGEPROFILE')"
+            />
             <i
               @click="toggleLogout()"
               v-if="this.menuDisplayed === false"
@@ -77,7 +83,6 @@
 import EventBus from '../EventBus';
 import modifyActionAdmin from '../components/ModifyAction.vue';
 import deleteActionAdmin from '../components/DeleteAction.vue';
-import i18n from '../I18n';
 import LogoWhite from '../assets/logo_full_white.png';
 import LogoBlack from '../assets/logo_full_black.png';
 
@@ -140,7 +145,7 @@ export default {
           searchable: false,
         },
       ],
-      userConnected: {},
+
       menuDisplayed: false,
     };
   },
@@ -164,7 +169,7 @@ export default {
       EventBus.$on('modifyActionPressed', this.modifyUser);
     },
     getUsers() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/user/', {
         method: 'GET',
         headers: {
@@ -188,9 +193,9 @@ export default {
     },
     deleteUser(userData) {
       // eslint-disable-next-line no-alert
-      const validation = window.confirm(i18n.$t('CONFIRM.USER'));
+      const validation = window.confirm(this.$t('CONFIRM.USER'));
       if (validation === true) {
-        const { token } = JSON.parse(localStorage.getItem('token'));
+        const { token } = this.$store.state.token;
         fetch(`http://localhost:3000/api/user/${userData.id}`, {
           method: 'DELETE',
           headers: {
@@ -212,7 +217,7 @@ export default {
     },
   },
   created() {
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -222,7 +227,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
         this.UserId = data.user.id;
       })
       .catch((error) => {

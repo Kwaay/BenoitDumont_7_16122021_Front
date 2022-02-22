@@ -9,14 +9,20 @@
               ><i class="fas fa-home"></i
             ></router-link>
             <router-link
-              :to="{ name: 'Profil', params: { UserId: this.UserId } }"
+              :to="{
+                name: 'Profil',
+                params: { UserId: $store.state.connectedUser.id },
+              }"
               ><i class="fas fa-user"></i
             ></router-link>
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -25,7 +31,10 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+              <img
+                :src="$store.state.connectedUser.avatar"
+                :alt="$t('ALTIMAGEPROFILE')"
+              />
               <i
                 @click="toggleLogout()"
                 v-if="this.menuDisplayed === false"
@@ -35,7 +44,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p @click="logout()">
+                <p @click="$store.dispatch('logout')">
                   <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
                 </p>
               </div>
@@ -102,7 +111,7 @@
                 <input
                   type="checkbox"
                   id="security"
-                  v-model="userConnected.maxSecurity"
+                  v-model="$store.state.connectedUser.maxSecurity"
                   @change="toggleMaxSecurity"
                 /><label for="security">Toggle</label>
               </div>
@@ -150,7 +159,6 @@ export default {
   },
   data() {
     return {
-      userConnected: {},
       UserId: '',
       valueLang: {
         flag: localStorage.getItem('lang') === 'English' ? 'fi-us' : 'fi-fr',
@@ -196,7 +204,7 @@ export default {
     };
   },
   created() {
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -206,7 +214,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
         this.UserId = data.user.id;
         this.getTokens();
       })
@@ -235,22 +243,25 @@ export default {
       this.tokenListDisplayed = !this.tokenListDisplayed;
     },
     toggleMaxSecurity() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       if (
-        typeof this.userConnected.id !== 'number' ||
-        this.userConnected.id < 1
+        typeof this.$store.state.connectedUser.id !== 'number' ||
+        this.$store.state.connectedUser.id < 1
       )
         return;
-      fetch(`http://localhost:3000/api/user/${this.userConnected.id}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer: ${token}`,
-          'Content-Type': 'application/json',
+      fetch(
+        `http://localhost:3000/api/user/${this.$store.state.connectedUser.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer: ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            maxSecurity: this.$store.state.connectedUser.maxSecurity,
+          }),
         },
-        body: JSON.stringify({
-          maxSecurity: this.userConnected.maxSecurity,
-        }),
-      })
+      )
         .then((response) => response.json())
         .then(() => {
           return this.$vToastify.success(`Successfully modified`);
@@ -260,14 +271,17 @@ export default {
         });
     },
     getTokens() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
-      fetch(`http://localhost:3000/api/token/user/${this.userConnected.id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer:' ${token}`,
-          'Content-Type': 'application/json',
+      const { token } = this.$store.state.token;
+      fetch(
+        `http://localhost:3000/api/token/user/${this.$store.state.connectedUser.id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
         .then((response) => response.json())
         .then((data) => {
           this.tokens = data;
@@ -277,17 +291,20 @@ export default {
         });
     },
     deleteUser() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
-      fetch(`http://localhost:3000/api/user/${this.userConnected.id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer:' ${token}`,
-          'Content-Type': 'application/json',
+      const { token } = this.$store.state.token;
+      fetch(
+        `http://localhost:3000/api/user/${this.$store.state.connectedUser.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
         .then((response) => response.json())
         .then(() => {
-          return this.$router.push({
+          this.$router.push({
             name: 'Login',
           });
         })
@@ -607,8 +624,10 @@ export default {
   .logout {
     height: 8vh;
     padding: 0.5vh;
-    width: 100%;
+    width: initial;
     text-align: center;
+    bottom: -3vh;
+    right: -1vh;
   }
 
   .icon-container {

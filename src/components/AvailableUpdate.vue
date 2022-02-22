@@ -1,5 +1,5 @@
 <template>
-  <div class="packages-main">
+  <div class="packages-main" v-if="$store.state.connectedUser.rank === 1">
     <h1>
       {{
         stack === 'back'
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     async getDependencies() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       try {
         const response = await fetch(
           'http://localhost:3000/api/config/dependencies',
@@ -108,7 +108,7 @@ export default {
       }
     },
     async getDevDependencies() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       try {
         const response = await fetch(
           'http://localhost:3000/api/config/devdependencies',
@@ -127,7 +127,7 @@ export default {
       }
     },
     checkDependenciesUpdate() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/config/checkUpdatesDependencies', {
         method: 'POST',
         headers: {

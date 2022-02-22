@@ -8,14 +8,21 @@
             <router-link :to="{ name: 'Accueil' }"
               ><i class="fas fa-home"></i
             ></router-link>
-            <router-link :to="{ name: 'Profil', params: { UserId: UserId } }"
+            <router-link
+              :to="{
+                name: 'Profil',
+                params: { UserId: $store.state.connectedUser.id },
+              }"
               ><i class="fas fa-user"></i
             ></router-link>
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -24,7 +31,10 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+              <img
+                :src="$store.state.connectedUser.avatar"
+                :alt="$t('ALTIMAGEPROFILE')"
+              />
               <i
                 @click="toggleLogout()"
                 v-if="this.menuDisplayed === false"
@@ -34,7 +44,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p @click="logout()">
+                <p @click="$store.dispatch('logout')">
                   <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
                 </p>
               </div>
@@ -68,9 +78,9 @@
               <div
                 class="post-actions"
                 v-if="
-                  userConnected.id === post.User.id ||
-                  userConnected.rank === 1 ||
-                  userConnected.rank === 2
+                  $store.state.connectedUser.id === post.User.id ||
+                  $store.state.connectedUser.rank === 1 ||
+                  $store.state.connectedUser.rank === 2
                 "
               >
                 <div class="update" @click="updatePost(post)">
@@ -139,9 +149,9 @@
                 <div
                   class="comment-actions"
                   v-if="
-                    userConnected.id === comment.User.id ||
-                    userConnected.rank === 1 ||
-                    userConnected.rank === 2
+                    $store.state.connectedUser.id === comment.User.id ||
+                    $store.state.connectedUser.rank === 1 ||
+                    $store.state.connectedUser.rank === 2
                   "
                 >
                   <div class="update" @click="updateComment(comment)">
@@ -159,6 +169,7 @@
 </template>
 
 <script>
+import EventBus from '../EventBus';
 import deleteAction from '../components/DeleteAction.vue';
 import LogoBlack from '../assets/logo_black.png';
 import LogoWhite from '../assets/logo_white.png';
@@ -181,14 +192,14 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
-      userConnected: {},
+
       menuDisplayed: false,
       UserId: '',
     };
   },
   methods: {
     fetchPostData() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'GET',
         headers: {
@@ -226,11 +237,53 @@ export default {
         params: { PostId: post.id },
       });
     },
+    deleteResource(data) {
+      if (data.Comments) {
+        return this.deletePost(data);
+      }
+      return this.deleteComment(data);
+    },
+    deletePost(post) {
+      // eslint-disable-next-line no-alert
+      const validation = window.confirm(
+        'Are you sure you want to delete this post ?',
+      );
+      if (validation === true) {
+        const { token } = this.$store.state.token;
+        fetch(`http://localhost:3000/api/post/${post.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => {
+          return this.$router.push({
+            name: 'Accueil',
+          });
+        });
+      }
+    },
     updateComment(comment) {
       this.$router.push({
-        name: 'Post Modification',
+        name: 'Comment Modification',
         params: { CommentId: comment.id },
       });
+    },
+    deleteComment(comment) {
+      // eslint-disable-next-line no-alert
+      const validation = window.confirm(
+        'Are you sure you want to delete this comment ?',
+      );
+      if (validation === true) {
+        const { token } = this.$store.state.token;
+        fetch(`http://localhost:3000/api/comment/${comment.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer:' ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).then(() => this.fetchPostData());
+      }
     },
     getImage() {
       const theme = localStorage.getItem('theme');
@@ -254,7 +307,7 @@ export default {
       return this.updateReaction(existingReaction.id, type);
     },
     addReaction(type) {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/reaction/`, {
         method: 'POST',
         headers: {
@@ -276,7 +329,7 @@ export default {
         });
     },
     deleteReaction(reactionId) {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/reaction/${reactionId}`, {
         method: 'DELETE',
         headers: {
@@ -287,14 +340,14 @@ export default {
         .then((response) => response.json())
         .then(() => {
           this.fetchPostData();
-          return this.$vToastify.success('Successfully Deleted the Reaction');
+          this.$vToastify.success('Successfully Deleted the Reaction');
         })
         .catch((error) => {
           return this.$vToastify.error(`An error occurred: ${error}`);
         });
     },
     updateReaction(reactionId, type) {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/reaction/${reactionId}`, {
         method: 'PATCH',
         headers: {
@@ -317,7 +370,7 @@ export default {
     },
   },
   created() {
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -327,7 +380,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
         this.UserId = data.user.id;
       })
       .catch((error) => {
@@ -335,6 +388,7 @@ export default {
       });
   },
   mounted() {
+    EventBus.$on('deleteActionPressed', this.deleteResource);
     this.fetchPostData();
   },
   computed: {
@@ -349,17 +403,17 @@ export default {
     },
     hasLiked() {
       return this.likes.find(
-        (reaction) => reaction.UserId === this.userConnected.id,
+        (reaction) => reaction.UserId === this.$store.state.connectedUser.id,
       );
     },
     hasDisliked() {
       return this.dislikes.find(
-        (reaction) => reaction.UserId === this.userConnected.id,
+        (reaction) => reaction.UserId === this.$store.state.connectedUser.id,
       );
     },
     hasLoved() {
       return this.loves.find(
-        (reaction) => reaction.UserId === this.userConnected.id,
+        (reaction) => reaction.UserId === this.$store.state.connectedUser.id,
       );
     },
   },
@@ -518,11 +572,12 @@ export default {
   justify-content: center;
   align-items: stretch;
   height: 100%;
-  flex-grow: 1;
+  flex-grow: 2;
   color: var(--app-text-primary-color);
-  padding: 5vh;
+  padding: 10vh 5vh;
   position: relative;
   flex-direction: column;
+  overflow-x: scroll;
 }
 
 .post img {
@@ -537,7 +592,7 @@ export default {
 }
 
 .post-image img {
-  max-width: 800px;
+  max-width: 500px;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -550,8 +605,8 @@ export default {
   align-items: center;
   justify-content: flex-end;
   position: absolute;
-  right: 5vh;
-  top: 5vh;
+  right: 10vh;
+  top: 10vh;
   color: var(--app-text-primary-color);
 }
 
@@ -562,6 +617,7 @@ export default {
   padding-bottom: 10vh;
   overflow-x: hidden;
   border-left: solid 2vh var(--app-sidebar-color);
+  flex-grow: 1;
 }
 
 .comment-container h1 {
@@ -649,7 +705,7 @@ export default {
   color: red;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1000px) {
   .sidebar {
     display: initial;
   }
@@ -701,9 +757,16 @@ export default {
     padding: 0.5vh;
     width: 100%;
     text-align: center;
+    bottom: -4vh;
+    right: -2vh;
   }
 }
 @media (max-width: 400px) {
+  .post {
+    padding: 2vh;
+    padding-bottom: 4vh;
+  }
+
   .comment-title {
     flex-direction: column;
   }

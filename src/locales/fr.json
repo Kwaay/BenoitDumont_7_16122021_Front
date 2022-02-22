@@ -11,6 +11,9 @@
   },
   "ALTIMAGEPROFILE": "Image de profil",
   "ALTMEDIA": "Media du Post",
+  "COMMENT": {
+    "SUCCESS": "Le commentaire a été créé avec succès"
+  },
   "COMMENTEDIT": {
     "CONTENTLABEL": "Contenu",
     "CONTENTPLACEHOLDER": "Le texte que vous voulez poster",

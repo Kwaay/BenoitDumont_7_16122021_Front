@@ -8,14 +8,21 @@
             <router-link :to="{ name: 'Accueil' }"
               ><i class="fas fa-home"></i
             ></router-link>
-            <router-link :to="{ name: 'Profil', params: { UserId: UserId } }"
+            <router-link
+              :to="{
+                name: 'Profil',
+                params: { UserId: $store.state.connectedUser.id },
+              }"
               ><i class="fas fa-user"></i
             ></router-link>
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -24,7 +31,10 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+              <img
+                :src="$store.state.connectedUser.avatar"
+                :alt="$t('ALTIMAGEPROFILE')"
+              />
               <i
                 @click="toggleLogout()"
                 v-if="this.menuDisplayed === false"
@@ -34,7 +44,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p @click="logout()">
+                <p @click="$store.dispatch('logout')">
                   <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
                 </p>
               </div>
@@ -48,12 +58,13 @@
                 name="title"
                 class="title-form"
                 :placeholder="$t('ACCUEIL.TITLEPLACEHOLDER')"
+                v-model="title"
               />
               <input
                 type="text"
-                class="content-form"
+                class="content-form-post"
                 :placeholder="$t('ACCUEIL.CONTENTPLACEHOLDER')"
-                v-model="content"
+                v-model="contentPost"
               />
               <label for="post-image"><i class="fas fa-camera"></i></label>
               <input type="file" id="post-image" @change="tempStoreImage" />
@@ -68,84 +79,108 @@
                 <i class="fas fa-check-circle"></i>
               </p>
             </form>
-            <div class="post" v-for="post in posts" :key="post.id">
-              <div class="post-container">
-                <router-link
-                  :to="{ name: 'Profil', params: { UserId: post.UserId } }"
-                >
-                  <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
-                </router-link>
-                <div class="align">
+            <div v-if="posts.length !== 0">
+              <div class="post" v-for="post in posts" :key="post.id">
+                <div class="post-container">
                   <router-link
                     :to="{ name: 'Profil', params: { UserId: post.UserId } }"
                   >
+                    <img :src="post.User.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+                  </router-link>
+                  <div class="align">
+                    <router-link
+                      :to="{ name: 'Profil', params: { UserId: post.UserId } }"
+                    >
+                      <p>
+                        {{ post.User.name }} {{ post.User.firstname }} <br />
+                        {{ formatDate(post.createdAt) }}
+                      </p>
+                    </router-link>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <router-link
+                    :to="{ name: 'Post', params: { PostId: post.id } }"
+                  >
+                    <h2>{{ post.title }}</h2>
+                  </router-link>
+                  <router-link
+                    :to="{ name: 'Post', params: { PostId: post.id } }"
+                  >
                     <p>
-                      {{ post.User.name }} {{ post.User.firstname }} <br />
-                      {{ formatDate(post.createdAt) }}
+                      {{ post.content }}
+                    </p>
+                  </router-link>
+                  <div
+                    class="post-image"
+                    v-if="post.media && isImage(post.media)"
+                  >
+                    <router-link
+                      :to="{ name: 'Post', params: { PostId: post.id } }"
+                    >
+                      <img :src="post.media" :alt="$t('ALTMEDIA')" />
+                    </router-link>
+                  </div>
+                  <div
+                    class="post-video"
+                    v-if="post.media && isVideo(post.media)"
+                  >
+                    <video controls width="350" height="200">
+                      <source :src="post.media" type="video/mp4" />
+                    </video>
+                  </div>
+                  <div class="comments">
+                    <form
+                      class="form-add-comment"
+                      @submit.prevent="createComment(post)"
+                    >
+                      <input
+                        type="text"
+                        name="comContent"
+                        class="comment-content"
+                        placeholder="Ajouter un commentaire"
+                        v-model="comContent"
+                      />
+                      <input
+                        type="submit"
+                        :value="$t('ACCUEIL.BUTTONPOSTVALUE')"
+                        class="btn"
+                      />
+                    </form>
+                  </div>
+                </div>
+                <div
+                  class="post-actions"
+                  v-if="
+                    $store.state.connectedUser.id === post.User.id ||
+                    $store.state.connectedUser.rank === 1 ||
+                    $store.state.connectedUser.rank === 2
+                  "
+                >
+                  <div class="update" @click="updatePost(post)">
+                    <i class="fa fa-pencil"></i>
+                  </div>
+                  <deleteAction :data="post" />
+                </div>
+                <div class="post-infos">
+                  <router-link
+                    :to="{ name: 'Post', params: { PostId: post.id } }"
+                  >
+                    <p>{{ post.Reactions.length }} <span>Réactions</span></p>
+                  </router-link>
+                  <router-link
+                    :to="{ name: 'Post', params: { PostId: post.id } }"
+                  >
+                    <p>
+                      {{ post.Comments.length }}
+                      <span>Commentaires</span>
                     </p>
                   </router-link>
                 </div>
               </div>
-              <div class="post-content">
-                <router-link
-                  :to="{ name: 'Post', params: { PostId: post.id } }"
-                >
-                  <h2>{{ post.title }}</h2>
-                </router-link>
-                <router-link
-                  :to="{ name: 'Post', params: { PostId: post.id } }"
-                >
-                  <p>
-                    {{ post.content }}
-                  </p>
-                </router-link>
-                <div
-                  class="post-image"
-                  v-if="post.media && isImage(post.media)"
-                >
-                  <router-link
-                    :to="{ name: 'Post', params: { PostId: post.id } }"
-                  >
-                    <img :src="post.media" :alt="$t('ALTMEDIA')" />
-                  </router-link>
-                </div>
-                <div
-                  class="post-video"
-                  v-if="post.media && isVideo(post.media)"
-                >
-                  <video controls width="350" height="200">
-                    <source :src="post.media" type="video/mp4" />
-                  </video>
-                </div>
-              </div>
-              <div
-                class="post-actions"
-                v-if="
-                  userConnected.id === post.User.id ||
-                  userConnected.rank === 1 ||
-                  userConnected.rank === 2
-                "
-              >
-                <div class="update" @click="updatePost(post)">
-                  <i class="fa fa-pencil"></i>
-                </div>
-                <deleteAction :data="post" />
-              </div>
-              <div class="post-infos">
-                <router-link
-                  :to="{ name: 'Post', params: { PostId: post.id } }"
-                >
-                  <p>{{ post.Reactions.length }} <span>Réactions</span></p>
-                </router-link>
-                <router-link
-                  :to="{ name: 'Post', params: { PostId: post.id } }"
-                >
-                  <p>
-                    {{ post.Comments.length }}
-                    <span>Commentaires</span>
-                  </p>
-                </router-link>
-              </div>
+            </div>
+            <div class="no-post" v-else>
+              <h2>Aucun post créé sur cette page</h2>
             </div>
           </div>
         </div>
@@ -171,10 +206,9 @@ export default {
   components: { deleteAction },
   data() {
     return {
-      userConnected: {},
       UserId: '',
       title: '',
-      content: '',
+      contentPost: '',
       media: '',
       posts: [],
       supportedExtensions: {
@@ -183,10 +217,11 @@ export default {
       },
       menuDisplayed: false,
       commentsDisplayed: false,
+      comContent: '',
     };
   },
   created() {
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -196,8 +231,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
-        this.UserId = data.user.id;
+        this.$store.dispatch('saveConnectedUser', data.user);
       })
       .catch((error) => {
         return this.$vToastify.error(`An error occurred: ${error}`);
@@ -209,7 +243,7 @@ export default {
   },
   methods: {
     fetchPosts() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/post', {
         method: 'GET',
         headers: {
@@ -245,7 +279,7 @@ export default {
       if (this.title.length === 0) {
         return this.$vToastify.error('Title input is empty');
       }
-      if (this.content.length === 0) {
+      if (this.contentPost.length === 0) {
         return this.$vToastify.error('Content input is empty');
       }
       const regexTitle =
@@ -255,15 +289,15 @@ export default {
       if (!regexTitle.test(this.title)) {
         return this.$vToastify.error("Title doesn't have a correct format");
       }
-      if (!regexContent.test(this.content)) {
+      if (!regexContent.test(this.contentPost)) {
         return this.$vToastify.error("Content doesn't have a correct format");
       }
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       if (this.media) {
         const data = new FormData();
         data.append('media', this.media);
         data.append('title', this.title);
-        data.append('content', this.content);
+        data.append('content', this.contentPost);
         return fetch('http://localhost:3000/api/post', {
           method: 'POST',
           headers: {
@@ -287,7 +321,7 @@ export default {
         },
         body: JSON.stringify({
           title: this.title,
-          content: this.content,
+          content: this.contentPost,
         }),
       })
         .then((response) => response.json())
@@ -295,6 +329,34 @@ export default {
           this.fetchPosts();
           return this.$vToastify.success(
             'Post has been created successfully without a media',
+          );
+        });
+    },
+    createComment(post) {
+      const regexContent =
+        /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'"?!., _-]{4,255}$/;
+      if (!regexContent.test(this.comContent)) {
+        return this.$vToastify.error(
+          "The content of the comment doesn't have a correct format",
+        );
+      }
+      const { token } = this.$store.state.token;
+      return fetch('http://localhost:3000/api/comment', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer: ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: this.comContent,
+          PostId: post.id,
+        }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          this.fetchPosts();
+          return this.$vToastify.success(
+            'Comment has been successfully created',
           );
         });
     },
@@ -320,11 +382,9 @@ export default {
     },
     deletePost(post) {
       // eslint-disable-next-line no-alert
-      const validation = window.confirm(
-        'Are you sure you want to delete this post ?',
-      );
+      const validation = window.confirm(this.$t('CONFIRM.POST'));
       if (validation === true) {
-        const { token } = JSON.parse(localStorage.getItem('token'));
+        const { token } = this.$store.state.token;
         fetch(`http://localhost:3000/api/post/${post.id}`, {
           method: 'DELETE',
           headers: {
@@ -466,6 +526,16 @@ export default {
 .box-posts {
   overflow: hidden;
   position: relative;
+  width: 100%;
+}
+
+.no-post {
+  color: var(--app-text-primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .posts {
@@ -492,7 +562,7 @@ export default {
   padding-left: 2vh;
 }
 
-.content-form {
+.content-form-post {
   max-width: 70%;
   padding-left: 2vh;
 }
@@ -649,6 +719,18 @@ export default {
   padding: 1vh;
 }
 
+.form-add-comment {
+  padding-right: 4vh !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-content {
+  padding-left: 2vh;
+  max-width: 95%;
+}
+
 @media (max-width: 700px) {
   .sidebar {
     display: initial;
@@ -671,7 +753,9 @@ export default {
   .logout {
     height: 8vh;
     padding: 0.5vh;
-    width: 100%;
+    bottom: -4vh;
+    right: -1vh;
+    width: initial;
     text-align: center;
   }
 
@@ -713,6 +797,8 @@ export default {
     height: initial;
     padding: 2vh 2.5vh;
     width: initial;
+    min-height: 80vh;
+    border-radius: 0;
   }
 
   .posts h1 {
@@ -750,6 +836,26 @@ export default {
     left: 0;
     bottom: 0;
     top: initial;
+  }
+
+  .no-post {
+    text-align: center;
+  }
+
+  .post-infos {
+    right: initial;
+  }
+
+  .post-infos p {
+    text-align: center;
+  }
+
+  .form-add-comment {
+    padding-right: 0 !important;
+  }
+
+  .comment-content {
+    padding-left: 0;
   }
 }
 </style>

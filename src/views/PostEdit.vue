@@ -8,14 +8,21 @@
             <router-link :to="{ name: 'Accueil' }"
               ><i class="fas fa-home"></i
             ></router-link>
-            <router-link :to="{ name: 'Profil', params: { UserId: UserId } }"
+            <router-link
+              :to="{
+                name: 'Profil',
+                params: { UserId: $store.state.connectedUser.id },
+              }"
               ><i class="fas fa-user"></i
             ></router-link>
             <router-link :to="{ name: 'Settings' }"
               ><i class="fas fa-cog"></i
             ></router-link>
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
               ><i class="fas fa-tools"></i
             ></router-link>
@@ -24,7 +31,10 @@
         <div class="box-posts">
           <div class="up">
             <div class="account">
-              <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+              <img
+                :src="$store.state.connectedUser.avatar"
+                :alt="$t('ALTIMAGEPROFILE')"
+              />
               <i
                 @click="toggleLogout()"
                 v-if="this.menuDisplayed === false"
@@ -34,7 +44,7 @@
             </div>
             <transition name="logout">
               <div class="logout" v-if="this.menuDisplayed === true">
-                <p @click="logout()">
+                <p @click="$store.dispatch('logout')">
                   <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
                 </p>
               </div>
@@ -145,14 +155,14 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
-      userConnected: {},
+
       menuDisplayed: false,
       UserId: '',
     };
   },
   methods: {
     fetchPostData() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'GET',
         headers: {
@@ -170,8 +180,9 @@ export default {
     },
     updateMedia(e) {
       const data = new FormData();
+      console.log(e);
       data.append('media', e.target.files[0]);
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'PATCH',
         headers: {
@@ -189,7 +200,7 @@ export default {
       if (!regexTitle.test(title) || !regexContent.test(content)) {
         return false;
       }
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       return fetch(
         `http://localhost:3000/api/post/${this.$route.params.PostId}`,
         {
@@ -233,7 +244,7 @@ export default {
     },
   },
   created() {
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -243,7 +254,7 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
         this.UserId = data.user.id;
       })
       .catch((error) => {
@@ -533,6 +544,8 @@ export default {
     padding: 0.5vh;
     width: 100%;
     text-align: center;
+    bottom: -4vh;
+    right: -2vh;
   }
 }
 </style>

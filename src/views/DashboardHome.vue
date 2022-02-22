@@ -8,7 +8,10 @@
           </router-link>
           <div class="icons">
             <router-link
-              v-if="userConnected.rank === 1 || userConnected.rank === 2"
+              v-if="
+                $store.state.connectedUser.rank === 1 ||
+                $store.state.connectedUser.rank === 2
+              "
               :to="{ name: 'Home Dashboard' }"
             >
               <p>
@@ -17,7 +20,10 @@
               </p>
             </router-link>
             <br />
-            <router-link :to="{ name: 'User Dashboard' }">
+            <router-link
+              v-if="$store.state.connectedUser.rank === 1"
+              :to="{ name: 'User Dashboard' }"
+            >
               <p>
                 <i class="fas fa-user"></i>
                 <span>{{ $t('DASHBOARD.LISTUSER') }}</span>
@@ -38,7 +44,10 @@
               </p>
             </router-link>
             <br />
-            <router-link :to="{ name: 'Token Dashboard' }">
+            <router-link
+              v-if="$store.state.connectedUser.rank === 1"
+              :to="{ name: 'Token Dashboard' }"
+            >
               <p>
                 <i class="fas fa-ticket-alt"></i>
                 <span>{{ $t('DASHBOARD.LISTTOKEN') }}</span>
@@ -46,12 +55,15 @@
             </router-link>
           </div>
           <div class="logout" v-if="this.menuDisplayed === true">
-            <p @click="logout()">
+            <p @click="$store.dispatch('logout')">
               <i class="fas fa-sign-out-alt"></i>{{ $t('LOGOUT') }}
             </p>
           </div>
           <div class="account">
-            <img :src="userConnected.avatar" :alt="$t('ALTIMAGEPROFILE')" />
+            <img
+              :src="$store.state.connectedUser.avatar"
+              :alt="$t('ALTIMAGEPROFILE')"
+            />
             <i
               @click="toggleLogout()"
               v-if="this.menuDisplayed === false"
@@ -65,7 +77,10 @@
         <div class="middle-container">
           <h2>{{ $t('DASHBOARDHOME.TITLE') }}</h2>
           <div class="data">
-            <div class="data-nb-users">
+            <div
+              class="data-nb-users"
+              v-if="$store.state.connectedUser.rank === 1"
+            >
               <div class="data-container">
                 <h3>{{ $t('DASHBOARDHOME.NBUSERS') }}</h3>
                 <span>{{ this.nbUsers }}</span>
@@ -91,8 +106,17 @@
             </div>
           </div>
           <div class="package-info">
-            <AvailableUpdate stack="back" />
-            <AvailableUpdate stack="front" />
+            <AvailableUpdate
+              stack="back"
+              v-if="$store.state.connectedUser.rank === 1"
+            />
+            <AvailableUpdate
+              stack="front"
+              v-if="$store.state.connectedUser.rank === 1"
+            />
+            <p class="no-dependencies" v-else>
+              Vous ne pouvez pas voir les dépendances de l'API ou du Front
+            </p>
           </div>
         </div>
       </div>
@@ -119,16 +143,15 @@ export default {
       nbPosts: '0',
       nbReactions: '0',
       nbComments: '0',
-      userConnected: {},
+
       menuDisplayed: false,
     };
   },
   async created() {
-    this.getUsersCount();
     this.getPostsCount();
     this.getReactionsCount();
     this.getCommentsCount();
-    const { token } = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.$store.state.token;
     fetch('http://localhost:3000/api/user/me', {
       method: 'GET',
       headers: {
@@ -138,8 +161,11 @@ export default {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.userConnected = data.user;
+        this.$store.dispatch('saveConnectedUser', data.user);
         this.UserId = data.user.id;
+        if (this.$store.state.connectedUser.rank !== 1) return false;
+        this.getUsersCount();
+        return true;
       })
       .catch((error) => {
         return this.$vToastify.error(`An error occurred: ${error}`);
@@ -147,7 +173,7 @@ export default {
   },
   methods: {
     getUsersCount() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/user/', {
         method: 'GET',
         headers: {
@@ -164,7 +190,7 @@ export default {
         });
     },
     getPostsCount() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/post/', {
         method: 'GET',
         headers: {
@@ -181,7 +207,7 @@ export default {
         });
     },
     getReactionsCount() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/reaction/', {
         method: 'GET',
         headers: {
@@ -198,7 +224,7 @@ export default {
         });
     },
     getCommentsCount() {
-      const { token } = JSON.parse(localStorage.getItem('token'));
+      const { token } = this.$store.state.token;
       fetch('http://localhost:3000/api/comment/', {
         method: 'GET',
         headers: {
@@ -388,6 +414,13 @@ export default {
   width: 100%;
   padding-top: 4vh;
 }
+
+.no-dependencies {
+  padding-top: 5vh;
+  color: var(--app-text-primary-color);
+  font-size: x-large;
+}
+
 @media (max-width: 700px) {
   .content {
     display: initial;
