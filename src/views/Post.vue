@@ -161,6 +161,9 @@
                 </div>
               </li>
             </ul>
+            <div class="no-comment" v-else>
+              <h2>{{ $t('NO.COMMENT') }}</h2>
+            </div>
           </div>
         </div>
       </div>
@@ -180,7 +183,7 @@ export default {
     deleteAction,
   },
   metaInfo() {
-    const title = this.$t('POSTEDIT.TITLE');
+    const title = this.$t('POST.TITLE');
     return {
       title,
     };
@@ -194,7 +197,6 @@ export default {
       },
 
       menuDisplayed: false,
-      UserId: '',
     };
   },
   methods: {
@@ -572,7 +574,7 @@ export default {
   justify-content: center;
   align-items: stretch;
   height: 100%;
-  flex-grow: 2;
+  flex-grow: 0;
   color: var(--app-text-primary-color);
   padding: 10vh 5vh;
   position: relative;
@@ -592,6 +594,15 @@ export default {
 }
 
 .post-image img {
+  max-width: 500px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  margin: 0;
+}
+
+.post-video video {
   max-width: 500px;
   width: 100%;
   height: 100%;
@@ -705,6 +716,17 @@ export default {
   color: red;
 }
 
+.no-comment {
+  color: var(--app-text-primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-left: 2vh solid var(--app-sidebar-color);
+  flex-grow: 1;
+}
+
 @media (max-width: 1000px) {
   .sidebar {
     display: initial;
@@ -760,11 +782,24 @@ export default {
     bottom: -4vh;
     right: -2vh;
   }
+
+  .no-comment {
+    border-left: 0;
+    min-height: 30vh;
+    text-align: center;
+    height: 100%;
+    align-items: initial;
+    padding-top: 2vh;
+  }
 }
 @media (max-width: 400px) {
   .post {
     padding: 2vh;
     padding-bottom: 4vh;
+  }
+
+  .post-title {
+    flex-direction: column;
   }
 
   .comment-title {

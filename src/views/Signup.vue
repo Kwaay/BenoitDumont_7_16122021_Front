@@ -184,46 +184,46 @@ export default {
         avatar,
       } = this;
       if (this.name.length === 0) {
-        return this.$vToastify.error('Name input is empty');
+        return this.$vToastify.error(this.$t('NAME.INPUT'));
       }
       if (this.firstname.length === 0) {
-        return this.$vToastify.error('Firstname input is empty');
+        return this.$vToastify.error(this.$t('FIRSTNAME.INPUT'));
       }
       if (this.username.length === 0) {
-        return this.$vToastify.error('Username input is empty');
+        return this.$vToastify.error(this.$t('USERNAME.INPUT'));
       }
       if (this.email.length === 0) {
-        return this.$vToastify.error('Email input is empty');
+        return this.$vToastify.error(this.$t('EMAIL.INPUT'));
       }
       if (this.password.length === 0) {
-        return this.$vToastify.error('Password input is empty');
+        return this.$vToastify.error(this.$t('PASSWORD.INPUT'));
       }
       if (this.question.length === 0) {
-        return this.$vToastify.error('Question input is empty');
+        return this.$vToastify.error(this.$t('QUESTION.INPUT'));
       }
       if (this.reponse.length === 0) {
-        return this.$vToastify.error('Reponse input is empty');
+        return this.$vToastify.error(this.$t('REPONSE.INPUT'));
       }
       if (!regexName.test(name)) {
-        return this.$vToastify.error("Name doesn't have a correct format");
+        return this.$vToastify.error(this.$t('NAME.FORMAT'));
       }
       if (!regexFirstname.test(firstname)) {
-        return this.$vToastify.error("Firstname doesn't have a correct format");
+        return this.$vToastify.error(this.$t('FIRSTNAME.FORMAT'));
       }
       if (!regexUsername.test(username)) {
-        return this.$vToastify.error("Username doesn't have a correct format");
+        return this.$vToastify.error(this.$t('USERNAME.FORMAT'));
       }
       if (!regexEmail.test(email)) {
-        return this.$vToastify.error("Email doesn't have a correct format");
+        return this.$vToastify.error(this.$t('EMAIL.FORMAT'));
       }
       if (!regexPassword.test(password)) {
-        return this.$vToastify.error("Password doesn't have a correct format");
+        return this.$vToastify.error(this.$t('PASSWORD.FORMAT'));
       }
       if (!regexQuestion.test(question)) {
-        return this.$vToastify.error("Question doesn't have a correct format");
+        return this.$vToastify.error(this.$t('QUESTION.FORMAT'));
       }
       if (!regexReponse.test(reponse)) {
-        return this.$vToastify.error("Reponse doesn't have a correct format");
+        return this.$vToastify.error(this.$t('REPONSE.FORMAT'));
       }
       if (avatar) {
         const data = new FormData();
@@ -243,8 +243,11 @@ export default {
           .then(() => {
             setTimeout(() => this.$router.push({ name: 'Login' }), 4000);
             return this.$vToastify.success(
-              'User has been created successfully with a avatar',
+              this.$t('SIGNUP.USER.SUCCESS.WITHAVATAR'),
             );
+          })
+          .catch(() => {
+            return this.$vToastify.success(this.$t('ERROR.GENERAL'));
           });
       }
       return fetch('http://localhost:3000/api/user/signup', {
@@ -266,11 +269,11 @@ export default {
         .then(() => {
           setTimeout(() => this.$router.push({ name: 'Login' }), 4000);
           return this.$vToastify.success(
-            'User has been created successfully without an avatar',
+            this.$t('SIGNUP.USER.SUCCESS.WITHOUTAVATAR'),
           );
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.success(this.$t('ERROR.GENERAL'));
         });
     },
     tempStoreImage(e) {

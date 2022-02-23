@@ -164,10 +164,9 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
-        this.UserId = data.user.id;
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
+      .catch(() => {
+        return this.$vToastify.error(this.$t('ERROR.GENERAL'));
       });
   },
   methods: {
@@ -200,8 +199,8 @@ export default {
         .then((data) => {
           this.posts = data;
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     updatePost(post) {

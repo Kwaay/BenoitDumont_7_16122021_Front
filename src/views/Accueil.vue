@@ -166,21 +166,24 @@
                   <router-link
                     :to="{ name: 'Post', params: { PostId: post.id } }"
                   >
-                    <p>{{ post.Reactions.length }} <span>Réactions</span></p>
+                    <p>
+                      {{ post.Reactions.length }}
+                      <span>{{ $t('DASHBOARD.LISTREACTS') }}</span>
+                    </p>
                   </router-link>
                   <router-link
                     :to="{ name: 'Post', params: { PostId: post.id } }"
                   >
                     <p>
                       {{ post.Comments.length }}
-                      <span>Commentaires</span>
+                      <span>{{ $t('DASHBOARD.LISTCOMMENT') }}</span>
                     </p>
                   </router-link>
                 </div>
               </div>
             </div>
             <div class="no-post" v-else>
-              <h2>Aucun post créé sur cette page</h2>
+              <h2>{{ $t('NO.POST.HOME') }}</h2>
             </div>
           </div>
         </div>
@@ -206,7 +209,6 @@ export default {
   components: { deleteAction },
   data() {
     return {
-      UserId: '',
       title: '',
       contentPost: '',
       media: '',
@@ -233,8 +235,8 @@ export default {
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
+      .catch(() => {
+        return this.$tvToastify.error(this.$t('ERROR.GENERAL'));
       });
   },
   mounted() {
@@ -255,8 +257,8 @@ export default {
         .then((data) => {
           this.posts = data;
         })
-        .catch((error) => {
-          return this.$vToastify.error(`An error occurred: ${error}`);
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     isImage(media) {
@@ -277,20 +279,20 @@ export default {
     },
     submit() {
       if (this.title.length === 0) {
-        return this.$vToastify.error('Title input is empty');
+        return this.$vToastify.error(this.$t('TITLE.INPUT'));
       }
       if (this.contentPost.length === 0) {
-        return this.$vToastify.error('Content input is empty');
+        return this.$vToastify.error(this.$t('CONTENT.INPUT'));
       }
       const regexTitle =
         /^[A-ZÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸÇßØÅÆ]{1}[a-z0-9àèìòùáéíóúýâêîôûãñõäëïöüÿçøåæœ?'"! _-]{2,15}$/;
       const regexContent =
         /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'"?!., _-]{4,255}$/;
       if (!regexTitle.test(this.title)) {
-        return this.$vToastify.error("Title doesn't have a correct format");
+        return this.$vToastify.error(this.$t('TITLE.FORMAT'));
       }
       if (!regexContent.test(this.contentPost)) {
-        return this.$vToastify.error("Content doesn't have a correct format");
+        return this.$vToastify.error(this.$t('CONTENT.FORMAT'));
       }
       const { token } = this.$store.state.token;
       if (this.media) {
@@ -308,9 +310,7 @@ export default {
           .then((response) => response.json())
           .then(() => {
             this.fetchPosts();
-            return this.$vToastify.success(
-              'Post has been created successfully with a media',
-            );
+            return this.$vToastify.success(this.$t('POST.CREATED.WITHMEDIA'));
           });
       }
       return fetch('http://localhost:3000/api/post', {
@@ -327,18 +327,14 @@ export default {
         .then((response) => response.json())
         .then(() => {
           this.fetchPosts();
-          return this.$vToastify.success(
-            'Post has been created successfully without a media',
-          );
+          return this.$vToastify.success(this.$t('POST.CREATED.WITHOUTMEDIA'));
         });
     },
     createComment(post) {
       const regexContent =
         /^[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'"?!., _-]{4,255}$/;
       if (!regexContent.test(this.comContent)) {
-        return this.$vToastify.error(
-          "The content of the comment doesn't have a correct format",
-        );
+        return this.$vToastify.error(this.$t('COMMENT.CONTENT.FORMAT'));
       }
       const { token } = this.$store.state.token;
       return fetch('http://localhost:3000/api/comment', {
@@ -355,9 +351,7 @@ export default {
         .then((response) => response.json())
         .then(() => {
           this.fetchPosts();
-          return this.$vToastify.success(
-            'Comment has been successfully created',
-          );
+          return this.$vToastify.success(this.$t('COMMENT.SUCCESS'));
         });
     },
     tempStoreImage(e) {

@@ -159,7 +159,6 @@ export default {
   },
   data() {
     return {
-      UserId: '',
       valueLang: {
         flag: localStorage.getItem('lang') === 'English' ? 'fi-us' : 'fi-fr',
         lang: localStorage.getItem('lang') || 'Français',
@@ -215,11 +214,10 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
-        this.UserId = data.user.id;
         this.getTokens();
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
+      .catch(() => {
+        return this.$vToastify.error(this.$t('ERROR.GENERAL'));
       });
   },
   methods: {
@@ -264,10 +262,10 @@ export default {
       )
         .then((response) => response.json())
         .then(() => {
-          return this.$vToastify.success(`Successfully modified`);
+          return this.$vToastify.success(this.$t('USER.SUCCESS'));
         })
-        .catch((error) => {
-          return this.$vToastify.error(`An error occurred: ${error}`);
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     getTokens() {
@@ -286,8 +284,8 @@ export default {
         .then((data) => {
           this.tokens = data;
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     deleteUser() {
@@ -308,8 +306,8 @@ export default {
             name: 'Login',
           });
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
   },

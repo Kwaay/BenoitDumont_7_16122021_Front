@@ -61,26 +61,22 @@ export default {
   },
   methods: {
     submit() {
-      /* const alreadyLogin = localStorage.getItem('token');
-      if (alreadyLogin !== 'null' || alreadyLogin !== 'undefined') {
-        return this.$vToastify.error('Already logged in');
-      } */
       if (this.identifiant.length === 0) {
-        return this.$vToastify.error('Identifiant input is empty');
+        return this.$vToastify.error(this.$t('LOGIN.IDENTIFIANT.INPUT'));
       }
       if (this.password.length === 0) {
-        return this.$vToastify.error('Password input is empty');
+        return this.$vToastify.error(this.$t('PASSWORD.INPUT'));
       }
       const regexPassword =
         /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
 
       if (!regexPassword.test(this.password)) {
-        return this.$vToastify.error("Password doesn't have a correct format");
+        return this.$vToastify.error(this.$t('PASSWORD.FORMAT'));
       }
       if (this.identifiant.includes('@groupomania.fr')) {
         const regexEmail = /^([\w-]+(?:\.[\w-]+)*)@groupomania\.fr$/i;
         if (!regexEmail.test(this.identifiant)) {
-          return this.$vToastify.error("Email doesn't have a correct format");
+          return this.$vToastify.error(this.$t('EMAIL.FORMAT'));
         }
         return fetch('http://localhost:3000/api/user/login', {
           method: 'POST',
@@ -101,7 +97,7 @@ export default {
             };
             this.$store.dispatch('saveToken', tokenData);
             setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
-            return this.$vToastify.success('Successfully Login');
+            return this.$vToastify.success(this.$t('LOGIN.SUCCESS'));
           });
       }
 
@@ -129,10 +125,10 @@ export default {
           };
           this.$store.dispatch('saveToken', tokenData);
           setTimeout(() => this.$router.push({ name: 'Accueil' }), 4000);
-          return this.$vToastify.success('Successfully Login');
+          return this.$vToastify.success(this.$t('LOGIN.SUCCESS'));
         })
-        .catch((error) => {
-          return this.$vToastify.error(`An error occurred: ${error}`);
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
       return false;
     },

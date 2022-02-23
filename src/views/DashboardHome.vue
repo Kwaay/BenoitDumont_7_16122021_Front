@@ -115,7 +115,7 @@
               v-if="$store.state.connectedUser.rank === 1"
             />
             <p class="no-dependencies" v-else>
-              Vous ne pouvez pas voir les dépendances de l'API ou du Front
+              {{ $t('NO.DEPENDENCIES') }}
             </p>
           </div>
         </div>
@@ -162,13 +162,12 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
-        this.UserId = data.user.id;
         if (this.$store.state.connectedUser.rank !== 1) return false;
         this.getUsersCount();
         return true;
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
+      .catch(() => {
+        return this.$vToastify.error(this.$t('ERROR.GENERAL'));
       });
   },
   methods: {
@@ -185,8 +184,8 @@ export default {
         .then((data) => {
           this.nbUsers = data.length;
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     getPostsCount() {
@@ -202,8 +201,8 @@ export default {
         .then((data) => {
           this.nbPosts = data.length;
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     getReactionsCount() {
@@ -219,8 +218,8 @@ export default {
         .then((data) => {
           this.nbReactions = data.length;
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     getCommentsCount() {
@@ -236,8 +235,8 @@ export default {
         .then((data) => {
           this.nbComments = data.length;
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     getImage() {

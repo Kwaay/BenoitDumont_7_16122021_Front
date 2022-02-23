@@ -104,7 +104,8 @@
                           :to="{ name: 'Post', params: { PostId: post.id } }"
                         >
                           <p>
-                            {{ post.Reactions.length }} <span>Réactions</span>
+                            {{ post.Reactions.length }}
+                            <span>{{ $t('DASHBOARD.LISTREACTS') }}</span>
                           </p>
                         </router-link>
                         <router-link
@@ -112,7 +113,7 @@
                         >
                           <p>
                             {{ post.Comments.length }}
-                            <span>Commentaires</span>
+                            <span>{{ $t('DASHBOARD.LISTCOMMENT') }}</span>
                           </p>
                         </router-link>
                       </div>
@@ -121,7 +122,7 @@
                 </div>
               </div>
               <div class="no-posts" v-else>
-                <h2>Cet utilisateur n'a pas de posts</h2>
+                <h2>{{ $t('NO.POST.PROFILE') }}</h2>
               </div>
             </div>
           </div>
@@ -168,8 +169,8 @@ export default {
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
       })
-      .catch((error) => {
-        this.error = error;
+      .catch(() => {
+        return this.$vToastify.error(this.$t('ERROR.GENERAL'));
       });
     this.getPosts();
   },
@@ -198,9 +199,7 @@ export default {
     },
     deletePost(post) {
       // eslint-disable-next-line no-alert
-      const validation = window.confirm(
-        'Are you sure you want to delete this post ?',
-      );
+      const validation = window.confirm(this.$t('CONFIRM.POST'));
       if (validation === true) {
         const { token } = this.$store.state.token;
         fetch(`http://localhost:3000/api/post/${post.id}`, {
@@ -209,7 +208,10 @@ export default {
             Authorization: `Bearer:' ${token}`,
             'Content-Type': 'application/json',
           },
-        }).then(() => this.getPosts());
+        }).then(() => {
+          this.getPosts();
+          return this.$vToastify.success(this.$t('POST.SUCCESS.DELETE'));
+        });
       }
     },
     getPosts() {
@@ -225,8 +227,8 @@ export default {
         .then((data) => {
           this.$store.dispatch('saveMyPosts', data.Posts);
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     getImage() {

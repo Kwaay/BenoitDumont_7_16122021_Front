@@ -14,6 +14,7 @@ import DashboardToken from '../views/DashboardToken.vue';
 import UserEdit from '../views/UserEdit.vue';
 import PostEdit from '../views/PostEdit.vue';
 import CommentEdit from '../views/CommentEdit.vue';
+// eslint-disable-next-line import/no-cycle
 import store from '../store';
 
 Vue.use(VueRouter);

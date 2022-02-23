@@ -155,9 +155,7 @@ export default {
         image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
         video: ['mp4', 'avi'],
       },
-
       menuDisplayed: false,
-      UserId: '',
     };
   },
   methods: {
@@ -174,13 +172,12 @@ export default {
         .then((data) => {
           this.post = data;
         })
-        .catch((error) => {
-          return this.$vToastify.error(`An error occurred: ${error}`);
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     updateMedia(e) {
       const data = new FormData();
-      console.log(e);
       data.append('media', e.target.files[0]);
       const { token } = this.$store.state.token;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
@@ -255,10 +252,9 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
-        this.UserId = data.user.id;
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
+      .catch(() => {
+        return this.$vToastify.error(this.$t('ERROR.GENERAL'));
       });
   },
   mounted() {

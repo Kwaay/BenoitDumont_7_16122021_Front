@@ -99,9 +99,7 @@ export default {
       patternContent:
         '[a-zA-Z0-9àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\'"?!., _-]{4,255}',
       comment: {},
-
       menuDisplayed: false,
-      UserId: '',
     };
   },
   methods: {
@@ -121,8 +119,8 @@ export default {
         .then((data) => {
           this.comment = data;
         })
-        .catch((error) => {
-          return this.$vToastify.error(`An error occurred: ${error}`);
+        .catch(() => {
+          return this.$vToastify.error(this.$t('ERROR.GENERAL'));
         });
     },
     submit() {
@@ -170,10 +168,9 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.$store.dispatch('saveConnectedUser', data.user);
-        this.UserId = data.user.id;
       })
-      .catch((error) => {
-        return this.$vToastify.error(`An error occurred: ${error}`);
+      .catch(() => {
+        return this.$vToastify.error(this.$t('ERROR.GENERAL'));
       });
   },
   mounted() {
