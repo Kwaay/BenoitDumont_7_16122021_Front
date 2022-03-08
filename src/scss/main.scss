@@ -109,6 +109,10 @@
   color: var(--app-text-primary-color);
 }
 
+.data-table-pagination .pagination {
+  overflow: initial;
+}
+
 .data-table-search-filter span {
   color: var(--app-text-primary-color);
 }

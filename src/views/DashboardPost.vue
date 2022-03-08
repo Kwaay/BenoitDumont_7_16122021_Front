@@ -361,7 +361,7 @@ export default {
 .post {
   display: inline-flex;
   flex-direction: column;
-  margin: 2.5vh 2.5vh 2.5vh 5vh;
+  margin: 2.5vh;
   padding: 2vh;
   border: 1px solid var(--app-text-primary-color);
   border-radius: 20px;
@@ -508,6 +508,7 @@ export default {
   .post-content {
     padding-top: 0;
     padding-bottom: 4vh;
+    text-align: center;
   }
 
   .post-image img {

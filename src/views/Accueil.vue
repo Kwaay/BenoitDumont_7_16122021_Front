@@ -747,7 +747,7 @@ export default {
   .logout {
     height: 8vh;
     padding: 0.5vh;
-    bottom: -4vh;
+    bottom: -2vh;
     right: -1vh;
     width: initial;
     text-align: center;
@@ -775,7 +775,7 @@ export default {
   }
 
   .post {
-    padding: 2vh;
+    padding: 0 0 2vh;
   }
 
   .align {
@@ -802,15 +802,22 @@ export default {
   .posts form {
     flex-direction: column;
     gap: 20px;
+    padding: 2vh 0;
+  }
+
+  .posts form ::placeholder {
+    text-align: center;
   }
 
   .post-container {
     flex-direction: column;
+    padding: 2vh;
   }
 
   .post-content {
+    padding: 2vh;
     padding-top: 0;
-    padding-bottom: 4vh;
+    text-align: center;
   }
 
   .post-image img {
@@ -832,12 +839,27 @@ export default {
     top: initial;
   }
 
+  .title-form {
+    padding-left: 0;
+    max-width: 80%;
+  }
+
+  .content-form-post {
+    padding-left: 0;
+    max-width: 80%;
+  }
+
   .no-post {
     text-align: center;
   }
 
   .post-infos {
     right: initial;
+    justify-content: center;
+  }
+
+  .comments form ::placeholder {
+    text-align: center;
   }
 
   .post-infos p {
@@ -850,6 +872,7 @@ export default {
 
   .comment-content {
     padding-left: 0;
+    max-width: initial;
   }
 }
 </style>

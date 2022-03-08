@@ -457,6 +457,10 @@ export default {
     margin: 0;
   }
 
+  .middle-container {
+    padding: initial;
+  }
+
   .middle-container h2 {
     text-align: center;
     padding: 0;

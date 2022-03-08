@@ -539,6 +539,10 @@ export default {
     margin: 2vh;
   }
 
+  .post p {
+    font-size: 20px;
+  }
+
   .align {
     text-align: center;
   }
@@ -570,6 +574,7 @@ export default {
   .post-content {
     padding-top: 0;
     padding-bottom: 4vh;
+    text-align: center;
   }
 
   .post-image img {
@@ -603,6 +608,15 @@ export default {
 
   .post-infos {
     right: initial;
+    justify-content: center;
+  }
+
+  .post-infos p {
+    text-align: center;
+  }
+
+  .profile-container {
+    padding: initial;
   }
 }
 </style>

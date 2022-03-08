@@ -478,7 +478,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 900px;
+  max-width: 500px;
   width: 100%;
 }
 
