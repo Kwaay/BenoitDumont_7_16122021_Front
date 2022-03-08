@@ -202,6 +202,11 @@ export default {
   methods: {
     fetchPostData() {
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.PostId === 'number' ||
+        this.$route.params.PostId < 0
+      )
+        return;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'GET',
         headers: {
@@ -332,6 +337,7 @@ export default {
     },
     deleteReaction(reactionId) {
       const { token } = this.$store.state.token;
+      if (!typeof reactionId === 'number' || reactionId < 0) return;
       fetch(`http://localhost:3000/api/reaction/${reactionId}`, {
         method: 'DELETE',
         headers: {
@@ -350,6 +356,7 @@ export default {
     },
     updateReaction(reactionId, type) {
       const { token } = this.$store.state.token;
+      if (!typeof reactionId === 'number' || reactionId < 0) return;
       fetch(`http://localhost:3000/api/reaction/${reactionId}`, {
         method: 'PATCH',
         headers: {

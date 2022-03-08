@@ -161,6 +161,11 @@ export default {
   methods: {
     fetchPostData() {
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.PostId === 'number' ||
+        this.$route.params.PostId < 0
+      )
+        return;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'GET',
         headers: {
@@ -180,6 +185,11 @@ export default {
       const data = new FormData();
       data.append('media', e.target.files[0]);
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.PostId === 'number' ||
+        this.$route.params.PostId < 0
+      )
+        return;
       fetch(`http://localhost:3000/api/post/${this.$route.params.PostId}`, {
         method: 'PATCH',
         headers: {
@@ -198,6 +208,11 @@ export default {
         return false;
       }
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.PostId === 'number' ||
+        this.$route.params.PostId < 0
+      )
+        return false;
       return fetch(
         `http://localhost:3000/api/post/${this.$route.params.PostId}`,
         {

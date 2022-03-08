@@ -105,6 +105,11 @@ export default {
   methods: {
     fetchCommentData() {
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.CommentId === 'number' ||
+        this.$route.params.CommentId < 0
+      )
+        return;
       fetch(
         `http://localhost:3000/api/comment/${this.$route.params.CommentId}`,
         {
@@ -131,6 +136,11 @@ export default {
         return false;
       }
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.CommentId === 'number' ||
+        this.$route.params.CommentId < 0
+      )
+        return false;
       return fetch(
         `http://localhost:3000/api/comment/${this.$route.params.CommentId}`,
         {

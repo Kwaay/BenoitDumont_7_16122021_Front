@@ -216,6 +216,11 @@ export default {
     },
     getPosts() {
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.UserId === 'number' ||
+        this.$route.params.UserId < 0
+      )
+        return;
       fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
         method: 'GET',
         headers: {

@@ -185,6 +185,11 @@ export default {
       const data = new FormData();
       data.append('avatar', e.target.files[0]);
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.UserId === 'number' ||
+        this.$route.params.UserId < 0
+      )
+        return false;
       return fetch(
         `http://localhost:3000/api/user/${this.$route.params.UserId}`,
         {
@@ -220,6 +225,11 @@ export default {
         return false;
       }
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.UserId === 'number' ||
+        this.$route.params.UserId < 0
+      )
+        return false;
       return fetch(
         `http://localhost:3000/api/user/${this.$route.params.UserId}`,
         {
@@ -241,6 +251,11 @@ export default {
     },
     fetchUserProfile() {
       const { token } = this.$store.state.token;
+      if (
+        !typeof this.$route.params.UserId === 'number' ||
+        this.$route.params.UserId < 0
+      )
+        return;
       fetch(`http://localhost:3000/api/user/${this.$route.params.UserId}`, {
         method: 'GET',
         headers: {
