@@ -15,7 +15,6 @@
                 <span>{{ $t('DASHBOARD.LISTDASHBOARD') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link
               :to="{ name: 'User Dashboard' }"
               v-if="$store.state.connectedUser.rank === 1"
@@ -25,21 +24,18 @@
                 <span>{{ $t('DASHBOARD.LISTUSER') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link :to="{ name: 'Post Dashboard' }">
               <p>
                 <i class="fas fa-comment-alt"></i>
                 <span>{{ $t('DASHBOARD.LISTPOST') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link :to="{ name: 'Comment Dashboard' }">
               <p>
                 <i class="fas fa-comment"></i>
                 <span>{{ $t('DASHBOARD.LISTCOMMENT') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link
               :to="{ name: 'Token Dashboard' }"
               v-if="$store.state.connectedUser.rank === 1"

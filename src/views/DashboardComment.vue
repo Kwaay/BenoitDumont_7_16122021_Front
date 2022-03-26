@@ -21,7 +21,6 @@
                 <span>{{ $t('DASHBOARD.LISTDASHBOARD') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link
               v-if="$store.state.connectedUser.rank === 1"
               :to="{ name: 'User Dashboard' }"
@@ -31,21 +30,18 @@
                 <span>{{ $t('DASHBOARD.LISTUSER') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link :to="{ name: 'Post Dashboard' }">
               <p>
                 <i class="fas fa-comment-alt"></i>
                 <span>{{ $t('DASHBOARD.LISTPOST') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link :to="{ name: 'Comment Dashboard' }">
               <p>
                 <i class="fas fa-comment"></i>
                 <span>{{ $t('DASHBOARD.LISTCOMMENT') }}</span>
               </p>
             </router-link>
-            <br />
             <router-link
               v-if="$store.state.connectedUser.rank === 1"
               :to="{ name: 'Token Dashboard' }"
@@ -278,6 +274,7 @@ export default {
   background-color: var(--app-background-color);
   width: 100%;
   color: var(--app-text-primary-color);
+  height: 100vh;
 }
 
 .middle-container h2 {
